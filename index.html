@@ -10,7 +10,7 @@
         .active-tab { border-bottom: 4px solid #1e40af; color: #1e40af; font-weight: bold; background-color: #f8fafc; }
         .loader { border-top-color: #3498db; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #signature-pad { border: 2px dashed #ccc; background: #fff; cursor: crosshair; }
+        #signature-pad { border: 2px dashed #ccc; background: #fff; cursor: crosshair; touch-action: none; }
         @media print {
             .no-print { display: none !important; }
             .print-only { display: block !important; }
@@ -92,7 +92,6 @@
                 </div>
             </div>
 
-            <!-- Tab 1: Daftar/Edit Aset -->
             <div id="tab-inventory-1" class="bg-white p-6 rounded-xl shadow border">
                 <h3 id="asset-form-title" class="font-bold text-emerald-800 mb-4 uppercase">Daftar Aset Baru</h3>
                 <form onsubmit="submitAsset(event)" id="form-asset" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -118,7 +117,6 @@
                 </form>
             </div>
 
-            <!-- Tab 2: Senarai Aset -->
             <div id="tab-inventory-2" class="hidden bg-white p-6 rounded-xl shadow border">
                  <table class="w-full text-sm text-left">
                     <thead class="bg-slate-800 text-white">
@@ -128,7 +126,6 @@
                 </table>
             </div>
 
-            <!-- Tab 3: Pinjaman -->
             <div id="tab-inventory-3" class="hidden space-y-4">
                 <div class="bg-white p-6 rounded-xl shadow border">
                     <div class="flex justify-between items-center mb-4">
@@ -141,8 +138,8 @@
                         <div class="md:col-span-2 font-bold text-xs text-blue-600 uppercase border-b mb-2 pb-1">Borang Pinjaman Baru</div>
                         <div><label class="block text-xs font-bold uppercase">Nama Peminjam</label><input type="text" id="loan-nama" required class="w-full p-3 border rounded-lg"></div>
                         <div>
-                            <label class="block text-xs font-bold uppercase">Carian Aset (No Siri / Model)</label>
-                            <input type="text" id="search-asset-loan" oninput="filterLoanAssets()" placeholder="Taip untuk cari..." class="w-full p-3 border rounded-lg mb-1">
+                            <label class="block text-xs font-bold uppercase">Carian Aset</label>
+                            <input type="text" id="search-asset-loan" oninput="filterLoanAssets()" placeholder="Taip no siri/jenama..." class="w-full p-3 border rounded-lg mb-1">
                             <select id="loan-asset" required class="w-full p-3 border rounded-lg">
                                 <option value="">Sila taip untuk carian...</option>
                             </select>
@@ -162,7 +159,7 @@
         </div>
     </main>
 
-    <!-- Modal Pilihan Cetakan -->
+    <!-- Modal Cetakan -->
     <div id="modal-print" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[110] p-4 no-print">
         <div class="bg-white p-6 rounded-xl w-full max-w-sm shadow-2xl">
             <h3 class="font-bold text-lg mb-4 uppercase">Cetak Laporan Pinjaman</h3>
@@ -192,84 +189,74 @@
     <!-- Modal Tandatangan -->
     <div id="modal-signature" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[110] p-4 no-print">
         <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-2xl">
-            <h3 class="font-bold text-lg mb-2 uppercase">Sila Tandatangan</h3>
-            <p class="text-xs text-gray-500 mb-4 italic">Tandatangan diperlukan sebelum pengesahan pemulangan.</p>
-            <canvas id="signature-pad" width="400" height="200" class="w-full rounded border"></canvas>
+            <h3 class="font-bold text-lg mb-2 uppercase text-blue-800">Sahkan Pemulangan</h3>
+            <p class="text-[10px] text-gray-500 mb-4 italic">Sila tandatangan di dalam kotak di bawah menggunakan tetikus atau skrin sentuh.</p>
+            <canvas id="signature-pad" width="400" height="200" class="w-full rounded border bg-slate-50"></canvas>
             <div class="flex gap-2 mt-4">
-                <button onclick="clearSignature()" class="flex-1 py-2 bg-gray-200 font-bold rounded">Padam</button>
-                <button onclick="confirmReturn()" class="flex-1 py-2 bg-blue-700 text-white font-bold rounded">Sahkan Pulang</button>
+                <button onclick="clearSignature()" class="flex-1 py-2 bg-gray-200 font-bold rounded text-xs">PADAM</button>
+                <button onclick="confirmReturn()" class="flex-1 py-2 bg-blue-700 text-white font-bold rounded text-xs">SAMPAN & PULANG</button>
             </div>
-            <button onclick="closeSignatureModal()" class="w-full mt-2 text-xs text-gray-400 hover:underline">Batal</button>
+            <button onclick="closeSignatureModal()" class="w-full mt-4 text-[10px] text-gray-400 uppercase tracking-widest hover:text-red-500">Batal Transaksi</button>
         </div>
     </div>
 
-    <!-- Paparan Cetakan Sahaja -->
+    <!-- Print Area -->
     <div id="print-area" class="hidden print-only p-10 bg-white">
         <div class="text-center mb-8 border-b-2 border-black pb-4">
             <h1 class="text-2xl font-bold uppercase">LAPORAN REKOD PINJAMAN ICT</h1>
             <h2 class="text-xl">SMK JINJANG</h2>
             <p id="print-header-info" class="text-sm mt-1"></p>
         </div>
-        <table class="w-full border-collapse border border-black text-sm">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="border border-black p-2">Bil</th>
-                    <th class="border border-black p-2">Nama Peminjam</th>
-                    <th class="border border-black p-2">Butiran Aset</th>
-                    <th class="border border-black p-2">Tarikh Pinjam</th>
-                    <th class="border border-black p-2">Status / T.Tangan Pulang</th>
+        <table class="w-full border-collapse border border-black text-[10px]">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-black p-1">Bil</th>
+                    <th class="border border-black p-1">Nama Peminjam</th>
+                    <th class="border border-black p-1">Butiran Aset</th>
+                    <th class="border border-black p-1">Tarikh Pinjam</th>
+                    <th class="border border-black p-1">Tandatangan Pulang</th>
                 </tr>
             </thead>
             <tbody id="print-table-body"></tbody>
         </table>
-        <div class="mt-20 flex justify-between px-10">
-            <div class="text-center">
-                <div class="border-b border-black w-40 mb-1"></div>
-                <p class="text-xs uppercase font-bold">Disediakan Oleh</p>
-            </div>
-            <div class="text-center">
-                <div class="border-b border-black w-40 mb-1"></div>
-                <p class="text-xs uppercase font-bold">Disahkan Oleh</p>
-            </div>
-        </div>
     </div>
 
-    <div id="loader" class="hidden fixed inset-0 bg-white/80 flex flex-col items-center justify-center z-[100] no-print">
-        <div class="loader rounded-full border-8 border-t-8 border-blue-200 h-16 w-16 mb-2"></div>
-        <p class="font-bold text-blue-900 uppercase text-xs">Sila Tunggu...</p>
+    <div id="loader" class="hidden fixed inset-0 bg-white/90 flex flex-col items-center justify-center z-[200] no-print">
+        <div class="loader rounded-full border-4 border-t-4 border-blue-200 h-12 w-12 mb-4"></div>
+        <p class="font-bold text-blue-900 uppercase text-[10px] tracking-widest">Memproses Data...</p>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyaU4qz0o8ACBS1K3KLJfvela1v0zzhTLhcq_F9jf2to0UFH2idnm9IuUwYuTr3oJQN6g/exec';
+        // MASUKKAN URL WEB APP GOOGLE SCRIPT ANDA DI SINI
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwMsnRGYgJY_87Mkq6PRq-0FWIBipv-Rv7Rg80wRIZSRKBsiof5ZJXalsIqDny5XrvaWw/exec';
+        
         let dataTempahan = [], dataAset = [], dataPinjaman = [];
         let currentReturnId = null;
 
+        // Signature Logic
         const canvas = document.getElementById('signature-pad');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
 
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX || e.touches[0].clientX) - rect.left,
+                y: (e.clientY || e.touches[0].clientY) - rect.top
+            };
+        }
+        function startDrawing(e) { isDrawing = true; const pos = getPos(e); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
+        function draw(e) { if (!isDrawing) return; const pos = getPos(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
+        function stopDrawing() { isDrawing = false; }
+
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
         canvas.addEventListener('touchend', stopDrawing);
 
-        function startDrawing(e) { isDrawing = true; draw(e); }
-        function draw(e) {
-            if (!isDrawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.pageX) - rect.left;
-            const y = (e.clientY || e.pageY) - rect.top;
-            ctx.lineWidth = 2;
-            ctx.lineCap = 'round';
-            ctx.lineTo(x, y);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-        }
-        function stopDrawing() { isDrawing = false; ctx.beginPath(); }
-        function clearSignature() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        function clearSignature() { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.beginPath(); }
 
         window.onload = () => {
             const d = new Date();
@@ -277,7 +264,7 @@
             
             const yr = document.getElementById('print-year');
             const curYr = new Date().getFullYear();
-            for(let y = curYr; y >= curYr-5; y--) {
+            for(let y = curYr; y >= curYr-3; y--) {
                 const opt = document.createElement('option');
                 opt.value = y; opt.text = y; yr.add(opt);
             }
@@ -287,182 +274,105 @@
             document.getElementById('view-home').classList.add('hidden');
             document.getElementById('view-booking').classList.add('hidden');
             document.getElementById('view-inventory').classList.add('hidden');
-            const target = document.getElementById(`view-${viewId}`);
-            if (target) {
-                target.classList.remove('hidden');
-                if(viewId !== 'home') refreshData();
-            }
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            if(viewId !== 'home') refreshData();
         }
 
         function loginAdmin() {
-            const pass = prompt("Sila masukkan Kata Laluan Admin:");
+            const pass = prompt("Kata Laluan Admin:");
             if (pass === "smkjinjang123") {
                 document.getElementById('admin-badge').classList.remove('hidden');
                 showView('inventory');
-            } else if (pass !== null) {
-                alert("Kata laluan salah.");
-            }
+            } else if (pass !== null) alert("Salah!");
         }
 
         function switchTab(section, index) {
             const max = (section === 'booking') ? 2 : 3;
             for(let i=1; i<=max; i++) {
-                const tab = document.getElementById(`tab-${section}-${i}`);
-                const btn = document.getElementById(`btn-${section}-${i}`);
-                if(tab) tab.classList.add('hidden');
-                if(btn) btn.classList.remove('active-tab');
+                document.getElementById(`tab-${section}-${i}`).classList.add('hidden');
+                document.getElementById(`btn-${section}-${index}`).classList.remove('active-tab'); // simplistic
             }
             document.getElementById(`tab-${section}-${index}`).classList.remove('hidden');
-            document.getElementById(`btn-${section}-${index}`).classList.add('active-tab');
         }
 
         async function refreshData() {
             if(!API_URL || API_URL.includes('GANTIKAN')) {
-                renderBookingTable();
-                renderAssetTable();
+                console.log("Mod Demo Aktif");
                 return;
             }
             toggleLoader(true);
             try {
-                const responses = await Promise.all([
+                const res = await Promise.all([
                     fetch(`${API_URL}?action=getBookings`).then(r => r.json()),
                     fetch(`${API_URL}?action=getAssets`).then(r => r.json()),
                     fetch(`${API_URL}?action=getBorrowing`).then(r => r.json())
                 ]);
-                dataTempahan = responses[0].data || [];
-                dataAset = responses[1].data || [];
-                dataPinjaman = responses[2].data || [];
+                dataTempahan = res[0].data || [];
+                dataAset = res[1].data || [];
+                dataPinjaman = res[2].data || [];
+                
                 renderBookingTable();
                 renderAssetTable();
                 renderLoanTable();
                 filterLoanAssets(); 
-            } catch (e) {
-                console.error("Gagal muat data:", e);
-            } finally {
-                toggleLoader(false);
-            }
+            } catch (e) { console.error(e); }
+            finally { toggleLoader(false); }
         }
 
         function renderBookingTable() {
             const b = document.getElementById('table-booking-body');
-            if(!b) return;
-            b.innerHTML = dataTempahan.length ? dataTempahan.map(x => `<tr class="border-b"><td class="p-3 font-bold">${x[0]}</td><td class="p-3">${x[1]}</td><td class="p-3 text-blue-700 font-medium">${x[2]}</td></tr>`).join('') : '<tr><td colspan="3" class="p-4 text-center">Tiada data</td></tr>';
+            b.innerHTML = dataTempahan.map(x => `<tr class="border-b"><td class="p-3 font-bold">${x[0]}</td><td class="p-3">${x[1]}</td><td class="p-3 text-blue-700">${x[2]}</td></tr>`).join('');
         }
 
         function renderAssetTable() {
             const b = document.getElementById('table-asset-body');
-            if(!b) return;
-            b.innerHTML = dataAset.length ? dataAset.map(x => `
+            b.innerHTML = dataAset.map(x => `
                 <tr class="border-b">
-                    <td class="p-3">
-                        <b>[${x[1]}] ${x[2]} - ${x[3]}</b><br>
-                        <span class="text-xs text-gray-500">No Siri: ${x[4]} | Lokasi: ${x[5]}</span>
+                    <td class="p-3"><b>${x[2]} ${x[3]}</b><br><span class="text-[10px] text-gray-500 uppercase">${x[1]} | SN: ${x[4]}</span></td>
+                    <td class="p-3 text-center">
+                        <button onclick="editAsset('${x[0]}')" class="text-blue-600 font-bold mx-2">EDIT</button>
+                        <button onclick="deleteAsset('${x[0]}')" class="text-red-500 font-bold mx-2">HAPUS</button>
                     </td>
-                    <td class="p-3 text-center flex flex-col md:flex-row gap-1 justify-center">
-                        <button onclick="editAsset('${x[0]}')" class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded border border-amber-200">EDIT</button>
-                        <button onclick="deleteAsset('${x[0]}')" class="bg-red-50 text-red-500 text-[10px] font-bold px-2 py-1 rounded border border-red-200">HAPUS</button>
-                    </td>
-                </tr>`).join('') : '<tr><td colspan="2" class="p-4 text-center">Tiada rekod aset</td></tr>';
+                </tr>`).join('');
         }
 
         function renderLoanTable() {
             const b = document.getElementById('table-loan-body');
-            if(!b) return;
-            b.innerHTML = dataPinjaman.length ? dataPinjaman.map(x => `
+            b.innerHTML = dataPinjaman.map(x => `
                 <tr class="border-b">
                     <td class="p-2"><b>${x[1]}</b></td>
-                    <td class="p-2 text-xs">${x[2]}</td>
-                    <td class="p-2">${x[5] ? '<span class="text-green-600 font-bold">Pulang</span>' : '<span class="text-orange-500">Dipinjam</span>'}</td>
+                    <td class="p-2 text-[10px]">${x[2]}</td>
+                    <td class="p-2 uppercase font-bold text-[10px] ${x[5] ? 'text-green-600' : 'text-orange-500'}">${x[5] ? 'Selesai' : 'Dipinjam'}</td>
                     <td class="p-2 text-center">
-                        ${!x[5] ? `<button onclick="openSignatureModal('${x[0]}')" class="bg-blue-600 text-white px-2 py-1 rounded text-[10px] font-bold">PULANG</button>` : '-'}
+                        ${!x[5] ? `<button onclick="openSignatureModal('${x[0]}')" class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px]">PULANG</button>` : '-'}
                     </td>
-                </tr>`).join('') : '<tr><td colspan="4" class="p-4 text-center italic">Tiada pinjaman aktif</td></tr>';
+                </tr>`).join('');
         }
 
-        // FUNGSI PINTAR: Aset yang sedang dipinjam tidak akan muncul
+        // LOGIK PINTAR: Hilangkan aset jika sedang dipinjam
         function filterLoanAssets() {
             const term = document.getElementById('search-asset-loan').value.toLowerCase();
             const s = document.getElementById('loan-asset');
             s.innerHTML = '<option value="">-- Pilih Aset --</option>';
             
-            // Cari ID aset yang sedang dipinjam (status pulangan masih kosong)
-            const activeLoans = dataPinjaman.filter(loan => !loan[5]).map(loan => String(loan[6])); // assume idAset di kolum index 6
+            // Dapatkan senarai ID aset yang berstatus 'Dipinjam' (kolum index 5 kosong)
+            // Note: Kolum index 6 selalunya simpan ID Aset dalam sheet pinjaman
+            const idAsetDipinjam = dataPinjaman
+                .filter(loan => !loan[5] || loan[5] === "") 
+                .map(loan => String(loan[6])); 
 
             dataAset.forEach(a => {
-                const isBorrowed = activeLoans.includes(String(a[0]));
-                const label = `${a[4]} - ${a[3]} (${a[2]})`.toLowerCase();
+                const idAset = String(a[0]);
+                const isTersedia = !idAsetDipinjam.includes(idAset);
+                const stringCari = `${a[4]} ${a[2]} ${a[3]}`.toLowerCase();
                 
-                if(!isBorrowed && label.includes(term)) {
-                    s.innerHTML += `<option value="${a[0]}">${a[1]} - ${a[2]} (${a[4]})</option>`;
+                if(isTersedia && stringCari.includes(term)) {
+                    const opt = document.createElement('option');
+                    opt.value = a[0];
+                    opt.text = `${a[1]} - ${a[2]} ${a[3]} (${a[4]})`;
+                    s.appendChild(opt);
                 }
             });
-        }
-
-        function editAsset(id) {
-            const asset = dataAset.find(a => a[0] == id);
-            if(!asset) return;
-            document.getElementById('asset-id').value = asset[0];
-            document.getElementById('asset-jenis').value = asset[1];
-            document.getElementById('asset-jenama').value = asset[2];
-            document.getElementById('asset-model').value = asset[3];
-            document.getElementById('asset-siri').value = asset[4];
-            document.getElementById('asset-lokasi').value = asset[5];
-            
-            document.getElementById('asset-form-title').innerText = "Edit Aset";
-            document.getElementById('btn-save-asset').innerText = "Kemas Kini Aset";
-            document.getElementById('btn-cancel-edit').classList.remove('hidden');
-            switchTab('inventory', 1);
-        }
-
-        function resetAssetForm() {
-            document.getElementById('form-asset').reset();
-            document.getElementById('asset-id').value = "";
-            document.getElementById('asset-form-title').innerText = "Daftar Aset Baru";
-            document.getElementById('btn-save-asset').innerText = "Simpan Rekod Aset";
-            document.getElementById('btn-cancel-edit').classList.add('hidden');
-        }
-
-        function deleteAsset(id) {
-            if(confirm("Adakah anda pasti mahu memadam aset ini?")) {
-                sendData({ action: 'deleteAsset', id: id });
-            }
-        }
-
-        // Cetak Rekod
-        function openPrintModal() { document.getElementById('modal-print').classList.remove('hidden'); }
-        function closePrintModal() { document.getElementById('modal-print').classList.add('hidden'); }
-        
-        function executePrint() {
-            const m = parseInt(document.getElementById('print-month').value);
-            const y = parseInt(document.getElementById('print-year').value);
-            
-            const filtered = dataPinjaman.filter(p => {
-                const pDate = new Date(p[3]); // assum index 3 tarikh pinjam
-                const matchMonth = (m === 0) ? true : (pDate.getMonth() + 1 === m);
-                const matchYear = pDate.getFullYear() === y;
-                return matchMonth && matchYear;
-            });
-
-            if(filtered.length === 0) {
-                alert("Tiada rekod pada tempoh tersebut.");
-                return;
-            }
-
-            const pb = document.getElementById('print-table-body');
-            pb.innerHTML = filtered.map((p, i) => `
-                <tr>
-                    <td class="border border-black p-2 text-center">${i+1}</td>
-                    <td class="border border-black p-2 uppercase">${p[1]}</td>
-                    <td class="border border-black p-2">${p[2]}</td>
-                    <td class="border border-black p-2 text-center">${p[3]}</td>
-                    <td class="border border-black p-2 text-center">
-                        ${p[5] ? `<img src="${p[7] || ''}" style="max-height:40px; margin:auto;"><br><small>Pulang: ${p[5]}</small>` : 'DALAM PINJAMAN'}
-                    </td>
-                </tr>`).join('');
-            
-            document.getElementById('print-header-info').innerText = `Tahun: ${y} ${m !== 0 ? '| Bulan: ' + m : ''}`;
-            closePrintModal();
-            window.print();
         }
 
         function openSignatureModal(loanId) {
@@ -474,74 +384,100 @@
             document.getElementById('modal-signature').classList.add('hidden');
             currentReturnId = null;
         }
-        function confirmReturn() {
+
+        async function confirmReturn() {
+            if (!currentReturnId) return;
+            
+            // Check if canvas is blank
             const blank = document.createElement('canvas');
             blank.width = canvas.width; blank.height = canvas.height;
-            if(canvas.toDataURL() === blank.toDataURL()) {
-                alert("Sila berikan tandatangan terlebih dahulu.");
-                return;
+            if (canvas.toDataURL() === blank.toDataURL()) {
+                alert("Sila tandatangan!"); return;
             }
-            const sigData = canvas.toDataURL(); // Ambil base64 signature
-            sendData({ action: 'returnAsset', id: currentReturnId, signature: sigData });
-            closeSignatureModal();
+
+            const sigBase64 = canvas.toDataURL('image/png');
+            toggleLoader(true);
+            
+            try {
+                // Gunakan URLSearchParams atau JSON untuk hantar data ke GS
+                const body = JSON.stringify({
+                    action: 'returnAsset',
+                    id: currentReturnId,
+                    signature: sigBase64
+                });
+
+                // Hantar menggunakan POST
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    body: body
+                });
+
+                alert("Pemulangan direkodkan!");
+                closeSignatureModal();
+                // Tunggu sebentar untuk GS proses sebelum refresh
+                setTimeout(refreshData, 1500);
+            } catch (err) {
+                alert("Ralat: " + err);
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        // CETAKAN
+        function openPrintModal() { document.getElementById('modal-print').classList.remove('hidden'); }
+        function closePrintModal() { document.getElementById('modal-print').classList.add('hidden'); }
+        
+        function executePrint() {
+            const m = parseInt(document.getElementById('print-month').value);
+            const y = parseInt(document.getElementById('print-year').value);
+            
+            const filtered = dataPinjaman.filter(p => {
+                const pDate = new Date(p[3]); 
+                const mMatch = (m === 0) || (pDate.getMonth() + 1 === m);
+                const yMatch = (pDate.getFullYear() === y);
+                return mMatch && yMatch;
+            });
+
+            if(!filtered.length) { alert("Tiada rekod."); return; }
+
+            const body = document.getElementById('print-table-body');
+            body.innerHTML = filtered.map((p, i) => `
+                <tr>
+                    <td class="border border-black p-1 text-center">${i+1}</td>
+                    <td class="border border-black p-1 uppercase">${p[1]}</td>
+                    <td class="border border-black p-1">${p[2]}</td>
+                    <td class="border border-black p-1 text-center">${p[3]}</td>
+                    <td class="border border-black p-1 text-center">
+                        ${p[7] ? `<img src="${p[7]}" style="max-height:30px; margin:auto;">` : '---'}
+                    </td>
+                </tr>`).join('');
+            
+            document.getElementById('print-header-info').innerText = `Bulan: ${m||'Semua'} | Tahun: ${y}`;
+            closePrintModal();
+            window.print();
         }
 
         async function sendData(p) {
-            if(!API_URL || API_URL.includes('GANTIKAN')) { alert("Mod Demo: Data tidak disimpan."); return; }
+            if(!API_URL || API_URL.includes('GANTIKAN')) { alert("URL tidak sah."); return; }
             toggleLoader(true);
             try {
                 await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(p) });
-                alert("Berjaya!");
-                resetAssetForm();
-                setTimeout(refreshData, 1000);
-            } catch (e) { alert("Ralat teknikal."); }
-            toggleLoader(false);
+                setTimeout(refreshData, 1500);
+            } catch (e) { alert("Ralat."); }
+            finally { toggleLoader(false); }
         }
 
-        function submitAsset(e) { 
-            e.preventDefault(); 
-            const id = document.getElementById('asset-id').value;
-            const payload = { 
-                action: id ? 'editAsset' : 'addAsset', 
-                id: id,
-                jenis: document.getElementById('asset-jenis').value, 
-                jenama: document.getElementById('asset-jenama').value, 
-                model: document.getElementById('asset-model').value, 
-                nosiri: document.getElementById('asset-siri').value, 
-                lokasi: document.getElementById('asset-lokasi').value 
-            };
-            sendData(payload); 
-        }
-
-        function submitBooking(e) { 
-            e.preventDefault(); 
-            sendData({ action: 'addBooking', nama: document.getElementById('book-nama').value, tarikh: document.getElementById('book-tarikh').value, masa: document.getElementById('book-mula').value + ' - ' + document.getElementById('book-tamat').value }); 
-            e.target.reset(); 
-        }
-
-        function submitLoan(e) { 
-            e.preventDefault(); 
-            const sel = document.getElementById('loan-asset'); 
-            if(!sel.value) { alert("Sila pilih aset."); return; }
-            sendData({ action: 'addBorrow', idAset: sel.value, aset: sel.options[sel.selectedIndex].text, nama: document.getElementById('loan-nama').value, tarikh: document.getElementById('loan-tarikh').value, tujuan: document.getElementById('loan-tujuan').value }); 
-            e.target.reset(); 
-        }
+        function submitAsset(e) { e.preventDefault(); const id = document.getElementById('asset-id').value; sendData({ action: id?'editAsset':'addAsset', id:id, jenis:document.getElementById('asset-jenis').value, jenama:document.getElementById('asset-jenama').value, model:document.getElementById('asset-model').value, nosiri:document.getElementById('asset-siri').value, lokasi:document.getElementById('asset-lokasi').value }); e.target.reset(); }
+        function submitBooking(e) { e.preventDefault(); sendData({ action:'addBooking', nama:document.getElementById('book-nama').value, tarikh:document.getElementById('book-tarikh').value, masa:document.getElementById('book-mula').value + ' - ' + document.getElementById('book-tamat').value }); e.target.reset(); }
+        function submitLoan(e) { e.preventDefault(); const s = document.getElementById('loan-asset'); sendData({ action:'addBorrow', idAset:s.value, aset:s.options[s.selectedIndex].text, nama:document.getElementById('loan-nama').value, tarikh:document.getElementById('loan-tarikh').value, tujuan:document.getElementById('loan-tujuan').value }); e.target.reset(); }
 
         function toggleLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
 
-        const ALL_SLOTS = ["07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
-        function generateStartSlots() {
-            const s = document.getElementById('book-mula');
-            s.innerHTML = '<option value="">Pilih Masa</option>';
-            ALL_SLOTS.forEach(sl => { s.innerHTML += `<option value="${sl}">${sl}</option>`; });
-        }
-        function generateEndSlots() {
-            const m = document.getElementById('book-mula').value;
-            const s = document.getElementById('book-tamat');
-            s.innerHTML = '<option value="">Tamat</option>';
-            const idx = ALL_SLOTS.indexOf(m);
-            for(let i=idx+1; i<ALL_SLOTS.length; i++) { s.innerHTML += `<option value="${ALL_SLOTS[i]}">${ALL_SLOTS[i]}</option>`; }
-        }
+        const SLOTS = ["07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
+        function generateStartSlots() { const s = document.getElementById('book-mula'); s.innerHTML = '<option value="">Mula</option>'; SLOTS.forEach(x => s.innerHTML += `<option value="${x}">${x}</option>`); }
+        function generateEndSlots() { const m = document.getElementById('book-mula').value; const s = document.getElementById('book-tamat'); s.innerHTML = '<option value="">Tamat</option>'; const idx = SLOTS.indexOf(m); for(let i=idx+1; i<SLOTS.length; i++) s.innerHTML += `<option value="${SLOTS[i]}">${SLOTS[i]}</option>`; }
     </script>
 </body>
 </html>
