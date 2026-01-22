@@ -11,11 +11,16 @@
         .loader { border-top-color: #3498db; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         #signature-pad { border: 2px dashed #ccc; background: #fff; cursor: crosshair; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; }
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans text-slate-900">
 
-    <header class="bg-white shadow-sm border-b-4 border-blue-800 p-4">
+    <header class="bg-white shadow-sm border-b-4 border-blue-800 p-4 no-print">
         <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-4">
                 <img src="https://i.ibb.co/Lhb8pYQ/SMK-Jinjang.jpg" alt="Logo" class="h-20 w-auto rounded shadow-sm">
@@ -28,7 +33,7 @@
         </div>
     </header>
 
-    <main class="container mx-auto p-4 md:p-8">
+    <main class="container mx-auto p-4 md:p-8 no-print">
 
         <!-- HOME VIEW -->
         <div id="view-home" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
@@ -126,13 +131,21 @@
             <!-- Tab 3: Pinjaman -->
             <div id="tab-inventory-3" class="hidden space-y-4">
                 <div class="bg-white p-6 rounded-xl shadow border">
-                    <h3 class="font-bold text-blue-800 mb-4 uppercase">Borang Pinjaman Alatan</h3>
-                    <form onsubmit="submitLoan(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-blue-800 uppercase text-lg">Pinjaman Alatan</h3>
+                        <button onclick="openPrintModal()" class="bg-slate-700 text-white px-4 py-2 rounded font-bold text-xs uppercase hover:bg-slate-800 flex items-center gap-2">
+                            <span>🖨️</span> Cetak Rekod
+                        </button>
+                    </div>
+                    <form onsubmit="submitLoan(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-slate-50 border rounded-lg">
+                        <div class="md:col-span-2 font-bold text-xs text-blue-600 uppercase border-b mb-2 pb-1">Borang Pinjaman Baru</div>
                         <div><label class="block text-xs font-bold uppercase">Nama Peminjam</label><input type="text" id="loan-nama" required class="w-full p-3 border rounded-lg"></div>
                         <div>
                             <label class="block text-xs font-bold uppercase">Carian Aset (No Siri / Model)</label>
                             <input type="text" id="search-asset-loan" oninput="filterLoanAssets()" placeholder="Taip untuk cari..." class="w-full p-3 border rounded-lg mb-1">
-                            <select id="loan-asset" required class="w-full p-3 border rounded-lg"></select>
+                            <select id="loan-asset" required class="w-full p-3 border rounded-lg">
+                                <option value="">Sila taip untuk carian...</option>
+                            </select>
                         </div>
                         <div><label class="block text-xs font-bold uppercase">Tarikh Pinjam</label><input type="date" id="loan-tarikh" required class="w-full p-3 border rounded-lg"></div>
                         <div><label class="block text-xs font-bold uppercase">Tujuan</label><input type="text" id="loan-tujuan" required class="w-full p-3 border rounded-lg"></div>
@@ -140,7 +153,7 @@
                     </form>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs text-left border mt-4">
-                            <thead class="bg-gray-100"><tr><th class="p-2">Nama</th><th class="p-2">Aset</th><th class="p-2">Status</th><th class="p-2 text-center">Tindakan</th></tr></thead>
+                            <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Nama</th><th class="p-2">Aset</th><th class="p-2">Status</th><th class="p-2 text-center">Tindakan</th></tr></thead>
                             <tbody id="table-loan-body"></tbody>
                         </table>
                     </div>
@@ -149,8 +162,35 @@
         </div>
     </main>
 
+    <!-- Modal Pilihan Cetakan -->
+    <div id="modal-print" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[110] p-4 no-print">
+        <div class="bg-white p-6 rounded-xl w-full max-w-sm shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 uppercase">Cetak Laporan Pinjaman</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Pilih Bulan</label>
+                    <select id="print-month" class="w-full p-3 border rounded-lg">
+                        <option value="0">Semua Bulan</option>
+                        <option value="1">Januari</option><option value="2">Februari</option><option value="3">Mac</option>
+                        <option value="4">April</option><option value="5">Mei</option><option value="6">Jun</option>
+                        <option value="7">Julai</option><option value="8">Ogos</option><option value="9">September</option>
+                        <option value="10">Oktober</option><option value="11">November</option><option value="12">Disember</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Pilih Tahun</label>
+                    <select id="print-year" class="w-full p-3 border rounded-lg"></select>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button onclick="closePrintModal()" class="flex-1 py-3 bg-gray-200 font-bold rounded-lg">Batal</button>
+                    <button onclick="executePrint()" class="flex-1 py-3 bg-blue-700 text-white font-bold rounded-lg">Jana Laporan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Tandatangan -->
-    <div id="modal-signature" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[110] p-4">
+    <div id="modal-signature" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[110] p-4 no-print">
         <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-2xl">
             <h3 class="font-bold text-lg mb-2 uppercase">Sila Tandatangan</h3>
             <p class="text-xs text-gray-500 mb-4 italic">Tandatangan diperlukan sebelum pengesahan pemulangan.</p>
@@ -163,7 +203,38 @@
         </div>
     </div>
 
-    <div id="loader" class="hidden fixed inset-0 bg-white/80 flex flex-col items-center justify-center z-[100]">
+    <!-- Paparan Cetakan Sahaja -->
+    <div id="print-area" class="hidden print-only p-10 bg-white">
+        <div class="text-center mb-8 border-b-2 border-black pb-4">
+            <h1 class="text-2xl font-bold uppercase">LAPORAN REKOD PINJAMAN ICT</h1>
+            <h2 class="text-xl">SMK JINJANG</h2>
+            <p id="print-header-info" class="text-sm mt-1"></p>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="border border-black p-2">Bil</th>
+                    <th class="border border-black p-2">Nama Peminjam</th>
+                    <th class="border border-black p-2">Butiran Aset</th>
+                    <th class="border border-black p-2">Tarikh Pinjam</th>
+                    <th class="border border-black p-2">Status / T.Tangan Pulang</th>
+                </tr>
+            </thead>
+            <tbody id="print-table-body"></tbody>
+        </table>
+        <div class="mt-20 flex justify-between px-10">
+            <div class="text-center">
+                <div class="border-b border-black w-40 mb-1"></div>
+                <p class="text-xs uppercase font-bold">Disediakan Oleh</p>
+            </div>
+            <div class="text-center">
+                <div class="border-b border-black w-40 mb-1"></div>
+                <p class="text-xs uppercase font-bold">Disahkan Oleh</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="loader" class="hidden fixed inset-0 bg-white/80 flex flex-col items-center justify-center z-[100] no-print">
         <div class="loader rounded-full border-8 border-t-8 border-blue-200 h-16 w-16 mb-2"></div>
         <p class="font-bold text-blue-900 uppercase text-xs">Sila Tunggu...</p>
     </div>
@@ -173,7 +244,6 @@
         let dataTempahan = [], dataAset = [], dataPinjaman = [];
         let currentReturnId = null;
 
-        // Signature logic
         const canvas = document.getElementById('signature-pad');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
@@ -181,8 +251,8 @@
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
-        canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
         canvas.addEventListener('touchend', stopDrawing);
 
         function startDrawing(e) { isDrawing = true; draw(e); }
@@ -204,6 +274,13 @@
         window.onload = () => {
             const d = new Date();
             document.getElementById('display-date').innerText = d.toLocaleDateString('ms-MY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const yr = document.getElementById('print-year');
+            const curYr = new Date().getFullYear();
+            for(let y = curYr; y >= curYr-5; y--) {
+                const opt = document.createElement('option');
+                opt.value = y; opt.text = y; yr.add(opt);
+            }
         };
 
         function showView(viewId) {
@@ -302,19 +379,25 @@
                 </tr>`).join('') : '<tr><td colspan="4" class="p-4 text-center italic">Tiada pinjaman aktif</td></tr>';
         }
 
+        // FUNGSI PINTAR: Aset yang sedang dipinjam tidak akan muncul
         function filterLoanAssets() {
             const term = document.getElementById('search-asset-loan').value.toLowerCase();
             const s = document.getElementById('loan-asset');
             s.innerHTML = '<option value="">-- Pilih Aset --</option>';
+            
+            // Cari ID aset yang sedang dipinjam (status pulangan masih kosong)
+            const activeLoans = dataPinjaman.filter(loan => !loan[5]).map(loan => String(loan[6])); // assume idAset di kolum index 6
+
             dataAset.forEach(a => {
+                const isBorrowed = activeLoans.includes(String(a[0]));
                 const label = `${a[4]} - ${a[3]} (${a[2]})`.toLowerCase();
-                if(label.includes(term)) {
+                
+                if(!isBorrowed && label.includes(term)) {
                     s.innerHTML += `<option value="${a[0]}">${a[1]} - ${a[2]} (${a[4]})</option>`;
                 }
             });
         }
 
-        // CRUD Aset
         function editAsset(id) {
             const asset = dataAset.find(a => a[0] == id);
             if(!asset) return;
@@ -345,7 +428,43 @@
             }
         }
 
-        // Return Modal Logic
+        // Cetak Rekod
+        function openPrintModal() { document.getElementById('modal-print').classList.remove('hidden'); }
+        function closePrintModal() { document.getElementById('modal-print').classList.add('hidden'); }
+        
+        function executePrint() {
+            const m = parseInt(document.getElementById('print-month').value);
+            const y = parseInt(document.getElementById('print-year').value);
+            
+            const filtered = dataPinjaman.filter(p => {
+                const pDate = new Date(p[3]); // assum index 3 tarikh pinjam
+                const matchMonth = (m === 0) ? true : (pDate.getMonth() + 1 === m);
+                const matchYear = pDate.getFullYear() === y;
+                return matchMonth && matchYear;
+            });
+
+            if(filtered.length === 0) {
+                alert("Tiada rekod pada tempoh tersebut.");
+                return;
+            }
+
+            const pb = document.getElementById('print-table-body');
+            pb.innerHTML = filtered.map((p, i) => `
+                <tr>
+                    <td class="border border-black p-2 text-center">${i+1}</td>
+                    <td class="border border-black p-2 uppercase">${p[1]}</td>
+                    <td class="border border-black p-2">${p[2]}</td>
+                    <td class="border border-black p-2 text-center">${p[3]}</td>
+                    <td class="border border-black p-2 text-center">
+                        ${p[5] ? `<img src="${p[7] || ''}" style="max-height:40px; margin:auto;"><br><small>Pulang: ${p[5]}</small>` : 'DALAM PINJAMAN'}
+                    </td>
+                </tr>`).join('');
+            
+            document.getElementById('print-header-info').innerText = `Tahun: ${y} ${m !== 0 ? '| Bulan: ' + m : ''}`;
+            closePrintModal();
+            window.print();
+        }
+
         function openSignatureModal(loanId) {
             currentReturnId = loanId;
             document.getElementById('modal-signature').classList.remove('hidden');
@@ -356,15 +475,14 @@
             currentReturnId = null;
         }
         function confirmReturn() {
-            // Check if canvas is empty
             const blank = document.createElement('canvas');
-            blank.width = canvas.width;
-            blank.height = canvas.height;
+            blank.width = canvas.width; blank.height = canvas.height;
             if(canvas.toDataURL() === blank.toDataURL()) {
                 alert("Sila berikan tandatangan terlebih dahulu.");
                 return;
             }
-            sendData({ action: 'returnAsset', id: currentReturnId });
+            const sigData = canvas.toDataURL(); // Ambil base64 signature
+            sendData({ action: 'returnAsset', id: currentReturnId, signature: sigData });
             closeSignatureModal();
         }
 
@@ -404,13 +522,13 @@
         function submitLoan(e) { 
             e.preventDefault(); 
             const sel = document.getElementById('loan-asset'); 
+            if(!sel.value) { alert("Sila pilih aset."); return; }
             sendData({ action: 'addBorrow', idAset: sel.value, aset: sel.options[sel.selectedIndex].text, nama: document.getElementById('loan-nama').value, tarikh: document.getElementById('loan-tarikh').value, tujuan: document.getElementById('loan-tujuan').value }); 
             e.target.reset(); 
         }
 
         function toggleLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
 
-        // Time slots
         const ALL_SLOTS = ["07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
         function generateStartSlots() {
             const s = document.getElementById('book-mula');
