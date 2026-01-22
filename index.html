@@ -10,6 +10,7 @@
         .active-tab { border-bottom: 4px solid #1e40af; color: #1e40af; font-weight: bold; background-color: #f8fafc; }
         .loader { border-top-color: #3498db; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #signature-pad { border: 2px dashed #ccc; background: #fff; cursor: crosshair; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans text-slate-900">
@@ -86,41 +87,81 @@
                 </div>
             </div>
 
+            <!-- Tab 1: Daftar/Edit Aset -->
             <div id="tab-inventory-1" class="bg-white p-6 rounded-xl shadow border">
-                <h3 class="font-bold text-emerald-800 mb-4 uppercase">Daftar Aset Baru</h3>
-                <form onsubmit="submitAsset(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="md:col-span-2"><label class="block text-xs font-bold uppercase">Jenis Aset</label>
+                <h3 id="asset-form-title" class="font-bold text-emerald-800 mb-4 uppercase">Daftar Aset Baru</h3>
+                <form onsubmit="submitAsset(event)" id="form-asset" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="hidden" id="asset-id">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold uppercase">Jenis Aset</label>
                         <select id="asset-jenis" required class="w-full p-3 border rounded-lg">
-                            <option value="Komputer">Komputer</option><option value="Laptop">Laptop</option><option value="Printer">Printer</option><option value="Projektor">Projektor</option>
+                            <option value="Komputer">Komputer</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Printer">Printer</option>
+                            <option value="Toner/Ink">Toner/Ink</option>
+                            <option value="Lain-lain">Lain-lain</option>
                         </select>
                     </div>
                     <div><label class="block text-xs font-bold uppercase">Jenama</label><input type="text" id="asset-jenama" required class="w-full p-3 border rounded-lg"></div>
                     <div><label class="block text-xs font-bold uppercase">Model</label><input type="text" id="asset-model" required class="w-full p-3 border rounded-lg"></div>
                     <div><label class="block text-xs font-bold uppercase">No Siri</label><input type="text" id="asset-siri" required class="w-full p-3 border rounded-lg"></div>
                     <div><label class="block text-xs font-bold uppercase">Lokasi</label><input type="text" id="asset-lokasi" required class="w-full p-3 border rounded-lg"></div>
-                    <button type="submit" class="md:col-span-2 bg-emerald-700 text-white font-bold py-3 rounded-lg uppercase hover:bg-emerald-800 transition-colors">Simpan Rekod Aset</button>
+                    <div class="md:col-span-2 flex gap-2">
+                        <button type="submit" id="btn-save-asset" class="flex-1 bg-emerald-700 text-white font-bold py-3 rounded-lg uppercase hover:bg-emerald-800 transition-colors">Simpan Rekod Aset</button>
+                        <button type="button" id="btn-cancel-edit" onclick="resetAssetForm()" class="hidden bg-gray-500 text-white font-bold px-6 py-3 rounded-lg uppercase">Batal</button>
+                    </div>
                 </form>
             </div>
 
+            <!-- Tab 2: Senarai Aset -->
             <div id="tab-inventory-2" class="hidden bg-white p-6 rounded-xl shadow border">
-                 <table class="w-full text-sm text-left"><thead class="bg-slate-800 text-white"><tr><th class="p-3">Aset / No Siri</th><th class="p-3 text-center">Tindakan</th></tr></thead><tbody id="table-asset-body"></tbody></table>
+                 <table class="w-full text-sm text-left">
+                    <thead class="bg-slate-800 text-white">
+                        <tr><th class="p-3">Aset / No Siri</th><th class="p-3 text-center">Tindakan</th></tr>
+                    </thead>
+                    <tbody id="table-asset-body"></tbody>
+                </table>
             </div>
 
+            <!-- Tab 3: Pinjaman -->
             <div id="tab-inventory-3" class="hidden space-y-4">
                 <div class="bg-white p-6 rounded-xl shadow border">
                     <h3 class="font-bold text-blue-800 mb-4 uppercase">Borang Pinjaman Alatan</h3>
                     <form onsubmit="submitLoan(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div><label class="block text-xs font-bold uppercase">Nama Peminjam</label><input type="text" id="loan-nama" required class="w-full p-3 border rounded-lg"></div>
-                        <div><label class="block text-xs font-bold uppercase">Pilih Aset</label><select id="loan-asset" required class="w-full p-3 border rounded-lg"><option value="">Muat turun data...</option></select></div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase">Carian Aset (No Siri / Model)</label>
+                            <input type="text" id="search-asset-loan" oninput="filterLoanAssets()" placeholder="Taip untuk cari..." class="w-full p-3 border rounded-lg mb-1">
+                            <select id="loan-asset" required class="w-full p-3 border rounded-lg"></select>
+                        </div>
                         <div><label class="block text-xs font-bold uppercase">Tarikh Pinjam</label><input type="date" id="loan-tarikh" required class="w-full p-3 border rounded-lg"></div>
                         <div><label class="block text-xs font-bold uppercase">Tujuan</label><input type="text" id="loan-tujuan" required class="w-full p-3 border rounded-lg"></div>
                         <button type="submit" class="md:col-span-2 bg-blue-700 text-white font-bold py-3 rounded-lg uppercase">Sahkan Pinjaman</button>
                     </form>
-                    <table class="w-full text-xs text-left border mt-4"><thead class="bg-gray-100"><tr><th class="p-2">Nama</th><th class="p-2">Aset</th><th class="p-2">Status</th></tr></thead><tbody id="table-loan-body"></tbody></table>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left border mt-4">
+                            <thead class="bg-gray-100"><tr><th class="p-2">Nama</th><th class="p-2">Aset</th><th class="p-2">Status</th><th class="p-2 text-center">Tindakan</th></tr></thead>
+                            <tbody id="table-loan-body"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Modal Tandatangan -->
+    <div id="modal-signature" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[110] p-4">
+        <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-2xl">
+            <h3 class="font-bold text-lg mb-2 uppercase">Sila Tandatangan</h3>
+            <p class="text-xs text-gray-500 mb-4 italic">Tandatangan diperlukan sebelum pengesahan pemulangan.</p>
+            <canvas id="signature-pad" width="400" height="200" class="w-full rounded border"></canvas>
+            <div class="flex gap-2 mt-4">
+                <button onclick="clearSignature()" class="flex-1 py-2 bg-gray-200 font-bold rounded">Padam</button>
+                <button onclick="confirmReturn()" class="flex-1 py-2 bg-blue-700 text-white font-bold rounded">Sahkan Pulang</button>
+            </div>
+            <button onclick="closeSignatureModal()" class="w-full mt-2 text-xs text-gray-400 hover:underline">Batal</button>
+        </div>
+    </div>
 
     <div id="loader" class="hidden fixed inset-0 bg-white/80 flex flex-col items-center justify-center z-[100]">
         <div class="loader rounded-full border-8 border-t-8 border-blue-200 h-16 w-16 mb-2"></div>
@@ -130,6 +171,35 @@
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbwjCjtDcEHOglGZfR4Udo1jy66yuHwGZPpRRW8DbcEvBVxHFEUBTlbqu4-jB4XH8kfnZw/exec';
         let dataTempahan = [], dataAset = [], dataPinjaman = [];
+        let currentReturnId = null;
+
+        // Signature logic
+        const canvas = document.getElementById('signature-pad');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
+        canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function startDrawing(e) { isDrawing = true; draw(e); }
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.pageX) - rect.left;
+            const y = (e.clientY || e.pageY) - rect.top;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        function stopDrawing() { isDrawing = false; ctx.beginPath(); }
+        function clearSignature() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
         window.onload = () => {
             const d = new Date();
@@ -137,30 +207,23 @@
         };
 
         function showView(viewId) {
-            console.log("Membuka View:", viewId);
             document.getElementById('view-home').classList.add('hidden');
             document.getElementById('view-booking').classList.add('hidden');
             document.getElementById('view-inventory').classList.add('hidden');
-            
             const target = document.getElementById(`view-${viewId}`);
             if (target) {
                 target.classList.remove('hidden');
                 if(viewId !== 'home') refreshData();
-            } else {
-                console.error("View ID tidak dijumpai:", viewId);
-                document.getElementById('view-home').classList.remove('hidden');
             }
         }
 
         function loginAdmin() {
             const pass = prompt("Sila masukkan Kata Laluan Admin:");
-            if (pass === null) return; // Pengguna tekan Cancel
-            
             if (pass === "smkjinjang123") {
                 document.getElementById('admin-badge').classList.remove('hidden');
                 showView('inventory');
-            } else {
-                alert("Kata laluan salah. Akses ditolak.");
+            } else if (pass !== null) {
+                alert("Kata laluan salah.");
             }
         }
 
@@ -195,7 +258,7 @@
                 renderBookingTable();
                 renderAssetTable();
                 renderLoanTable();
-                updateLoanDropdown();
+                filterLoanAssets(); 
             } catch (e) {
                 console.error("Gagal muat data:", e);
             } finally {
@@ -206,30 +269,148 @@
         function renderBookingTable() {
             const b = document.getElementById('table-booking-body');
             if(!b) return;
-            b.innerHTML = dataTempahan.length ? dataTempahan.map(x => `<tr class="border-b"><td class="p-3 font-bold">${x[0]}</td><td class="p-3">${x[1]}</td><td class="p-3 text-blue-700 font-medium">${x[2]}</td></tr>`).join('') : '<tr><td colspan="3" class="p-4 text-center text-gray-400 italic">Tiada data dijumpai</td></tr>';
+            b.innerHTML = dataTempahan.length ? dataTempahan.map(x => `<tr class="border-b"><td class="p-3 font-bold">${x[0]}</td><td class="p-3">${x[1]}</td><td class="p-3 text-blue-700 font-medium">${x[2]}</td></tr>`).join('') : '<tr><td colspan="3" class="p-4 text-center">Tiada data</td></tr>';
         }
 
         function renderAssetTable() {
             const b = document.getElementById('table-asset-body');
             if(!b) return;
-            b.innerHTML = dataAset.length ? dataAset.map(x => `<tr class="border-b"><td class="p-3"><b>[${x[1]}] ${x[2]}</b><br><span class="text-xs text-gray-500">S/N: ${x[4]}</span></td><td class="p-3 text-center"><button class="text-red-500 text-xs font-bold border border-red-200 px-2 py-1 rounded bg-red-50 hover:bg-red-100">Hapus</button></td></tr>`).join('') : '<tr><td colspan="2" class="p-4 text-center text-gray-400">Tiada rekod aset</td></tr>';
+            b.innerHTML = dataAset.length ? dataAset.map(x => `
+                <tr class="border-b">
+                    <td class="p-3">
+                        <b>[${x[1]}] ${x[2]} - ${x[3]}</b><br>
+                        <span class="text-xs text-gray-500">No Siri: ${x[4]} | Lokasi: ${x[5]}</span>
+                    </td>
+                    <td class="p-3 text-center flex flex-col md:flex-row gap-1 justify-center">
+                        <button onclick="editAsset('${x[0]}')" class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded border border-amber-200">EDIT</button>
+                        <button onclick="deleteAsset('${x[0]}')" class="bg-red-50 text-red-500 text-[10px] font-bold px-2 py-1 rounded border border-red-200">HAPUS</button>
+                    </td>
+                </tr>`).join('') : '<tr><td colspan="2" class="p-4 text-center">Tiada rekod aset</td></tr>';
         }
 
         function renderLoanTable() {
             const b = document.getElementById('table-loan-body');
             if(!b) return;
-            b.innerHTML = dataPinjaman.length ? dataPinjaman.map(x => `<tr class="border-b"><td class="p-2"><b>${x[1]}</b></td><td class="p-2 text-xs">${x[2]}</td><td class="p-2">${x[5] ? '<span class="text-green-600 font-bold">✓</span>' : '<span class="text-orange-500">Dipinjam</span>'}</td></tr>`).join('') : '<tr><td colspan="3" class="p-4 text-center text-gray-400 italic">Tiada pinjaman aktif</td></tr>';
+            b.innerHTML = dataPinjaman.length ? dataPinjaman.map(x => `
+                <tr class="border-b">
+                    <td class="p-2"><b>${x[1]}</b></td>
+                    <td class="p-2 text-xs">${x[2]}</td>
+                    <td class="p-2">${x[5] ? '<span class="text-green-600 font-bold">Pulang</span>' : '<span class="text-orange-500">Dipinjam</span>'}</td>
+                    <td class="p-2 text-center">
+                        ${!x[5] ? `<button onclick="openSignatureModal('${x[0]}')" class="bg-blue-600 text-white px-2 py-1 rounded text-[10px] font-bold">PULANG</button>` : '-'}
+                    </td>
+                </tr>`).join('') : '<tr><td colspan="4" class="p-4 text-center italic">Tiada pinjaman aktif</td></tr>';
         }
 
-        function updateLoanDropdown() {
+        function filterLoanAssets() {
+            const term = document.getElementById('search-asset-loan').value.toLowerCase();
             const s = document.getElementById('loan-asset');
-            if(!s) return;
             s.innerHTML = '<option value="">-- Pilih Aset --</option>';
-            dataAset.forEach(a => { s.innerHTML += `<option value="${a[0]}">${a[1]} - ${a[2]} (${a[4]})</option>`; });
+            dataAset.forEach(a => {
+                const label = `${a[4]} - ${a[3]} (${a[2]})`.toLowerCase();
+                if(label.includes(term)) {
+                    s.innerHTML += `<option value="${a[0]}">${a[1]} - ${a[2]} (${a[4]})</option>`;
+                }
+            });
+        }
+
+        // CRUD Aset
+        function editAsset(id) {
+            const asset = dataAset.find(a => a[0] == id);
+            if(!asset) return;
+            document.getElementById('asset-id').value = asset[0];
+            document.getElementById('asset-jenis').value = asset[1];
+            document.getElementById('asset-jenama').value = asset[2];
+            document.getElementById('asset-model').value = asset[3];
+            document.getElementById('asset-siri').value = asset[4];
+            document.getElementById('asset-lokasi').value = asset[5];
+            
+            document.getElementById('asset-form-title').innerText = "Edit Aset";
+            document.getElementById('btn-save-asset').innerText = "Kemas Kini Aset";
+            document.getElementById('btn-cancel-edit').classList.remove('hidden');
+            switchTab('inventory', 1);
+        }
+
+        function resetAssetForm() {
+            document.getElementById('form-asset').reset();
+            document.getElementById('asset-id').value = "";
+            document.getElementById('asset-form-title').innerText = "Daftar Aset Baru";
+            document.getElementById('btn-save-asset').innerText = "Simpan Rekod Aset";
+            document.getElementById('btn-cancel-edit').classList.add('hidden');
+        }
+
+        function deleteAsset(id) {
+            if(confirm("Adakah anda pasti mahu memadam aset ini?")) {
+                sendData({ action: 'deleteAsset', id: id });
+            }
+        }
+
+        // Return Modal Logic
+        function openSignatureModal(loanId) {
+            currentReturnId = loanId;
+            document.getElementById('modal-signature').classList.remove('hidden');
+            clearSignature();
+        }
+        function closeSignatureModal() {
+            document.getElementById('modal-signature').classList.add('hidden');
+            currentReturnId = null;
+        }
+        function confirmReturn() {
+            // Check if canvas is empty
+            const blank = document.createElement('canvas');
+            blank.width = canvas.width;
+            blank.height = canvas.height;
+            if(canvas.toDataURL() === blank.toDataURL()) {
+                alert("Sila berikan tandatangan terlebih dahulu.");
+                return;
+            }
+            sendData({ action: 'returnAsset', id: currentReturnId });
+            closeSignatureModal();
+        }
+
+        async function sendData(p) {
+            if(!API_URL || API_URL.includes('GANTIKAN')) { alert("Mod Demo: Data tidak disimpan."); return; }
+            toggleLoader(true);
+            try {
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(p) });
+                alert("Berjaya!");
+                resetAssetForm();
+                setTimeout(refreshData, 1000);
+            } catch (e) { alert("Ralat teknikal."); }
+            toggleLoader(false);
+        }
+
+        function submitAsset(e) { 
+            e.preventDefault(); 
+            const id = document.getElementById('asset-id').value;
+            const payload = { 
+                action: id ? 'editAsset' : 'addAsset', 
+                id: id,
+                jenis: document.getElementById('asset-jenis').value, 
+                jenama: document.getElementById('asset-jenama').value, 
+                model: document.getElementById('asset-model').value, 
+                nosiri: document.getElementById('asset-siri').value, 
+                lokasi: document.getElementById('asset-lokasi').value 
+            };
+            sendData(payload); 
+        }
+
+        function submitBooking(e) { 
+            e.preventDefault(); 
+            sendData({ action: 'addBooking', nama: document.getElementById('book-nama').value, tarikh: document.getElementById('book-tarikh').value, masa: document.getElementById('book-mula').value + ' - ' + document.getElementById('book-tamat').value }); 
+            e.target.reset(); 
+        }
+
+        function submitLoan(e) { 
+            e.preventDefault(); 
+            const sel = document.getElementById('loan-asset'); 
+            sendData({ action: 'addBorrow', idAset: sel.value, aset: sel.options[sel.selectedIndex].text, nama: document.getElementById('loan-nama').value, tarikh: document.getElementById('loan-tarikh').value, tujuan: document.getElementById('loan-tujuan').value }); 
+            e.target.reset(); 
         }
 
         function toggleLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
 
+        // Time slots
         const ALL_SLOTS = ["07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
         function generateStartSlots() {
             const s = document.getElementById('book-mula');
@@ -243,21 +424,6 @@
             const idx = ALL_SLOTS.indexOf(m);
             for(let i=idx+1; i<ALL_SLOTS.length; i++) { s.innerHTML += `<option value="${ALL_SLOTS[i]}">${ALL_SLOTS[i]}</option>`; }
         }
-
-        async function sendData(p) {
-            if(!API_URL || API_URL.includes('GANTIKAN')) { alert("Mod Demo: Data tidak disimpan."); return; }
-            toggleLoader(true);
-            try {
-                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(p) });
-                alert("Berjaya dihantar!");
-                setTimeout(refreshData, 1000);
-            } catch (e) { alert("Ralat teknikal berlaku."); }
-            toggleLoader(false);
-        }
-
-        function submitBooking(e) { e.preventDefault(); sendData({ action: 'addBooking', nama: document.getElementById('book-nama').value, tarikh: document.getElementById('book-tarikh').value, masa: document.getElementById('book-mula').value + ' - ' + document.getElementById('book-tamat').value }); e.target.reset(); }
-        function submitAsset(e) { e.preventDefault(); sendData({ action: 'addAsset', jenis: document.getElementById('asset-jenis').value, jenama: document.getElementById('asset-jenama').value, model: document.getElementById('asset-model').value, nosiri: document.getElementById('asset-siri').value, lokasi: document.getElementById('asset-lokasi').value }); e.target.reset(); }
-        function submitLoan(e) { e.preventDefault(); const sel = document.getElementById('loan-asset'); sendData({ action: 'addBorrow', idAset: sel.value, aset: sel.options[sel.selectedIndex].text, nama: document.getElementById('loan-nama').value, tarikh: document.getElementById('loan-tarikh').value, tujuan: document.getElementById('loan-tujuan').value }); e.target.reset(); }
     </script>
 </body>
 </html>
