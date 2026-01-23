@@ -11,12 +11,12 @@
         .loader { border-top-color: #3498db; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         #signature-pad { border: 2px dashed #cbd5e1; background: #ffffff; cursor: crosshair; touch-action: none; }
-        @media print { .no-print { display: none !important; } .print-only { display: block !important; } }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-900">
+<body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
 
-    <header class="bg-white shadow-sm border-b-4 border-blue-800 p-4 no-print text-center md:text-left">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b-4 border-blue-800 p-4 text-center md:text-left">
         <div class="container mx-auto flex flex-col md:flex-row items-center gap-4">
             <img src="https://i.ibb.co/Lhb8pYQ/SMK-Jinjang.jpg" alt="Logo SMK Jinjang" class="h-16 w-auto">
             <div>
@@ -27,7 +27,8 @@
         </div>
     </header>
 
-    <main class="container mx-auto p-4 no-print">
+    <main class="container mx-auto p-4">
+        <!-- Dashboard Utama -->
         <div id="view-home" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <div onclick="showView('booking')" class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-all cursor-pointer border-t-4 border-blue-600">
                 <div class="text-4xl mb-2">🗓️</div>
@@ -41,49 +42,100 @@
             </div>
         </div>
 
+        <!-- Sistem Tempahan -->
+        <div id="view-booking" class="hidden space-y-4">
+            <button onclick="showView('home')" class="text-blue-700 font-bold text-sm">← KEMBALI</button>
+            <div class="bg-white p-6 rounded-xl shadow-sm border">
+                <h3 class="font-bold text-blue-900 mb-4 uppercase text-sm border-b pb-2">Borang Tempahan Makmal</h3>
+                <form onsubmit="submitBooking(event)" class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-600 uppercase">Nama Guru</label>
+                        <input type="text" id="book-nama" required class="w-full p-2 border rounded mt-1">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-gray-600 uppercase">Tarikh</label>
+                            <input type="date" id="book-tarikh" required class="w-full p-2 border rounded mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600 uppercase">Masa / Sesi</label>
+                            <input type="text" id="book-masa" placeholder="Cth: 8.00 - 10.00 AM" required class="w-full p-2 border rounded mt-1">
+                        </div>
+                    </div>
+                    <button type="submit" class="bg-blue-700 text-white py-3 rounded-lg font-bold uppercase hover:bg-blue-800 transition-colors">Hantar Tempahan</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sistem Inventori & Pinjaman (Admin Only) -->
         <div id="view-inventory" class="hidden space-y-4">
             <div class="flex justify-between items-center">
                 <button onclick="showView('home')" class="text-blue-700 font-bold text-sm">← KEMBALI</button>
-                <div class="flex bg-slate-200 p-1 rounded-lg gap-1">
-                    <button id="btn-inv-1" onclick="switchTab('inv', 1)" class="px-4 py-2 text-xs font-bold rounded active-tab">ASET</button>
-                    <button id="btn-inv-2" onclick="switchTab('inv', 2)" class="px-4 py-2 text-xs font-bold rounded">PINJAMAN</button>
+                <div class="flex bg-slate-200 p-1 rounded-lg gap-1 overflow-x-auto">
+                    <button id="btn-inv-1" onclick="switchTab(1)" class="px-4 py-2 text-[10px] md:text-xs font-bold rounded active-tab whitespace-nowrap uppercase">Daftar Aset</button>
+                    <button id="btn-inv-2" onclick="switchTab(2)" class="px-4 py-2 text-[10px] md:text-xs font-bold rounded whitespace-nowrap uppercase">Senarai Aset</button>
+                    <button id="btn-inv-3" onclick="switchTab(3)" class="px-4 py-2 text-[10px] md:text-xs font-bold rounded whitespace-nowrap uppercase">Pinjaman Aset</button>
                 </div>
             </div>
 
+            <!-- Tab 1: Daftar Aset -->
             <div id="tab-inv-1" class="bg-white p-6 rounded-xl shadow-sm border">
-                <h3 class="font-bold text-blue-900 mb-4 uppercase text-sm">Pendaftaran Aset</h3>
-                <form onsubmit="submitAsset(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <input type="text" id="asset-jenis" placeholder="Jenis (cth: Laptop)" required class="p-2 border rounded text-sm">
+                <h3 class="font-bold text-blue-900 mb-4 uppercase text-sm border-b pb-2">Pendaftaran Aset Baru</h3>
+                <form onsubmit="submitAsset(event)" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input type="text" id="asset-jenis" placeholder="Jenis (Cth: Laptop)" required class="p-2 border rounded text-sm">
                     <input type="text" id="asset-jenama" placeholder="Jenama" required class="p-2 border rounded text-sm">
+                    <input type="text" id="asset-model" placeholder="Model" class="p-2 border rounded text-sm">
                     <input type="text" id="asset-siri" placeholder="No Siri" required class="p-2 border rounded text-sm">
-                    <button type="submit" class="md:col-span-3 bg-emerald-600 text-white py-2 rounded font-bold text-sm hover:bg-emerald-700 uppercase">Simpan Aset</button>
+                    <input type="text" id="asset-lokasi" placeholder="Lokasi Simpanan" class="p-2 border rounded text-sm">
+                    <input type="text" id="asset-catatan" placeholder="Catatan" class="p-2 border rounded text-sm">
+                    <button type="submit" class="md:col-span-2 bg-emerald-600 text-white py-2 rounded font-bold text-sm hover:bg-emerald-700 uppercase">Simpan Aset</button>
                 </form>
-                <div class="mt-6 overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-50"><tr><th class="p-2">Aset</th><th class="p-2">No Siri</th><th class="p-2">Aksi</th></tr></thead>
+            </div>
+
+            <!-- Tab 2: Senarai Aset -->
+            <div id="tab-inv-2" class="hidden bg-white p-6 rounded-xl shadow-sm border">
+                <h3 class="font-bold text-blue-900 mb-4 uppercase text-sm border-b pb-2">Senarai Inventori</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-slate-50 border-b">
+                            <tr>
+                                <th class="p-3">Maklumat Aset</th>
+                                <th class="p-3">No Siri</th>
+                                <th class="p-3">Lokasi</th>
+                                <th class="p-3 text-center">Aksi</th>
+                            </tr>
+                        </thead>
                         <tbody id="asset-list"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="tab-inv-2" class="hidden space-y-4">
-                <div class="bg-white p-6 rounded-xl shadow-sm border">
-                    <h3 class="font-bold text-blue-900 mb-4 uppercase text-sm">Pinjaman Baru</h3>
+            <!-- Tab 3: Pinjaman Aset -->
+            <div id="tab-inv-3" class="hidden space-y-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-blue-200">
+                    <h3 class="font-bold text-blue-900 mb-4 uppercase text-sm border-b pb-2">Borang Pinjaman Baru</h3>
                     <form onsubmit="submitLoan(event)" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <input type="text" id="loan-nama" placeholder="Nama Peminjam" required class="p-2 border rounded text-sm">
                         <select id="loan-asset-id" required class="p-2 border rounded text-sm bg-blue-50">
                             <option value="">-- Memuatkan Stok... --</option>
                         </select>
                         <input type="date" id="loan-tarikh" required class="p-2 border rounded text-sm">
+                        <input type="text" id="loan-tujuan" placeholder="Tujuan Pinjaman" class="p-2 border rounded text-sm md:col-span-2">
                         <button type="submit" class="md:col-span-2 bg-blue-700 text-white py-2 rounded font-bold text-sm uppercase">Sahkan Pinjaman</button>
                     </form>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border">
-                    <h3 class="font-bold text-slate-800 mb-4 uppercase text-sm">Senarai Pinjaman Aktif</h3>
+                    <h3 class="font-bold text-slate-800 mb-4 uppercase text-sm border-b pb-2 text-red-600">Pinjaman Belum Pulang</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs border-collapse">
-                            <thead><tr class="border-b bg-slate-50"><th class="p-2 text-left">Peminjam</th><th class="p-2 text-left">Alatan</th><th class="p-2 text-center">Aksi</th></tr></thead>
+                            <thead>
+                                <tr class="border-b bg-slate-50">
+                                    <th class="p-2 text-left uppercase">Peminjam</th>
+                                    <th class="p-2 text-left uppercase">Alatan</th>
+                                    <th class="p-2 text-center uppercase">Aksi</th>
+                                </tr>
+                            </thead>
                             <tbody id="loan-list"></tbody>
                         </table>
                     </div>
@@ -92,88 +144,183 @@
         </div>
     </main>
 
+    <!-- Modal Tandatangan -->
     <div id="modal-sig" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-[50]">
-        <div class="bg-white p-6 rounded-2xl w-full max-w-md">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl">
             <h3 class="font-bold text-blue-900 mb-1 uppercase">Sahkan Pemulangan</h3>
-            <p class="text-[10px] text-gray-500 mb-4 uppercase font-bold">Tandatangan di bawah:</p>
-            <canvas id="signature-pad" width="400" height="200" class="w-full border rounded"></canvas>
+            <p class="text-[10px] text-gray-500 mb-4 uppercase font-bold italic">Sila tandatangan di bawah untuk rekod digital:</p>
+            <canvas id="signature-pad" width="400" height="200" class="w-full border rounded shadow-inner"></canvas>
             <div class="grid grid-cols-2 gap-2 mt-4">
                 <button onclick="clearSig()" class="bg-slate-200 py-2 rounded font-bold text-xs uppercase">Padam</button>
-                <button onclick="saveReturn()" class="bg-blue-700 text-white py-2 rounded font-bold text-xs uppercase">Hantar & Selesai</button>
+                <button onclick="saveReturn()" class="bg-blue-700 text-white py-2 rounded font-bold text-xs uppercase">Selesai Pulang</button>
             </div>
             <button onclick="closeSig()" class="w-full mt-4 text-[10px] text-red-500 font-bold uppercase">Batal</button>
         </div>
     </div>
 
+    <!-- Loader -->
     <div id="loader" class="hidden fixed inset-0 bg-white/80 flex items-center justify-center z-[100]">
-        <div class="loader ease-linear rounded-full border-4 border-t-4 border-blue-100 h-10 w-10"></div>
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-blue-100 h-12 w-12"></div>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyeCiImbyiUBJ6j8lDyycNQB7IDRmKMVLs3ABD2YdTv5-m6naVNDlTR0D48AIbf8qvB9g/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxSE5wV8IrmSy-IU4e4Drf5fs8iNYglizXHo9ZUGePiSVIFsFdLE1xlTgR6SPASnlkpkw/exec';
         let assets = [], loans = [], currentLoanId = null;
 
+        // Signature Pad Logic
         const canvas = document.getElementById('signature-pad');
         const ctx = canvas.getContext('2d');
         let drawing = false;
 
-        canvas.addEventListener('mousedown', () => drawing = true);
-        canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; });
-        canvas.addEventListener('touchend', () => { drawing = false; ctx.beginPath(); });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX || e.touches[0].clientX) - rect.left,
+                y: (e.clientY || e.touches[0].clientY) - rect.top
+            };
+        }
 
+        function startDrawing(e) { drawing = true; draw(e); }
+        function stopDrawing() { drawing = false; ctx.beginPath(); }
         function draw(e) {
             if (!drawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            const pos = getPos(e);
             ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#1e3a8a';
-            ctx.lineTo(x, y); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(x, y);
+            ctx.lineTo(pos.x, pos.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
         }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        window.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
+        canvas.addEventListener('touchend', stopDrawing);
 
         function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
         function closeSig() { document.getElementById('modal-sig').classList.add('hidden'); }
         function openSig(id) { currentLoanId = id; document.getElementById('modal-sig').classList.remove('hidden'); clearSig(); }
 
+        // Core Functions
         async function refresh() {
             if (!API_URL.startsWith('http')) return;
             setLoading(true);
             try {
-                const rA = await fetch(API_URL + '?action=getAssets');
-                const rL = await fetch(API_URL + '?action=getBorrowing');
-                const resA = await rA.json();
-                const resL = await rL.json();
+                const [resA, resL] = await Promise.all([
+                    fetch(`${API_URL}?action=getAssets`).then(r => r.json()),
+                    fetch(`${API_URL}?action=getBorrowing`).then(r => r.json())
+                ]);
                 assets = resA.data || [];
                 loans = resL.data || [];
                 updateUI();
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error("Refresh Error:", err); }
             setLoading(false);
         }
 
         function updateUI() {
+            // Update Tab Inventori (Senarai)
             const al = document.getElementById('asset-list');
             al.innerHTML = assets.map(a => `
-                <tr class="border-b"><td class="p-2">${a[2]}</td><td class="p-2">${a[4]}</td>
-                <td class="p-2"><button onclick="deleteAsset('${a[0]}')" class="text-red-500 font-bold">HAPUS</button></td></tr>`).join('');
+                <tr class="border-b hover:bg-slate-50 transition-colors">
+                    <td class="p-3">
+                        <div class="font-bold text-blue-900">${a[2]}</div>
+                        <div class="text-[10px] text-gray-500">${a[1]} | ${a[3] || '-'}</div>
+                    </td>
+                    <td class="p-3 text-slate-600 font-mono">${a[4]}</td>
+                    <td class="p-3 text-slate-500">${a[5] || '-'}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="deleteAsset('${a[0]}')" class="text-red-500 hover:text-red-700 font-bold p-1">HAPUS</button>
+                    </td>
+                </tr>`).join('');
 
+            // Update Dropdown Stok Pintar
             const dropdown = document.getElementById('loan-asset-id');
-            // Logik Stok Pintar: Ambil ID Aset dari Kolum H (Index 7)
+            // Logik Stok: Pinjaman Aktif adalah yang TarikhPulang (Kolum F / Index 5) masih kosong
             const borrowedIds = loans.filter(l => !l[5] || l[5] === "").map(l => String(l[7])); 
-            
             const available = assets.filter(a => !borrowedIds.includes(String(a[0])));
             
             dropdown.innerHTML = '<option value="">-- Pilih Aset --</option>' + 
                 available.map(a => `<option value="${a[0]}">${a[2]} (${a[4]})</option>`).join('');
 
+            // Update Senarai Pinjaman Aktif
             const ll = document.getElementById('loan-list');
             const activeLoans = loans.filter(l => !l[5] || l[5] === "");
             ll.innerHTML = activeLoans.length ? activeLoans.map(l => `
-                <tr class="border-b"><td class="p-2 font-bold">${l[1]}</td><td class="p-2">${l[2]}</td>
-                <td class="p-2 text-center"><button onclick="openSig('${l[0]}')" class="bg-blue-600 text-white px-3 py-1 rounded text-[10px] font-bold">PULANG</button></td></tr>`).join('') 
-                : '<tr><td colspan="3" class="p-4 text-center text-gray-400 italic">Tiada pinjaman aktif</td></tr>';
+                <tr class="border-b">
+                    <td class="p-3">
+                        <div class="font-bold text-slate-800">${l[1]}</div>
+                        <div class="text-[9px] text-gray-400">ID: ${l[0]}</div>
+                    </td>
+                    <td class="p-3">
+                        <div class="text-blue-700 font-medium">${l[2]}</div>
+                        <div class="text-[9px] text-gray-400 uppercase">${l[4]}</div>
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="openSig('${l[0]}')" class="bg-blue-600 text-white px-4 py-1.5 rounded-full text-[10px] font-bold shadow-sm hover:bg-blue-700">PULANG</button>
+                    </td>
+                </tr>`).join('') 
+                : '<tr><td colspan="3" class="p-8 text-center text-gray-400 italic">Tiada pinjaman aktif dijumpai</td></tr>';
+        }
+
+        async function postData(obj) {
+            setLoading(true);
+            try {
+                const params = new URLSearchParams();
+                for (let key in obj) params.append(key, obj[key]);
+                const res = await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: params });
+                setTimeout(refresh, 2000);
+                return true;
+            } catch (e) { 
+                alert("Ralat penghantaran data!"); 
+                return false;
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function submitBooking(e) {
+            e.preventDefault();
+            const ok = await postData({
+                action: 'addBooking',
+                nama: document.getElementById('book-nama').value,
+                tarikh: document.getElementById('book-tarikh').value,
+                masa: document.getElementById('book-masa').value
+            });
+            if(ok) {
+                alert("Tempahan berjaya dihantar!");
+                e.target.reset();
+                showView('home');
+            }
+        }
+
+        async function submitAsset(e) {
+            e.preventDefault();
+            await postData({
+                action: 'addAsset',
+                jenis: document.getElementById('asset-jenis').value,
+                jenama: document.getElementById('asset-jenama').value,
+                model: document.getElementById('asset-model').value,
+                nosiri: document.getElementById('asset-siri').value,
+                lokasi: document.getElementById('asset-lokasi').value,
+                catatan: document.getElementById('asset-catatan').value
+            });
+            e.target.reset();
+            alert("Aset berjaya didaftarkan!");
+        }
+
+        async function submitLoan(e) {
+            e.preventDefault();
+            const sel = document.getElementById('loan-asset-id');
+            await postData({
+                action: 'addBorrow',
+                idAset: sel.value,
+                aset: sel.options[sel.selectedIndex].text,
+                nama: document.getElementById('loan-nama').value,
+                tarikh: document.getElementById('loan-tarikh').value,
+                tujuan: document.getElementById('loan-tujuan').value
+            });
+            e.target.reset();
+            alert("Pinjaman disahkan!");
         }
 
         async function saveReturn() {
@@ -188,71 +335,44 @@
                 await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: params });
                 closeSig();
                 setTimeout(refresh, 2000);
-                alert("Berjaya dipulangkan!");
+                alert("Proses pemulangan selesai!");
             } catch (err) { alert("Ralat server!"); }
             setLoading(false);
         }
 
-        async function postData(obj) {
-            setLoading(true);
-            try {
-                const params = new URLSearchParams();
-                for (let key in obj) params.append(key, obj[key]);
-                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: params });
-                setTimeout(refresh, 1500);
-            } catch (e) { alert("Gagal!"); }
-            setLoading(false);
-        }
-
-        function submitAsset(e) {
-            e.preventDefault();
-            postData({
-                action: 'addAsset',
-                jenis: document.getElementById('asset-jenis').value,
-                jenama: document.getElementById('asset-jenama').value,
-                nosiri: document.getElementById('asset-siri').value
-            });
-            e.target.reset();
-        }
-
-        function submitLoan(e) {
-            e.preventDefault();
-            const sel = document.getElementById('loan-asset-id');
-            postData({
-                action: 'addBorrow',
-                idAset: sel.value,
-                aset: sel.options[sel.selectedIndex].text,
-                nama: document.getElementById('loan-nama').value,
-                tarikh: document.getElementById('loan-tarikh').value
-            });
-            e.target.reset();
+        async function deleteAsset(id) {
+            if(!confirm("Hapus aset ini secara kekal?")) return;
+            await postData({ action: 'deleteAsset', id: id });
         }
 
         function showView(v) {
-            ['home','inventory'].forEach(i => document.getElementById('view-'+i).classList.add('hidden'));
+            ['home','booking','inventory'].forEach(i => document.getElementById('view-'+i).classList.add('hidden'));
             document.getElementById('view-'+v).classList.remove('hidden');
-            if(v !== 'home') refresh();
+            if(v === 'inventory') refresh();
         }
 
-        function switchTab(s, i) {
-            document.getElementById('tab-inv-1').classList.toggle('hidden', i!==1);
-            document.getElementById('tab-inv-2').classList.toggle('hidden', i!==2);
-            document.getElementById('btn-inv-1').classList.toggle('active-tab', i===1);
-            document.getElementById('btn-inv-2').classList.toggle('active-tab', i===2);
+        function switchTab(i) {
+            [1,2,3].forEach(n => {
+                document.getElementById('tab-inv-'+n).classList.toggle('hidden', n!==i);
+                document.getElementById('btn-inv-'+n).classList.toggle('active-tab', n===i);
+            });
         }
 
         function setLoading(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
 
         function loginAdmin() {
-            const p = prompt("Kata Laluan:");
+            const p = prompt("Masukkan Kata Laluan Pentadbir:");
             if (p === "smkjinjang123") {
                 document.getElementById('admin-badge').classList.remove('hidden');
                 showView('inventory');
+            } else if (p !== null) {
+                alert("Kata laluan salah!");
             }
         }
 
         window.onload = () => {
-            document.getElementById('display-date').innerText = new Date().toLocaleDateString('ms-MY', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('display-date').innerText = new Date().toLocaleDateString('ms-MY', options);
         };
     </script>
 </body>
