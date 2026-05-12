@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eKeberadaan Guru - SMK Perempuan Jalan Ipoh</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Memuatkan Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .loading-overlay {
@@ -34,24 +33,20 @@
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
     </div>
 
-    <!-- Main Container -->
     <div id="app" class="max-w-md mx-auto md:max-w-4xl min-h-screen flex flex-col">
         
-        <!-- Header -->
         <header class="bg-blue-800 text-white p-4 shadow-lg sticky top-0 z-40 no-print">
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-lg font-bold">eKeberadaan Guru</h1>
-                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.2)</p>
+                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.3)</p>
                 </div>
-                <!-- BUTANG ADMIN (Ikon Gear) -->
                 <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all flex items-center justify-center border border-blue-500/30">
                     <i data-lucide="settings" class="w-6 h-6 text-white"></i>
                 </button>
             </div>
         </header>
 
-        <!-- Navigation Admin (Hidden by default) -->
         <nav id="admin-nav" class="bg-white border-b overflow-x-auto whitespace-nowrap hidden no-print">
             <div class="flex p-2 gap-2">
                 <button onclick="switchTab('dashboard')" class="px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-100 tab-btn active-tab bg-blue-50 text-blue-700 border border-blue-100">DASHBOARD</button>
@@ -63,10 +58,8 @@
             </div>
         </nav>
 
-        <!-- Main Content -->
         <main class="flex-grow p-4">
             
-            <!-- VIEW: PENGGUNA -->
             <section id="view-user" class="space-y-4">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
@@ -74,17 +67,14 @@
                     </h2>
                     
                     <form id="form-keberadaan" class="space-y-4">
-                        <!-- Nama Autocomplete -->
                         <div class="relative">
                             <label class="block text-sm font-semibold mb-1 text-slate-600">NAMA GURU</label>
                             <input type="text" id="user-nama-input" placeholder="Taip nama anda..." autocomplete="off"
                                 class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all">
                             <div id="name-dropdown" class="absolute w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-48 overflow-y-auto hidden">
-                                <!-- Search results here -->
-                            </div>
+                                </div>
                         </div>
 
-                        <!-- Urusan -->
                         <div>
                             <label class="block text-sm font-semibold mb-1 text-slate-600">URUSAN KEBERADAAN</label>
                             <select id="select-urusan" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all" onchange="toggleFormFields()">
@@ -95,10 +85,8 @@
                             </select>
                         </div>
 
-                        <!-- Fields Container -->
                         <div id="dynamic-fields" class="space-y-4 border-t border-slate-100 pt-4 hidden">
-                            <!-- Fields will be injected here dynamically -->
-                        </div>
+                            </div>
 
                         <button type="submit" class="w-full bg-blue-700 text-white py-4 rounded-xl font-bold shadow-blue-200 shadow-lg hover:bg-blue-800 transition-all active:scale-95 flex items-center justify-center gap-2">
                             <i data-lucide="save" class="w-5 h-5"></i> SIMPAN MAKLUMAT
@@ -107,7 +95,6 @@
                 </div>
             </section>
 
-            <!-- VIEW: ADMIN DASHBOARD -->
             <section id="view-admin-dashboard" class="hidden space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
@@ -133,7 +120,6 @@
                 </div>
             </section>
 
-            <!-- VIEW: ADMIN REKOD -->
             <section id="view-admin-rekod" class="hidden space-y-4">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap gap-2 no-print">
                     <input type="date" id="filter-date" class="p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
@@ -162,13 +148,11 @@
                             </tr>
                         </thead>
                         <tbody id="table-rekod-body" class="text-sm divide-y divide-slate-100">
-                            <!-- Rows injected here -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- VIEW: ADMIN TETAPAN -->
             <section id="view-admin-tetapan" class="hidden space-y-4">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i data-lucide="user-plus-2" class="text-emerald-600"></i> Tambah Guru Baru</h2>
@@ -193,15 +177,13 @@
                         <span id="teacher-count" class="text-xs bg-slate-100 px-2 py-1 rounded-full text-slate-500 font-normal">0 Guru</span>
                     </h3>
                     <div id="teacher-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <!-- List of teachers -->
-                    </div>
+                        </div>
                 </div>
             </section>
 
         </main>
     </div>
 
-    <!-- Admin Login Modal -->
     <div id="modal-login" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4 backdrop-blur-sm">
         <div class="bg-white p-8 rounded-3xl w-full max-w-sm text-center shadow-2xl scale-95 animate-in fade-in zoom-in duration-300">
             <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -217,10 +199,8 @@
         </div>
     </div>
 
-    <!-- Script Section -->
     <script>
         // --- CONFIGURATION ---
-        // URL Google Apps Script yang anda berikan dimasukkan di sini
         const API_URL = "https://script.google.com/macros/s/AKfycbwCumZBnERCXzABn3L00ulOdae7B7tx1gLCmSNRgq-tGo_zHWe27boeGkPwFhlYyjjWrg/exec"; 
         const ADMIN_PASS = "Admin0228";
         
@@ -233,40 +213,32 @@
 
         // --- INITIALIZATION ---
         window.addEventListener('load', () => {
-            // Memastikan Lucide dimuatkan sebelum ikon dicipta
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
-            } else {
-                console.error("Lucide tidak dimuatkan.");
             }
             loadInitialData();
             setupAutocomplete();
-            
             document.getElementById('filter-date').valueAsDate = new Date();
         });
 
         async function loadInitialData() {
             showLoading(true);
             try {
-                if(!API_URL || API_URL.trim() === "") {
-                    console.warn("API_URL tidak ditetapkan. Menjalankan mod demo.");
-                    state.teachers = [{id: "G01", nama: "GURU CONTOH 1", jawatan: "GURU"}, {id: "G02", nama: "GURU CONTOH 2", jawatan: "GURU"}];
-                    renderTeacherList();
-                    showLoading(false);
-                    return;
-                }
-                const response = await fetch(`${API_URL}?action=getInitialData`, { method: 'POST', body: JSON.stringify({}) });
+                const response = await fetch(`${API_URL}?action=getInitialData`, { 
+                    method: 'POST', 
+                    mode: 'cors',
+                    body: JSON.stringify({}) 
+                });
                 const data = await response.json();
                 state.teachers = data.teachers || [];
                 state.records = data.records || [];
                 renderTeacherList();
                 updateStats();
                 renderRecords();
+                console.log("Data guru dimuatkan:", state.teachers.length);
             } catch (e) {
                 console.error("Gagal memuatkan data:", e);
-                // Jika ralat berlaku (cth: CORS), muatkan data demo supaya UI tidak kosong
-                state.teachers = [{id: "G01", nama: "GURU CONTOH 1", jawatan: "GURU"}];
-                renderTeacherList();
+                state.teachers = [];
             } finally {
                 showLoading(false);
             }
@@ -343,22 +315,34 @@
             if(typeof lucide !== 'undefined') lucide.createIcons();
         }
 
-        // --- AUTOCOMPLETE LOGIC ---
+        // --- LOGIK AUTOCOMPLETE YANG DIBETULKAN ---
         function setupAutocomplete() {
             const input = document.getElementById('user-nama-input');
             const dropdown = document.getElementById('name-dropdown');
             if(!input || !dropdown) return;
 
-            input.addEventListener('input', (e) => {
-                const val = e.target.value.toUpperCase();
-                if(!val) { dropdown.classList.add('hidden'); return; }
+            input.addEventListener('input', () => {
+                const query = input.value.trim().toUpperCase();
                 
-                const matches = state.teachers.filter(t => t.nama.toUpperCase().includes(val));
-                if(matches.length > 0) {
+                // Sembunyikan dropdown jika input kosong
+                if (query.length < 1) {
+                    dropdown.classList.add('hidden');
+                    return;
+                }
+
+                // Cari guru berdasarkan nama (Case-insensitive)
+                const matches = state.teachers.filter(t => 
+                    t.nama.toUpperCase().includes(query)
+                );
+
+                if (matches.length > 0) {
                     dropdown.innerHTML = matches.map(t => `
-                        <div class="p-3 hover:bg-blue-50 cursor-pointer border-b border-slate-50 last:border-0" onclick="selectTeacher('${t.nama}')">
+                        <div class="p-3 hover:bg-blue-50 cursor-pointer border-b border-slate-50 last:border-0 transition-colors" 
+                             onclick="selectTeacher('${t.nama}')">
                             <div class="font-bold text-sm text-slate-700">${t.nama}</div>
-                            <div class="text-[10px] text-slate-400 font-mono tracking-tighter uppercase">${t.id} - ${t.jawatan}</div>
+                            <div class="text-[10px] text-slate-400 font-mono tracking-tighter uppercase">
+                                ${t.id} - ${t.jawatan}
+                            </div>
                         </div>
                     `).join('');
                     dropdown.classList.remove('hidden');
@@ -367,13 +351,17 @@
                 }
             });
 
+            // Sembunyikan dropdown jika klik di luar kawasan input
             document.addEventListener('click', (e) => {
-                if(!input.contains(e.target)) dropdown.classList.add('hidden');
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
             });
         }
 
         function selectTeacher(name) {
-            document.getElementById('user-nama-input').value = name;
+            const input = document.getElementById('user-nama-input');
+            input.value = name;
             document.getElementById('name-dropdown').classList.add('hidden');
         }
 
@@ -381,11 +369,6 @@
         document.getElementById('form-keberadaan').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            if(!API_URL || API_URL.trim() === "") {
-                alert("Ralat: API URL tidak ditetapkan.");
-                return;
-            }
-
             const nama = document.getElementById('user-nama-input').value;
             const urusan = document.getElementById('select-urusan').value;
             
@@ -397,17 +380,17 @@
             const formData = {
                 nama,
                 urusan,
-                urusanKeluar: document.getElementById('urusanKeluar')?.value,
-                tarikhMula: document.getElementById('tarikhMula')?.value,
-                tarikhTamat: document.getElementById('tarikhTamat')?.value,
-                masaKeluar: document.getElementById('masaKeluar')?.value,
-                masaMasuk: document.getElementById('masaMasuk')?.value,
-                jenisUrusan: document.getElementById('jenisUrusan')?.value,
-                namaProgram: document.getElementById('namaProgram')?.value,
-                tempat: document.getElementById('tempat')?.value,
-                anjuran: document.getElementById('anjuran')?.value,
-                jenisCuti: document.getElementById('jenisCuti')?.value,
-                catatan: document.getElementById('catatan')?.value,
+                urusanKeluar: document.getElementById('urusanKeluar')?.value || "",
+                tarikhMula: document.getElementById('tarikhMula')?.value || "",
+                tarikhTamat: document.getElementById('tarikhTamat')?.value || "",
+                masaKeluar: document.getElementById('masaKeluar')?.value || "",
+                masaMasuk: document.getElementById('masaMasuk')?.value || "",
+                jenisUrusan: document.getElementById('jenisUrusan')?.value || "",
+                namaProgram: document.getElementById('namaProgram')?.value || "",
+                tempat: document.getElementById('tempat')?.value || "",
+                anjuran: document.getElementById('anjuran')?.value || "",
+                jenisCuti: document.getElementById('jenisCuti')?.value || "",
+                catatan: document.getElementById('catatan')?.value || "",
             };
 
             showLoading(true);
@@ -425,7 +408,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert("Ralat sambungan: Sila pastikan skrip GAS anda membenarkan CORS dan telah dideploy sebagai 'Web App' dengan akses 'Anyone'.");
+                alert("Ralat sambungan: Sila pastikan skrip GAS anda membenarkan CORS.");
             } finally {
                 showLoading(false);
             }
@@ -486,14 +469,10 @@
             const todayDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
             const todayRecords = state.records.filter(r => r.TarikhMula === todayDate);
             
-            const dalaman = todayRecords.filter(r => r.UrusanKeberadaan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN').length;
-            const rasmi = todayRecords.filter(r => r.UrusanKeberadaan === 'URUSAN RASMI').length;
-            const cuti = todayRecords.filter(r => r.UrusanKeberadaan === 'CUTI').length;
-            
             document.getElementById('stat-total').innerText = todayRecords.length;
-            document.getElementById('stat-dalaman').innerText = dalaman;
-            document.getElementById('stat-rasmi').innerText = rasmi;
-            document.getElementById('stat-cuti').innerText = cuti;
+            document.getElementById('stat-dalaman').innerText = todayRecords.filter(r => r.UrusanKeberadaan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN').length;
+            document.getElementById('stat-rasmi').innerText = todayRecords.filter(r => r.UrusanKeberadaan === 'URUSAN RASMI').length;
+            document.getElementById('stat-cuti').innerText = todayRecords.filter(r => r.UrusanKeberadaan === 'CUTI').length;
         }
 
         function renderRecords() {
@@ -542,26 +521,23 @@
             if(typeof lucide !== 'undefined') lucide.createIcons();
         }
 
+        async function deleteRecordInSheet(id) {
+            try {
+                await fetch(`${API_URL}?action=deleteRecord`, {
+                    method: 'POST',
+                    body: JSON.stringify({id: id})
+                });
+            } catch (e) { console.error(e); }
+        }
+
         async function deleteRow(id) {
             if(!confirm("AMARAN: Rekod akan dipadam terus dari Google Sheet. Teruskan?")) return;
-            
             showLoading(true);
-            try {
-                if(API_URL && API_URL.trim() !== "") {
-                    await fetch(`${API_URL}?action=deleteRecord`, {
-                        method: 'POST',
-                        body: JSON.stringify({id: id})
-                    });
-                }
-                state.records = state.records.filter(r => r.IDRekod !== id);
-                renderRecords();
-                updateStats();
-            } catch (e) {
-                console.error("Gagal memadam:", e);
-                alert("Ralat semasa pemadaman.");
-            } finally {
-                showLoading(false);
-            }
+            await deleteRecordInSheet(id);
+            state.records = state.records.filter(r => r.IDRekod !== id);
+            renderRecords();
+            updateStats();
+            showLoading(false);
         }
 
         function getBadgeColor(type) {
@@ -576,12 +552,6 @@
             if(!container || !countEl) return;
             
             countEl.innerText = `${state.teachers.length} Guru`;
-            
-            if(state.teachers.length === 0) {
-                container.innerHTML = `<p class="col-span-2 text-center py-4 text-slate-400 text-sm italic">Tiada data guru.</p>`;
-                return;
-            }
-
             container.innerHTML = state.teachers.map(t => `
                 <div class="flex justify-between items-center p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-colors">
                     <div>
@@ -594,12 +564,6 @@
 
         document.getElementById('form-tambah-guru').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            if(!API_URL || API_URL.trim() === "") {
-                alert("Mod Demo: Sila masukkan API URL untuk menyimpan data.");
-                return;
-            }
-
             const nama = document.getElementById('new-teacher-name').value.toUpperCase();
             const jawatan = document.getElementById('new-teacher-role').value.toUpperCase();
             
@@ -617,8 +581,7 @@
                     alert("Guru baru berjaya didaftarkan!");
                 }
             } catch(e) { 
-                console.error(e); 
-                alert("Ralat menambah guru: " + e.message);
+                alert("Ralat menambah guru.");
             } finally { 
                 showLoading(false); 
             }
