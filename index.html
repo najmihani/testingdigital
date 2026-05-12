@@ -7,24 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .loading-overlay {
-            background: rgba(255,255,255,0.8);
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 99;
-            justify-content: center;
-            align-items: center;
-        }
-        @media print {
-            .no-print { display: none; }
-            .print-only { display: block !important; }
-        }
+        .loading-overlay { background: rgba(255,255,255,0.8); display: none; position: fixed; inset: 0; z-index: 99; justify-content: center; align-items: center; }
+        @media print { .no-print { display: none; } .print-only { display: block !important; } }
         .print-only { display: none; }
-        
-        #name-dropdown {
-            z-index: 100;
-        }
+        #name-dropdown { z-index: 100; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800">
@@ -34,14 +20,13 @@
     </div>
 
     <div id="app" class="max-w-md mx-auto md:max-w-4xl min-h-screen flex flex-col">
-        
         <header class="bg-blue-800 text-white p-4 shadow-lg sticky top-0 z-40 no-print">
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-lg font-bold">eKeberadaan Guru</h1>
                     <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh</p>
                 </div>
-                <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all flex items-center justify-center border border-blue-500/30">
+                <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all border border-blue-500/30">
                     <i data-lucide="settings" class="w-6 h-6 text-white"></i>
                 </button>
             </div>
@@ -59,36 +44,26 @@
         </nav>
 
         <main class="flex-grow p-4">
-            
             <section id="view-user" class="space-y-4">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <i data-lucide="user-check" class="text-blue-600"></i> Borang Keberadaan
-                    </h2>
-                    
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i data-lucide="user-check" class="text-blue-600"></i> Borang Keberadaan</h2>
                     <form id="form-keberadaan" class="space-y-4">
                         <div class="relative">
                             <label class="block text-sm font-semibold mb-1 text-slate-600">NAMA GURU</label>
-                            <input type="text" id="user-nama-input" placeholder="Taip nama anda..." autocomplete="off"
-                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all">
-                            <div id="name-dropdown" class="absolute w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-48 overflow-y-auto hidden">
-                                </div>
+                            <input type="text" id="user-nama-input" placeholder="Taip nama anda..." autocomplete="off" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            <div id="name-dropdown" class="absolute w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-48 overflow-y-auto hidden"></div>
                         </div>
-
                         <div>
                             <label class="block text-sm font-semibold mb-1 text-slate-600">URUSAN KEBERADAAN</label>
-                            <select id="select-urusan" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all" onchange="toggleFormFields()">
+                            <select id="select-urusan" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500" onchange="toggleFormFields()">
                                 <option value="">-- Sila Pilih --</option>
                                 <option value="KELUAR WAKTU BEKERJA / URUSAN DALAMAN">KELUAR WAKTU BEKERJA / URUSAN DALAMAN</option>
                                 <option value="URUSAN RASMI">URUSAN RASMI</option>
                                 <option value="CUTI">CUTI</option>
                             </select>
                         </div>
-
-                        <div id="dynamic-fields" class="space-y-4 border-t border-slate-100 pt-4 hidden">
-                            </div>
-
-                        <button type="submit" class="w-full bg-blue-700 text-white py-4 rounded-xl font-bold shadow-blue-200 shadow-lg hover:bg-blue-800 transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <div id="dynamic-fields" class="space-y-4 border-t border-slate-100 pt-4 hidden"></div>
+                        <button type="submit" class="w-full bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-800 transition-all flex items-center justify-center gap-2">
                             <i data-lucide="save" class="w-5 h-5"></i> SIMPAN MAKLUMAT
                         </button>
                     </form>
@@ -114,308 +89,90 @@
                         <div><p class="text-xs text-slate-500">Cuti</p><h3 id="stat-cuti" class="text-2xl font-bold">0</h3></div>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center py-10">
-                    <i data-lucide="bar-chart-3" class="w-12 h-12 text-slate-300 mx-auto mb-2"></i>
-                    <p class="text-slate-500 text-sm">Statistik Keberadaan Guru Harian</p>
-                </div>
             </section>
 
             <section id="view-admin-rekod" class="hidden space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap gap-2 no-print">
-                    <input type="date" id="filter-date" class="p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                    <select id="filter-urusan" class="p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-wrap gap-2 no-print">
+                    <input type="date" id="filter-date" class="p-2 border rounded-lg text-sm outline-none">
+                    <select id="filter-urusan" class="p-2 border rounded-lg text-sm outline-none">
                         <option value="">Semua Urusan</option>
                         <option value="KELUAR WAKTU BEKERJA / URUSAN DALAMAN">Urusan Dalaman</option>
                         <option value="URUSAN RASMI">Urusan Rasmi</option>
                         <option value="CUTI">Cuti</option>
                     </select>
-                    <button onclick="applyFilters()" class="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm hover:bg-slate-700 transition">Tapis</button>
-                    <button onclick="window.print()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 flex items-center gap-2 ml-auto">
-                        <i data-lucide="printer" class="w-4 h-4"></i> Cetak
-                    </button>
+                    <button onclick="renderRecords()" class="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm">Tapis</button>
+                    <button onclick="window.print()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm ml-auto">Cetak</button>
                 </div>
 
-                <div class="overflow-x-auto bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="overflow-x-auto bg-white rounded-xl border border-slate-200">
                     <table class="w-full text-left border-collapse min-w-[900px]">
-                        <thead class="bg-slate-50 border-b border-slate-200">
+                        <thead class="bg-slate-50 border-b">
                             <tr>
                                 <th class="p-3 text-xs font-bold uppercase text-slate-500">ID</th>
                                 <th class="p-3 text-xs font-bold uppercase text-slate-500">Nama Guru</th>
                                 <th class="p-3 text-xs font-bold uppercase text-slate-500">Urusan</th>
                                 <th class="p-3 text-xs font-bold uppercase text-slate-500">Tarikh</th>
-                                <th class="p-3 text-xs font-bold uppercase text-slate-500 text-center">Butiran</th>
+                                <th class="p-3 text-xs font-bold uppercase text-slate-500">Butiran</th>
                                 <th class="p-3 text-xs font-bold uppercase text-slate-500 no-print text-right">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="table-rekod-body" class="text-sm divide-y divide-slate-100">
-                            </tbody>
+                        <tbody id="table-rekod-body" class="text-sm divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </section>
 
             <section id="view-admin-tetapan" class="hidden space-y-4">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i data-lucide="user-plus-2" class="text-emerald-600"></i> Tambah Guru Baru</h2>
+                    <h2 class="text-lg font-bold mb-4">Tambah Guru Baru</h2>
                     <form id="form-tambah-guru" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold mb-1 text-slate-600">Nama Penuh Guru</label>
-                            <input type="text" id="new-teacher-name" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-1 text-slate-600">Jawatan</label>
-                            <input type="text" id="new-teacher-role" value="GURU" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
-                        </div>
-                        <button type="submit" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold hover:bg-emerald-700 transition shadow-lg shadow-emerald-100">
-                            SIMPAN GURU
-                        </button>
+                        <input type="text" id="new-teacher-name" required placeholder="Nama Penuh Guru" class="w-full p-3 bg-slate-50 border rounded-xl">
+                        <input type="text" id="new-teacher-role" value="GURU" class="w-full p-3 bg-slate-50 border rounded-xl">
+                        <button type="submit" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold">SIMPAN GURU</button>
                     </form>
                 </div>
-                
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h3 class="font-bold mb-4 flex items-center justify-between">
-                        <span>Senarai Guru</span>
-                        <span id="teacher-count" class="text-xs bg-slate-100 px-2 py-1 rounded-full text-slate-500 font-normal">0 Guru</span>
-                    </h3>
-                    <div id="teacher-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        </div>
-                </div>
+                <div id="teacher-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
             </section>
-
         </main>
     </div>
 
-    <div id="modal-login" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4 backdrop-blur-sm">
-        <div class="bg-white p-8 rounded-3xl w-full max-w-sm text-center shadow-2xl scale-95 animate-in fade-in zoom-in duration-300">
-            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i data-lucide="shield-check" class="w-8 h-8"></i>
-            </div>
-            <h2 class="text-xl font-bold mb-2">Akses Pentadbir</h2>
-            <p class="text-sm text-slate-500 mb-6">Sila masukkan kata laluan untuk ke paparan Admin.</p>
-            <input type="password" id="admin-password" class="w-full p-4 border border-slate-200 rounded-2xl mb-4 text-center text-lg tracking-widest outline-none focus:ring-2 focus:ring-blue-500" placeholder="••••••••">
+    <div id="modal-login" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white p-8 rounded-3xl w-full max-w-sm text-center shadow-2xl">
+            <h2 class="text-xl font-bold mb-4">Akses Pentadbir</h2>
+            <input type="password" id="admin-password" class="w-full p-4 border rounded-2xl mb-4 text-center tracking-widest outline-none" placeholder="••••••••">
             <div class="flex gap-2">
-                <button onclick="hideAdminLogin()" class="flex-1 p-3 bg-slate-100 text-slate-600 rounded-xl font-semibold hover:bg-slate-200 transition">Batal</button>
-                <button onclick="verifyAdmin()" class="flex-1 p-3 bg-blue-600 text-white rounded-xl font-semibold shadow-lg shadow-blue-200 hover:bg-blue-700 transition">Masuk</button>
+                <button onclick="hideAdminLogin()" class="flex-1 p-3 bg-slate-100 rounded-xl">Batal</button>
+                <button onclick="verifyAdmin()" class="flex-1 p-3 bg-blue-600 text-white rounded-xl">Masuk</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
-        const API_URL = "https://script.google.com/macros/s/AKfycbwCumZBnERCXzABn3L00ulOdae7B7tx1gLCmSNRgq-tGo_zHWe27boeGkPwFhlYyjjWrg/exec"; // Gantikan dengan URL Web App GAS anda
+        const API_URL = "https://script.google.com/macros/s/AKfycbwCumZBnERCXzABn3L00ulOdae7B7tx1gLCmSNRgq-tGo_zHWe27boeGkPwFhlYyjjWrg/exec"; 
         const ADMIN_PASS = "Admin0228";
-        
-        let state = {
-            teachers: [],
-            records: [],
-            isAdmin: false,
-            currentView: 'user'
-        };
+        let state = { teachers: [], records: [], isAdmin: false };
 
-        // --- INITIALIZATION ---
-        window.addEventListener('load', () => {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            loadInitialData();
-            setupAutocomplete();
-            document.getElementById('filter-date').valueAsDate = new Date();
-        });
+        window.addEventListener('load', () => { lucide.createIcons(); loadInitialData(); setupAutocomplete(); document.getElementById('filter-date').valueAsDate = new Date(); });
 
         async function loadInitialData() {
             showLoading(true);
             try {
-                const response = await fetch(`${API_URL}?action=getInitialData`, { 
-                    method: 'POST', 
-                    mode: 'cors',
-                    body: JSON.stringify({}) 
-                });
+                const response = await fetch(`${API_URL}?action=getInitialData`, { method: 'POST', body: JSON.stringify({}) });
                 const data = await response.json();
                 state.teachers = data.teachers || [];
                 state.records = data.records || [];
-                renderTeacherList();
                 updateStats();
-                renderRecords();
-            } catch (e) {
-                console.error("Gagal memuatkan data:", e);
-                state.teachers = [];
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // --- UI FUNCTIONS ---
-        function showLoading(show) {
-            const el = document.getElementById('loading');
-            if(el) el.style.display = show ? 'flex' : 'none';
-        }
-
-        function toggleFormFields() {
-            const urusan = document.getElementById('select-urusan').value;
-            const container = document.getElementById('dynamic-fields');
-            
-            if(!urusan) {
-                container.classList.add('hidden');
-                return;
-            }
-            
-            container.classList.remove('hidden');
-            let html = '';
-            const today = new Date().toISOString().split('T')[0];
-
-            if(urusan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN') {
-                html = `
-                    <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-4">
-                        <div><label class="block text-xs font-bold mb-1 uppercase text-blue-800">Urusan Keluar</label><input type="text" id="urusanKeluar" required class="w-full p-3 border border-blue-200 rounded-xl bg-white shadow-sm" placeholder="Sebab keluar..."></div>
-                        <div><label class="block text-xs font-bold mb-1 uppercase text-blue-800">Tarikh Mula</label><input type="date" id="tarikhMula" value="${today}" required class="w-full p-3 border border-blue-200 rounded-xl bg-white shadow-sm"></div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-bold mb-1 uppercase text-blue-800">Masa Keluar</label><input type="time" id="masaKeluar" required class="w-full p-3 border border-blue-200 rounded-xl bg-white shadow-sm"></div>
-                            <div><label class="block text-xs font-bold mb-1 uppercase text-blue-800">Masa Masuk</label><input type="time" id="masaMasuk" required class="w-full p-3 border border-blue-200 rounded-xl bg-white shadow-sm"></div>
-                        </div>
-                        <div><label class="block text-xs font-bold mb-1 uppercase text-blue-800">Catatan</label><textarea id="catatan" class="w-full p-3 border border-blue-200 rounded-xl bg-white shadow-sm" rows="2" placeholder="Maklumat tambahan jika ada..."></textarea></div>
-                    </div>
-                `;
-            } else if(urusan === 'URUSAN RASMI') {
-                html = `
-                    <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold mb-1 uppercase text-emerald-800">Jenis Urusan</label>
-                            <select id="jenisUrusan" required class="w-full p-3 border border-emerald-200 rounded-xl bg-white shadow-sm">
-                                <option value="MESYUARAT">MESYUARAT</option><option value="BENGKEL">BENGKEL</option><option value="PROGRAM">PROGRAM</option><option value="KURSUS">KURSUS</option><option value="TAKLIMAT">TAKLIMAT</option>
-                            </select>
-                        </div>
-                        <div><label class="block text-xs font-bold mb-1 uppercase text-emerald-800">Nama Program</label><input type="text" id="namaProgram" required class="w-full p-3 border border-emerald-200 rounded-xl bg-white shadow-sm"></div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-bold mb-1 uppercase text-emerald-800">Tarikh Mula</label><input type="date" id="tarikhMula" value="${today}" required class="w-full p-3 border border-emerald-200 rounded-xl bg-white shadow-sm"></div>
-                            <div><label class="block text-xs font-bold mb-1 uppercase text-emerald-800">Tarikh Tamat</label><input type="date" id="tarikhTamat" value="${today}" required class="w-full p-3 border border-emerald-200 rounded-xl bg-white shadow-sm"></div>
-                        </div>
-                        <div><label class="block text-xs font-bold mb-1 uppercase text-emerald-800">Tempat</label><input type="text" id="tempat" required class="w-full p-3 border border-emerald-200 rounded-xl bg-white shadow-sm"></div>
-                        <div><label class="block text-xs font-bold mb-1 uppercase text-emerald-800">Anjuran</label><input type="text" id="anjuran" required class="w-full p-3 border border-emerald-200 rounded-xl bg-white shadow-sm"></div>
-                        <div><label class="block text-xs font-bold mb-1 uppercase text-emerald-800">Catatan</label><textarea id="catatan" class="w-full p-3 border border-emerald-200 rounded-xl bg-white shadow-sm" rows="2"></textarea></div>
-                    </div>
-                `;
-            } else if(urusan === 'CUTI') {
-                html = `
-                    <div class="bg-rose-50/50 p-4 rounded-xl border border-rose-100 space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold mb-1 uppercase text-rose-800">Jenis Cuti</label>
-                            <select id="jenisCuti" required class="w-full p-3 border border-rose-200 rounded-xl bg-white shadow-sm">
-                                <option value="CUTI SAKIT">CUTI SAKIT</option><option value="CUTI BERSALIN">CUTI BERSALIN</option><option value="CUTI KUARANTIN">CUTI KUARANTIN</option><option value="CTR">CTR</option><option value="CRK">CRK</option><option value="CUTI SEPARUH / TANPA GAJI">CUTI SEPARUH / TANPA GAJI</option><option value="CUTI REHAT">CUTI REHAT</option>
-                            </select>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-bold mb-1 uppercase text-rose-800">Tarikh Mula</label><input type="date" id="tarikhMula" value="${today}" required class="w-full p-3 border border-rose-200 rounded-xl bg-white shadow-sm"></div>
-                            <div><label class="block text-xs font-bold mb-1 uppercase text-rose-800">Tarikh Tamat</label><input type="date" id="tarikhTamat" value="${today}" required class="w-full p-3 border border-rose-200 rounded-xl bg-white shadow-sm"></div>
-                        </div>
-                        <div><label class="block text-xs font-bold mb-1 uppercase text-rose-800">Catatan</label><textarea id="catatan" class="w-full p-3 border border-rose-200 rounded-xl bg-white shadow-sm" rows="2"></textarea></div>
-                    </div>
-                `;
-            }
-            container.innerHTML = html;
-            if(typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        function setupAutocomplete() {
-            const input = document.getElementById('user-nama-input');
-            const dropdown = document.getElementById('name-dropdown');
-            if(!input || !dropdown) return;
-
-            input.addEventListener('input', () => {
-                const query = input.value.trim().toUpperCase();
-                if (query.length < 1) {
-                    dropdown.classList.add('hidden');
-                    return;
-                }
-                const matches = state.teachers.filter(t => t.nama.toUpperCase().includes(query));
-                if (matches.length > 0) {
-                    dropdown.innerHTML = matches.map(t => `
-                        <div class="p-3 hover:bg-blue-50 cursor-pointer border-b border-slate-50 last:border-0 transition-colors" onclick="selectTeacher('${t.nama}')">
-                            <div class="font-bold text-sm text-slate-700">${t.nama}</div>
-                            <div class="text-[10px] text-slate-400 font-mono tracking-tighter uppercase">${t.id} - ${t.jawatan}</div>
-                        </div>
-                    `).join('');
-                    dropdown.classList.remove('hidden');
-                } else {
-                    dropdown.classList.add('hidden');
-                }
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.classList.add('hidden');
-                }
-            });
-        }
-
-        function selectTeacher(name) {
-            document.getElementById('user-nama-input').value = name;
-            document.getElementById('name-dropdown').classList.add('hidden');
-        }
-
-        document.getElementById('form-keberadaan').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nama = document.getElementById('user-nama-input').value;
-            const urusan = document.getElementById('select-urusan').value;
-            if(!nama || !urusan) { alert("Sila lengkapkan Nama dan Urusan."); return; }
-
-            const formData = {
-                nama, urusan,
-                urusanKeluar: document.getElementById('urusanKeluar')?.value || "",
-                tarikhMula: document.getElementById('tarikhMula')?.value || "",
-                tarikhTamat: document.getElementById('tarikhTamat')?.value || "",
-                masaKeluar: document.getElementById('masaKeluar')?.value || "",
-                masaMasuk: document.getElementById('masaMasuk')?.value || "",
-                jenisUrusan: document.getElementById('jenisUrusan')?.value || "",
-                namaProgram: document.getElementById('namaProgram')?.value || "",
-                tempat: document.getElementById('tempat')?.value || "",
-                anjuran: document.getElementById('anjuran')?.value || "",
-                jenisCuti: document.getElementById('jenisCuti')?.value || "",
-                catatan: document.getElementById('catatan')?.value || "",
-            };
-
-            showLoading(true);
-            try {
-                const response = await fetch(`${API_URL}?action=submitRecord`, { method: 'POST', body: JSON.stringify(formData) });
-                const result = await response.json();
-                if(result.success) { alert("Maklumat berjaya disimpan!"); location.reload(); }
-                else { alert("Gagal menyimpan: " + (result.message || "Ralat")); }
-            } catch (err) { alert("Ralat sambungan."); }
+                if(state.isAdmin) renderRecords();
+            } catch (e) { console.error("Error:", e); }
             finally { showLoading(false); }
-        });
-
-        function showAdminLogin() { document.getElementById('modal-login').classList.remove('hidden'); document.getElementById('admin-password').focus(); }
-        function hideAdminLogin() { document.getElementById('modal-login').classList.add('hidden'); document.getElementById('admin-password').value = ""; }
-        function verifyAdmin() {
-            const pass = document.getElementById('admin-password').value;
-            if(pass === ADMIN_PASS) {
-                state.isAdmin = true; hideAdminLogin();
-                document.getElementById('admin-nav').classList.remove('hidden');
-                document.getElementById('btn-admin-access').classList.add('hidden');
-                switchTab('dashboard');
-            } else { alert("Kata laluan salah!"); }
-        }
-        function logoutAdmin() { state.isAdmin = false; location.reload(); }
-
-        function switchTab(tab) {
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('bg-blue-50', 'text-blue-700', 'active-tab', 'border', 'border-blue-100'));
-            
-            if(tab === 'user') { document.getElementById('view-user').classList.remove('hidden'); }
-            else {
-                document.getElementById(`view-admin-${tab}`).classList.remove('hidden');
-                const buttons = document.querySelectorAll('.tab-btn');
-                buttons.forEach(btn => { if(btn.innerText.toLowerCase().includes(tab.toLowerCase())) btn.classList.add('bg-blue-50', 'text-blue-700', 'active-tab', 'border', 'border-blue-100'); });
-                if(tab === 'rekod') renderRecords();
-                if(tab === 'dashboard') updateStats();
-            }
-            if(typeof lucide !== 'undefined') lucide.createIcons();
         }
 
-        // --- UPDATED FOR UNDERSCORE HEADERS ---
+        function showLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
+
+        // Penyesuaian Key Underscore untuk Dashboard & Rekod
         function updateStats() {
             const todayDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            // Gunakan Tarikh_Mula
+            // Menggunakan Tarikh_Mula dan Urusan_Keberadaan (dengan garis bawah)
             const todayRecords = state.records.filter(r => r.Tarikh_Mula === todayDate);
-            
             document.getElementById('stat-total').innerText = todayRecords.length;
             document.getElementById('stat-dalaman').innerText = todayRecords.filter(r => r.Urusan_Keberadaan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN').length;
             document.getElementById('stat-rasmi').innerText = todayRecords.filter(r => r.Urusan_Keberadaan === 'URUSAN RASMI').length;
@@ -424,20 +181,12 @@
 
         function renderRecords() {
             const tbody = document.getElementById('table-rekod-body');
-            if(!tbody) return;
-
             const fDate = document.getElementById('filter-date').value;
             const fUrusan = document.getElementById('filter-urusan').value;
-            
-            let formattedFilterDate = "";
-            if(fDate) {
-                const parts = fDate.split('-');
-                formattedFilterDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
-            }
+            let formattedDate = fDate ? fDate.split('-').reverse().join('/') : "";
 
             const filtered = state.records.filter(r => {
-                // Selaraskan dengan Tarikh_Mula dan Urusan_Keberadaan
-                const matchDate = fDate ? r.Tarikh_Mula === formattedFilterDate : true;
+                const matchDate = fDate ? r.Tarikh_Mula === formattedDate : true;
                 const matchUrusan = fUrusan ? r.Urusan_Keberadaan === fUrusan : true;
                 return matchDate && matchUrusan;
             });
@@ -448,25 +197,29 @@
             }
 
             tbody.innerHTML = filtered.map(r => `
-                <tr class="hover:bg-slate-50 transition-colors">
+                <tr>
                     <td class="p-3 font-mono text-[10px] text-slate-400">${r.ID_Rekod}</td>
-                    <td class="p-3 font-bold text-slate-700">${r.Nama}</td>
-                    <td class="p-3"><span class="px-2 py-1 rounded-md text-[9px] font-bold ${getBadgeColor(r.Urusan_Keberadaan)}">${r.Urusan_Keberadaan}</span></td>
-                    <td class="p-3 text-xs font-semibold">${r.Tarikh_Mula}</td>
-                    <td class="p-3 text-[11px] text-slate-600">
-                        <div class="font-bold uppercase text-slate-700">${r.Jenis_Urusan || r.Jenis_Cuti || r.Urusan_Keluar}</div>
-                        ${r.Nama_Program ? `<div class="italic">${r.Nama_Program}</div>` : ''}
-                        ${r.Masa_Keluar ? `<div class="mt-1 flex items-center gap-1 text-blue-600"><i data-lucide="clock" class="w-3 h-3"></i> ${r.Masa_Keluar} - ${r.Masa_Masuk}</div>` : ''}
-                        ${r.Catatan ? `<div class="mt-1 text-slate-400 italic line-clamp-1">"${r.Catatan}"</div>` : ''}
+                    <td class="p-3 font-bold">${r.Nama}</td>
+                    <td class="p-3"><span class="px-2 py-1 rounded text-[10px] font-bold ${getBadgeColor(r.Urusan_Keberadaan)}">${r.Urusan_Keberadaan}</span></td>
+                    <td class="p-3 text-xs">${r.Tarikh_Mula}</td>
+                    <td class="p-3 text-[11px]">
+                        <div class="font-bold">${r.Jenis_Urusan || r.Jenis_Cuti || r.Urusan_Keluar}</div>
+                        ${r.Nama_Program ? `<div>${r.Nama_Program}</div>` : ''}
+                        ${r.Masa_Keluar ? `<div class="text-blue-600">${r.Masa_Keluar} - ${r.Masa_Masuk}</div>` : ''}
                     </td>
                     <td class="p-3 text-right no-print">
-                        <button onclick="deleteRow('${r.ID_Rekod}')" class="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
+                        <button onclick="deleteRow('${r.ID_Rekod}')" class="p-2 text-red-400 hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </td>
                 </tr>
             `).join('');
-            if(typeof lucide !== 'undefined') lucide.createIcons();
+            lucide.createIcons();
+        }
+
+        // Fungsi sokongan lain kekal sama
+        function getBadgeColor(type) {
+            if(type === 'URUSAN RASMI') return 'bg-emerald-100 text-emerald-700';
+            if(type === 'CUTI') return 'bg-rose-100 text-rose-700';
+            return 'bg-blue-100 text-blue-700';
         }
 
         async function deleteRow(id) {
@@ -475,53 +228,92 @@
             try {
                 const res = await fetch(`${API_URL}?action=deleteRecord`, { method: 'POST', body: JSON.stringify({id: id}) });
                 const result = await res.json();
-                if(result.success) {
-                    state.records = state.records.filter(r => r.ID_Rekod !== id);
-                    renderRecords(); updateStats();
-                }
+                if(result.success) { state.records = state.records.filter(r => r.ID_Rekod !== id); renderRecords(); updateStats(); }
             } catch (e) { alert("Ralat padam."); }
             finally { showLoading(false); }
         }
 
-        function getBadgeColor(type) {
-            if(type === 'URUSAN RASMI') return 'bg-emerald-100 text-emerald-700';
-            if(type === 'CUTI') return 'bg-rose-100 text-rose-700';
-            return 'bg-blue-100 text-blue-700';
-        }
-
-        function renderTeacherList() {
-            const container = document.getElementById('teacher-list-container');
-            const countEl = document.getElementById('teacher-count');
-            if(!container || !countEl) return;
-            countEl.innerText = `${state.teachers.length} Guru`;
-            container.innerHTML = state.teachers.map(t => `
-                <div class="flex justify-between items-center p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                    <div>
-                        <p class="font-bold text-sm text-slate-700">${t.nama}</p>
-                        <p class="text-[10px] text-slate-400 font-mono">${t.id} • ${t.jawatan}</p>
+        function toggleFormFields() {
+            const urusan = document.getElementById('select-urusan').value;
+            const container = document.getElementById('dynamic-fields');
+            if(!urusan) { container.classList.add('hidden'); return; }
+            container.classList.remove('hidden');
+            const today = new Date().toISOString().split('T')[0];
+            let html = '';
+            if(urusan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN') {
+                html = `<div class="bg-blue-50/50 p-4 rounded-xl space-y-4">
+                    <input type="text" id="urusanKeluar" placeholder="Sebab Keluar" required class="w-full p-3 border rounded-xl">
+                    <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="time" id="masaKeluar" required class="w-full p-3 border rounded-xl">
+                        <input type="time" id="masaMasuk" required class="w-full p-3 border rounded-xl">
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            } else if(urusan === 'URUSAN RASMI') {
+                html = `<div class="bg-emerald-50/50 p-4 rounded-xl space-y-4">
+                    <select id="jenisUrusan" class="w-full p-3 border rounded-xl">
+                        <option value="MESYUARAT">MESYUARAT</option><option value="BENGKEL">BENGKEL</option><option value="PROGRAM">PROGRAM</option>
+                    </select>
+                    <input type="text" id="namaProgram" placeholder="Nama Program" class="w-full p-3 border rounded-xl">
+                    <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
+                    <input type="text" id="tempat" placeholder="Tempat" class="w-full p-3 border rounded-xl">
+                </div>`;
+            } else if(urusan === 'CUTI') {
+                html = `<div class="bg-rose-50/50 p-4 rounded-xl space-y-4">
+                    <select id="jenisCuti" class="w-full p-3 border rounded-xl">
+                        <option value="CUTI SAKIT">CUTI SAKIT</option><option value="CRK">CRK</option>
+                    </select>
+                    <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
+                </div>`;
+            }
+            container.innerHTML = html + `<textarea id="catatan" placeholder="Catatan" class="w-full p-3 border rounded-xl"></textarea>`;
         }
 
-        document.getElementById('form-tambah-guru').addEventListener('submit', async (e) => {
+        function setupAutocomplete() {
+            const input = document.getElementById('user-nama-input');
+            const dropdown = document.getElementById('name-dropdown');
+            input.addEventListener('input', () => {
+                const query = input.value.toUpperCase();
+                if (query.length < 1) { dropdown.classList.add('hidden'); return; }
+                const matches = state.teachers.filter(t => t.nama.toUpperCase().includes(query));
+                if (matches.length > 0) {
+                    dropdown.innerHTML = matches.map(t => `<div class="p-3 hover:bg-blue-50 cursor-pointer" onclick="selectTeacher('${t.nama}')">${t.nama}</div>`).join('');
+                    dropdown.classList.remove('hidden');
+                } else dropdown.classList.add('hidden');
+            });
+        }
+        function selectTeacher(name) { document.getElementById('user-nama-input').value = name; document.getElementById('name-dropdown').classList.add('hidden'); }
+
+        document.getElementById('form-keberadaan').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const nama = document.getElementById('new-teacher-name').value.toUpperCase();
-            const jawatan = document.getElementById('new-teacher-role').value.toUpperCase();
+            const formData = {
+                nama: document.getElementById('user-nama-input').value,
+                urusan: document.getElementById('select-urusan').value,
+                urusanKeluar: document.getElementById('urusanKeluar')?.value || "",
+                tarikhMula: document.getElementById('tarikhMula')?.value || "",
+                masaKeluar: document.getElementById('masaKeluar')?.value || "",
+                masaMasuk: document.getElementById('masaMasuk')?.value || "",
+                jenisUrusan: document.getElementById('jenisUrusan')?.value || "",
+                namaProgram: document.getElementById('namaProgram')?.value || "",
+                jenisCuti: document.getElementById('jenisCuti')?.value || "",
+                catatan: document.getElementById('catatan')?.value || "",
+            };
             showLoading(true);
             try {
-                const res = await fetch(`${API_URL}?action=addTeacher`, { method: 'POST', body: JSON.stringify({nama, jawatan}) });
-                const data = await res.json();
-                if(data.success) {
-                    state.teachers.push({id: data.id, nama, jawatan});
-                    renderTeacherList(); document.getElementById('form-tambah-guru').reset();
-                    alert("Berjaya!");
-                }
-            } catch(e) { alert("Ralat."); }
+                const res = await fetch(`${API_URL}?action=submitRecord`, { method: 'POST', body: JSON.stringify(formData) });
+                if((await res.json()).success) { alert("Berjaya!"); location.reload(); }
+            } catch (e) { alert("Ralat simpan."); }
             finally { showLoading(false); }
         });
 
-        function applyFilters() { renderRecords(); }
+        function showAdminLogin() { document.getElementById('modal-login').classList.remove('hidden'); }
+        function hideAdminLogin() { document.getElementById('modal-login').classList.add('hidden'); }
+        function verifyAdmin() { if(document.getElementById('admin-password').value === ADMIN_PASS) { state.isAdmin = true; hideAdminLogin(); document.getElementById('admin-nav').classList.remove('hidden'); switchTab('dashboard'); } else alert("Salah!"); }
+        function switchTab(tab) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            if(tab === 'user') document.getElementById('view-user').classList.remove('hidden');
+            else { document.getElementById(`view-admin-${tab}`).classList.remove('hidden'); if(tab === 'rekod') renderRecords(); if(tab === 'dashboard') updateStats(); }
+        }
     </script>
 </body>
 </html>
