@@ -34,7 +34,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-lg font-bold">eKeberadaan Guru</h1>
-                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.5)</p>
+                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.6)</p>
                 </div>
                 <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all border border-blue-500/30">
                     <i data-lucide="settings" class="w-6 h-6 text-white"></i>
@@ -82,15 +82,15 @@
 
             <section id="view-admin-dashboard" class="hidden space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase">Statistik Hari Ini</h3>
-                        <div class="h-64 flex items-center justify-center">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center">
+                        <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase">Status Guru Hari Ini</h3>
+                        <div class="h-64">
                             <canvas id="chartKehadiran"></canvas>
                         </div>
                     </div>
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase">Kategori Keberadaan</h3>
-                        <div class="h-64 flex items-center justify-center">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center">
+                        <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase">Kategori Ketidakhadiran</h3>
+                        <div class="h-64">
                             <canvas id="chartKategori"></canvas>
                         </div>
                     </div>
@@ -120,13 +120,13 @@
                 </div>
                 
                 <div class="overflow-x-auto bg-white rounded-xl border border-slate-200 shadow-sm">
-                    <table class="w-full text-left border-collapse min-w-[800px]">
+                    <table class="w-full text-left border-collapse min-w-[900px]">
                         <thead class="bg-slate-50 border-b">
                             <tr>
                                 <th class="p-3 text-xs font-bold uppercase text-slate-500">Nama Guru</th>
                                 <th class="p-3 text-xs font-bold uppercase text-slate-500">Urusan</th>
-                                <th class="p-3 text-xs font-bold uppercase text-slate-500">Tarikh</th>
-                                <th class="p-3 text-xs font-bold uppercase text-slate-500">Butiran</th>
+                                <th class="p-3 text-xs font-bold uppercase text-slate-500">Masa / Tarikh</th>
+                                <th class="p-3 text-xs font-bold uppercase text-slate-500">Catatan/Butiran</th>
                                 <th class="p-3 text-xs font-bold uppercase text-slate-500 no-print text-right">Aksi</th>
                             </tr>
                         </thead>
@@ -192,7 +192,7 @@
 
         function showLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
 
-        // --- FUNGSI ADMIN ---
+        // --- ADMIN AUTH ---
         function showAdminLogin() { document.getElementById('modal-login').classList.remove('hidden'); }
         function hideAdminLogin() { document.getElementById('modal-login').classList.add('hidden'); }
         
@@ -203,10 +203,7 @@
                 document.getElementById('admin-nav').classList.remove('hidden');
                 document.getElementById('btn-admin-access').classList.add('hidden');
                 switchTab('dashboard');
-                renderTeacherList();
-            } else {
-                alert("Kata laluan salah!");
-            }
+            } else { alert("Kata laluan salah!"); }
         }
 
         function logoutAdmin() {
@@ -232,31 +229,43 @@
             if(typeof lucide !== 'undefined') lucide.createIcons();
         }
 
-        // --- CARTA & DASHBOARD ---
+        // --- DASHBOARD LOGIC (BAIKPULIH) ---
         function updateDashboard() {
-            const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            const todayRecs = state.records.filter(r => r.Tarikh_Mula === today);
+            const todayStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
             
+            // Filter rekod pada tarikh hari ini sahaja
+            const todayRecs = state.records.filter(r => r.Tarikh_Mula === todayStr);
+            
+            // Kategori Statistik
             const countDalaman = todayRecs.filter(r => r.Urusan_Keberadaan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN').length;
             const countRasmi = todayRecs.filter(r => r.Urusan_Keberadaan === 'URUSAN RASMI').length;
             const countCuti = todayRecs.filter(r => r.Urusan_Keberadaan === 'CUTI').length;
+            const totalTidakHadir = todayRecs.length;
+            const totalHadir = Math.max(0, state.teachers.length - totalTidakHadir);
 
-            // Carta 1: Jumlah Kehadiran (Doughnut)
+            // Chart 1: Status Guru (Doughnut)
             if (charts.kehadiran) charts.kehadiran.destroy();
             const ctx1 = document.getElementById('chartKehadiran').getContext('2d');
             charts.kehadiran = new Chart(ctx1, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Tidak Hadir', 'Hadir/Lain'],
+                    labels: ['Tiada Di Sekolah', 'Berada Di Sekolah'],
                     datasets: [{
-                        data: [todayRecs.length, state.teachers.length - todayRecs.length],
-                        backgroundColor: ['#ef4444', '#e2e8f0']
+                        data: [totalTidakHadir, totalHadir],
+                        backgroundColor: ['#ef4444', '#10b981'],
+                        borderWidth: 0
                     }]
                 },
-                options: { maintainAspectRatio: false, plugins: { title: { display: true, text: `Jumlah Tidak Hadir: ${todayRecs.length}` } } }
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { position: 'bottom' },
+                        title: { display: true, text: `Jumlah Rekod Hari Ini: ${totalTidakHadir}` } 
+                    } 
+                }
             });
 
-            // Carta 2: Kategori (Bar)
+            // Chart 2: Kategori (Bar)
             if (charts.kategori) charts.kategori.destroy();
             const ctx2 = document.getElementById('chartKategori').getContext('2d');
             charts.kategori = new Chart(ctx2, {
@@ -269,16 +278,19 @@
                         backgroundColor: ['#3b82f6', '#10b981', '#f43f5e']
                     }]
                 },
-                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } 
+                }
             });
         }
 
-        // --- JADUAL REKOD ---
+        // --- REKOD TABLE (BAIKPULIH) ---
         function renderRecords() {
             const tbody = document.getElementById('table-rekod-body');
             const fDate = document.getElementById('filter-date').value;
             const fUrusan = document.getElementById('filter-urusan').value;
-            
             let formattedDate = fDate ? fDate.split('-').reverse().join('/') : "";
 
             const filtered = state.records.filter(r => {
@@ -288,22 +300,37 @@
             });
 
             if(filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-slate-400">Tiada rekod dijumpai.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-slate-400">Tiada rekod pada tarikh dipilih.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = filtered.map(r => `
                 <tr class="hover:bg-slate-50/50">
-                    <td class="p-3 font-bold text-slate-700">${r.Nama}</td>
-                    <td class="p-3"><span class="px-2 py-1 rounded text-[10px] font-bold ${getBadgeColor(r.Urusan_Keberadaan)}">${r.Urusan_Keberadaan}</span></td>
-                    <td class="p-3 text-xs text-slate-500">${r.Tarikh_Mula} ${r.Tarikh_Tamat && r.Tarikh_Tamat !== r.Tarikh_Mula ? '- ' + r.Tarikh_Tamat : ''}</td>
-                    <td class="p-3 text-[11px]">
-                        <div class="font-bold text-slate-600 uppercase">${r.Jenis_Urusan || r.Jenis_Cuti || r.Urusan_Keluar}</div>
-                        ${r.Nama_Program ? `<div class="italic text-slate-400">${r.Nama_Program}</div>` : ''}
-                        ${r.Masa_Keluar ? `<div class="text-blue-600 font-medium">${r.Masa_Keluar} - ${r.Masa_Masuk}</div>` : ''}
+                    <td class="p-3 align-top">
+                        <div class="font-bold text-slate-700 leading-tight">${r.Nama}</div>
+                        <div class="text-[10px] text-slate-400 uppercase font-mono">${r.ID_Rekod}</div>
                     </td>
-                    <td class="p-3 text-right no-print">
-                        <button onclick="deleteRow('${r.ID_Rekod}')" class="p-2 text-red-300 hover:text-red-600 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <td class="p-3 align-top">
+                        <span class="px-2 py-0.5 rounded text-[9px] font-bold inline-block mb-1 ${getBadgeColor(r.Urusan_Keberadaan)}">
+                            ${r.Urusan_Keberadaan}
+                        </span>
+                        <div class="text-[11px] font-semibold text-slate-600">${r.Jenis_Urusan || r.Jenis_Cuti || r.Urusan_Keluar || '-'}</div>
+                    </td>
+                    <td class="p-3 align-top text-[11px]">
+                        <div class="flex items-center gap-1 text-slate-500"><i data-lucide="calendar" class="w-3 h-3"></i> ${r.Tarikh_Mula} ${r.Tarikh_Tamat && r.Tarikh_Tamat !== r.Tarikh_Mula ? '- ' + r.Tarikh_Tamat : ''}</div>
+                        ${r.Masa_Keluar ? `
+                        <div class="flex items-center gap-1 text-blue-600 font-medium mt-1">
+                            <i data-lucide="clock" class="w-3 h-3"></i> ${r.Masa_Keluar} - ${r.Masa_Masuk}
+                        </div>` : ''}
+                    </td>
+                    <td class="p-3 align-top">
+                        ${r.Nama_Program ? `<div class="text-[11px] font-bold text-slate-600">${r.Nama_Program}</div>` : ''}
+                        <div class="text-[11px] text-slate-500 italic">${r.Catatan || '-'}</div>
+                    </td>
+                    <td class="p-3 text-right no-print align-top">
+                        <button onclick="deleteRow('${r.ID_Rekod}')" class="p-2 text-red-300 hover:text-red-600 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
                     </td>
                 </tr>
             `).join('');
@@ -331,7 +358,7 @@
             finally { showLoading(false); }
         }
 
-        // --- PENGURUSAN GURU ---
+        // --- TEACHER MGMT ---
         function renderTeacherList() {
             const container = document.getElementById('teacher-list-container');
             container.innerHTML = state.teachers.map(t => `
@@ -349,20 +376,19 @@
             showLoading(true);
             try {
                 const res = await fetch(`${API_URL}?action=addTeacher`, { 
-                    method: 'POST', 
-                    body: JSON.stringify({nama: nama, jawatan: jawatan}) 
+                    method: 'POST', body: JSON.stringify({nama: nama, jawatan: jawatan}) 
                 });
                 const data = await res.json();
                 if(data.success) {
                     alert("Guru berjaya ditambah!");
                     document.getElementById('form-tambah-guru').reset();
-                    loadInitialData(); // Refresh data
+                    loadInitialData();
                 }
             } catch (e) { alert("Ralat."); }
             finally { showLoading(false); }
         });
 
-        // --- FUNGSI ASAL USER (KEKAL) ---
+        // --- USER FORM FUNCTIONS ---
         function toggleFormFields() {
             const urusan = document.getElementById('select-urusan').value;
             const container = document.getElementById('dynamic-fields');
@@ -372,11 +398,11 @@
             let html = '';
             if(urusan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN') {
                 html = `<div class="bg-blue-50/50 p-4 rounded-xl space-y-4">
-                    <input type="text" id="urusanKeluar" placeholder="Urusan Keluar" required class="w-full p-3 border rounded-xl">
+                    <input type="text" id="urusanKeluar" placeholder="Urusan Keluar (Contoh: Klinik)" required class="w-full p-3 border rounded-xl">
                     <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
                     <div class="grid grid-cols-2 gap-4">
-                        <input type="time" id="masaKeluar" required class="w-full p-3 border rounded-xl">
-                        <input type="time" id="masaMasuk" required class="w-full p-3 border rounded-xl">
+                        <div><label class="text-[10px] font-bold text-slate-500 px-1">MASA KELUAR</label><input type="time" id="masaKeluar" required class="w-full p-3 border rounded-xl"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 px-1">MASA MASUK</label><input type="time" id="masaMasuk" required class="w-full p-3 border rounded-xl"></div>
                     </div>
                 </div>`;
             } else if(urusan === 'URUSAN RASMI') {
@@ -391,14 +417,14 @@
                 </div>`;
             } else if(urusan === 'CUTI') {
                 html = `<div class="bg-rose-50/50 p-4 rounded-xl space-y-4">
-                    <select id="jenisCuti" class="w-full p-3 border rounded-xl"><option value="CUTI SAKIT">CUTI SAKIT</option><option value="CRK">CRK</option></select>
+                    <select id="jenisCuti" class="w-full p-3 border rounded-xl"><option value="CUTI SAKIT">CUTI SAKIT</option><option value="CRK">CRK</option><option value="CUTI KUARANTIN">CUTI KUARANTIN</option><option value="LAIN-LAIN">LAIN-LAIN</option></select>
                     <div class="grid grid-cols-2 gap-4">
                         <div><label class="text-[10px] font-bold text-slate-500 px-1">TARIKH MULA</label><input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl"></div>
                         <div><label class="text-[10px] font-bold text-slate-500 px-1">TARIKH TAMAT</label><input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl"></div>
                     </div>
                 </div>`;
             }
-            container.innerHTML = html + `<textarea id="catatan" placeholder="Catatan" class="w-full p-3 border rounded-xl"></textarea>`;
+            container.innerHTML = html + `<textarea id="catatan" placeholder="Catatan Tambahan (Jika ada)" class="w-full p-3 border rounded-xl"></textarea>`;
         }
 
         function setupAutocomplete() {
@@ -409,10 +435,11 @@
                 if (q.length < 1) { dropdown.classList.add('hidden'); return; }
                 const matches = state.teachers.filter(t => t.nama.toUpperCase().includes(q));
                 if (matches.length > 0) {
-                    dropdown.innerHTML = matches.map(t => `<div class="p-3 hover:bg-blue-50 cursor-pointer" onclick="selectTeacher('${t.nama}')">${t.nama}</div>`).join('');
+                    dropdown.innerHTML = matches.map(t => `<div class="p-3 hover:bg-blue-50 cursor-pointer text-sm font-medium border-b border-slate-50" onclick="selectTeacher('${t.nama}')">${t.nama}</div>`).join('');
                     dropdown.classList.remove('hidden');
                 } else dropdown.classList.add('hidden');
             });
+            document.addEventListener('click', (e) => { if(!input.contains(e.target)) dropdown.classList.add('hidden'); });
         }
 
         function selectTeacher(n) { 
@@ -434,13 +461,17 @@
                 namaProgram: document.getElementById('namaProgram')?.value || "",
                 jenisCuti: document.getElementById('jenisCuti')?.value || "",
                 catatan: document.getElementById('catatan')?.value || "",
+                tempat: document.getElementById('tempat')?.value || ""
             };
+            
+            if(!formData.nama || !formData.urusan) { alert("Sila lengkapkan Nama dan Urusan."); return; }
+
             showLoading(true);
             try {
                 const res = await fetch(`${API_URL}?action=submitRecord`, { method: 'POST', body: JSON.stringify(formData) });
                 const result = await res.json();
                 if(result.success) { alert("Berjaya disimpan!"); location.reload(); }
-            } catch (e) { alert("Ralat."); }
+            } catch (e) { alert("Ralat semasa menyimpan."); }
             finally { showLoading(false); }
         });
     </script>
