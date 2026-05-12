@@ -33,7 +33,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-lg font-bold">eKeberadaan Guru</h1>
-                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.10)</p>
+                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.11)</p>
                 </div>
                 <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all border border-blue-500/30">
                     <i data-lucide="settings" class="w-6 h-6 text-white"></i>
@@ -165,22 +165,15 @@
             document.getElementById('admin-password').value = "";
         }
 
-        // --- FUNGSI MEMBERSIHKAN FORMAT MASA (VERSI BAIK PULIH) ---
         function formatMasa(val) {
             if (!val || val === '-') return '-';
-            
             let timeString = String(val);
-
-            // Jika mengandungi tarikh 1899, potong dan ambil masa sahaja
             if (timeString.includes('1899')) {
                 const parts = timeString.split(' ');
-                timeString = parts[parts.length - 1]; // Ambil bahagian terakhir (masa)
+                timeString = parts[parts.length - 1];
             }
-
-            // Jika masa dalam format HH:mm:ss, kita cantikkan kepada HH:mm AM/PM
             if (timeString.includes(':')) {
                 try {
-                    // Cipta tarikh dummy untuk formatkan masa
                     const dummyDate = new Date('2000-01-01 ' + timeString);
                     if (!isNaN(dummyDate.getTime())) {
                         return dummyDate.toLocaleTimeString('en-US', { 
@@ -193,7 +186,6 @@
                     return timeString;
                 }
             }
-            
             return timeString;
         }
 
@@ -263,13 +255,20 @@
             container.classList.remove('hidden');
             const today = new Date().toISOString().split('T')[0];
             let html = '';
+            
             if(urusan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN') {
                 html = `<div class="bg-blue-50/50 p-4 rounded-xl space-y-4">
                     <input type="text" id="urusanKeluar" placeholder="Urusan Keluar (Contoh: Klinik)" required class="w-full p-3 border rounded-xl">
                     <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Masa Keluar</label><input type="time" id="masaKeluar" required class="w-full p-3 border rounded-xl"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Masa Masuk</label><input type="time" id="masaMasuk" required class="w-full p-3 border rounded-xl"></div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Masa Keluar (24 Jam)</label>
+                            <input type="time" id="masaKeluar" required class="w-full p-3 border rounded-xl">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Masa Masuk (24 Jam)</label>
+                            <input type="time" id="masaMasuk" required class="w-full p-3 border rounded-xl">
+                        </div>
                     </div>
                 </div>`;
             } else if(urusan === 'URUSAN RASMI') {
