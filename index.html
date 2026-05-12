@@ -43,7 +43,7 @@
 
         <nav id="admin-nav" class="bg-white border-b hidden no-print">
             <div class="flex p-2 gap-2">
-                <span class="px-4 py-2 text-sm font-bold text-blue-800">MOD PENTADBIR (SEMUA REKOD)</span>
+                <span class="px-4 py-2 text-sm font-bold text-blue-800 uppercase">Mod Pentadbir (Rekod Penuh)</span>
                 <button onclick="logoutAdmin()" class="px-4 py-2 text-sm font-medium rounded-lg text-red-600 hover:bg-red-50 ml-auto flex items-center gap-1">
                     <i data-lucide="log-out" class="w-4 h-4"></i> KELUAR
                 </button>
@@ -79,18 +79,23 @@
 
             <section id="view-admin-rekod" class="hidden space-y-4">
                 <div class="flex justify-between items-center mb-2">
-                    <h2 class="font-bold text-slate-700">Senarai Semua Rekod</h2>
+                    <h2 class="font-bold text-slate-700">Senarai Keseluruhan Rekod</h2>
                     <button onclick="window.print()" class="px-3 py-1 bg-slate-200 rounded text-xs flex items-center gap-1"><i data-lucide="printer" class="w-3 h-3"></i> Cetak</button>
                 </div>
                 <div class="overflow-x-auto bg-white rounded-lg border border-slate-200">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead class="bg-slate-100 border-b">
+                    <table class="w-full text-left border-collapse text-[10px]">
+                        <thead class="bg-slate-100 border-b font-bold uppercase text-slate-600">
                             <tr>
-                                <th class="p-2 font-bold">Nama Guru</th>
-                                <th class="p-2 font-bold">Urusan</th>
-                                <th class="p-2 font-bold">Tarikh/Masa</th>
-                                <th class="p-2 font-bold">Butiran</th>
-                                <th class="p-2 font-bold no-print text-center">Aksi</th>
+                                <th class="p-2 border-r">Nama Guru</th>
+                                <th class="p-2 border-r">Urusan Utama</th>
+                                <th class="p-2 border-r">Tarikh Mula</th>
+                                <th class="p-2 border-r">Tarikh Tamat</th>
+                                <th class="p-2 border-r text-rose-600">Masa Keluar</th>
+                                <th class="p-2 border-r text-emerald-600">Masa Masuk</th>
+                                <th class="p-2 border-r">Butiran/Program</th>
+                                <th class="p-2 border-r">Tempat/Anjuran</th>
+                                <th class="p-2 border-r">Catatan</th>
+                                <th class="p-2 no-print text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="table-rekod-body" class="divide-y divide-slate-100"></tbody>
@@ -101,7 +106,7 @@
     </div>
 
     <div id="modal-login" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white p-8 rounded-3xl w-full max-sm text-center shadow-2xl">
+        <div class="bg-white p-8 rounded-3xl w-full max-w-sm text-center shadow-2xl">
             <h2 class="text-xl font-bold mb-4">Akses Pentadbir</h2>
             <input type="password" id="admin-password" class="w-full p-4 border rounded-2xl mb-4 text-center tracking-widest outline-none" placeholder="••••••••">
             <div class="flex gap-2">
@@ -148,7 +153,6 @@
                 document.getElementById('view-user').classList.add('hidden');
                 document.getElementById('view-admin-rekod').classList.remove('hidden');
                 renderAllRecords();
-                if(typeof lucide !== 'undefined') lucide.createIcons();
             } else { alert("Kata laluan salah!"); }
         }
 
@@ -164,24 +168,46 @@
         function renderAllRecords() {
             const tbody = document.getElementById('table-rekod-body');
             if(state.records.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center">Tiada rekod ditemui.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center">Tiada rekod ditemui.</td></tr>`;
                 return;
             }
-            // Paparkan semua rekod tanpa filter
+            
             tbody.innerHTML = state.records.map(r => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-2 font-bold">${r.Nama}</td>
-                    <td class="p-2">${r.Urusan_Keberadaan}</td>
-                    <td class="p-2">${r.Tarikh_Mula} ${r.Masa_Keluar ? '<br>'+r.Masa_Keluar : ''}</td>
-                    <td class="p-2">${r.Nama_Program || r.Jenis_Cuti || r.Urusan_Keluar || ''} ${r.Catatan ? '<br><i>'+r.Catatan+'</i>' : ''}</td>
+                <tr class="hover:bg-slate-50 border-b border-slate-100">
+                    <td class="p-2 font-bold text-slate-700">${r.Nama || '-'}</td>
+                    <td class="p-2">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${getUrusanClass(r.Urusan_Keberadaan)}">
+                            ${r.Urusan_Keberadaan || '-'}
+                        </span>
+                    </td>
+                    <td class="p-2 whitespace-nowrap">${r.Tarikh_Mula || '-'}</td>
+                    <td class="p-2 whitespace-nowrap">${r.Tarikh_Tamat || '-'}</td>
+                    <td class="p-2 font-medium text-rose-600">${r.Masa_Keluar || '-'}</td>
+                    <td class="p-2 font-medium text-emerald-600">${r.Masa_Masuk || '-'}</td>
+                    <td class="p-2">
+                        <div class="font-bold text-slate-800">${r.Nama_Program || r.Jenis_Cuti || r.Urusan_Keluar || '-'}</div>
+                        <div class="text-[9px] text-slate-400">${r.Jenis_Urusan || ''}</div>
+                    </td>
+                    <td class="p-2">
+                        <div>${r.Tempat || '-'}</div>
+                        <div class="text-[9px] text-slate-400 italic">${r.Anjuran || ''}</div>
+                    </td>
+                    <td class="p-2 italic text-slate-500">${r.Catatan || '-'}</td>
                     <td class="p-2 text-center no-print">
-                        <button onclick="deleteRow('${r.ID_Rekod}')" class="text-red-500 hover:text-red-700">
+                        <button onclick="deleteRow('${r.ID_Rekod}')" class="text-red-400 hover:text-red-600 p-1">
                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                         </button>
                     </td>
                 </tr>
             `).join('');
             lucide.createIcons();
+        }
+
+        function getUrusanClass(u) {
+            if(u?.includes('KELUAR')) return 'bg-blue-100 text-blue-700';
+            if(u?.includes('RASMI')) return 'bg-emerald-100 text-emerald-700';
+            if(u?.includes('CUTI')) return 'bg-rose-100 text-rose-700';
+            return 'bg-slate-100 text-slate-600';
         }
 
         async function deleteRow(id) {
@@ -198,7 +224,6 @@
             finally { showLoading(false); }
         }
 
-        // FUNGSI BORANG PENGGUNA (ASAL)
         function toggleFormFields() {
             const urusan = document.getElementById('select-urusan').value;
             const container = document.getElementById('dynamic-fields');
@@ -211,26 +236,27 @@
                     <input type="text" id="urusanKeluar" placeholder="Urusan Keluar (Contoh: Klinik)" required class="w-full p-3 border rounded-xl">
                     <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1">MASA KELUAR</label><input type="time" id="masaKeluar" required class="w-full p-3 border rounded-xl"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1">MASA MASUK</label><input type="time" id="masaMasuk" required class="w-full p-3 border rounded-xl"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Masa Keluar</label><input type="time" id="masaKeluar" required class="w-full p-3 border rounded-xl"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Masa Masuk</label><input type="time" id="masaMasuk" required class="w-full p-3 border rounded-xl"></div>
                     </div>
                 </div>`;
             } else if(urusan === 'URUSAN RASMI') {
                 html = `<div class="bg-emerald-50/50 p-4 rounded-xl space-y-4">
                     <select id="jenisUrusan" class="w-full p-3 border rounded-xl"><option value="MESYUARAT">MESYUARAT</option><option value="BENGKEL">BENGKEL</option><option value="PROGRAM">PROGRAM</option></select>
-                    <input type="text" id="namaProgram" placeholder="Nama Program" class="w-full p-3 border rounded-xl">
+                    <input type="text" id="namaProgram" placeholder="Nama Program / Bengkel" class="w-full p-3 border rounded-xl">
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1">TARIKH MULA</label><input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1">TARIKH TAMAT</label><input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Tarikh Mula</label><input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Tarikh Tamat</label><input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl"></div>
                     </div>
                     <input type="text" id="tempat" placeholder="Tempat" class="w-full p-3 border rounded-xl">
+                    <input type="text" id="anjuran" placeholder="Anjuran (Contoh: PPD/JPN)" class="w-full p-3 border rounded-xl">
                 </div>`;
             } else if(urusan === 'CUTI') {
                 html = `<div class="bg-rose-50/50 p-4 rounded-xl space-y-4">
                     <select id="jenisCuti" class="w-full p-3 border rounded-xl"><option value="CUTI SAKIT">CUTI SAKIT</option><option value="CRK">CRK</option><option value="CUTI KUARANTIN">CUTI KUARANTIN</option><option value="LAIN-LAIN">LAIN-LAIN</option></select>
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1">TARIKH MULA</label><input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1">TARIKH TAMAT</label><input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Tarikh Mula</label><input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Tarikh Tamat</label><input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl"></div>
                     </div>
                 </div>`;
             }
@@ -271,7 +297,8 @@
                 namaProgram: document.getElementById('namaProgram')?.value || "",
                 jenisCuti: document.getElementById('jenisCuti')?.value || "",
                 catatan: document.getElementById('catatan')?.value || "",
-                tempat: document.getElementById('tempat')?.value || ""
+                tempat: document.getElementById('tempat')?.value || "",
+                anjuran: document.getElementById('anjuran')?.value || ""
             };
             if(!formData.nama || !formData.urusan) { alert("Sila lengkapkan Nama dan Urusan."); return; }
             showLoading(true);
