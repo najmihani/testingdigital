@@ -193,7 +193,7 @@
 
         function showLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
 
-        // --- UTILITY: FORMAT DATE TO DD/MM/YYYY ---
+        // --- UTILITY: FORMAT DATE TO DD/MM/YYYY (Sama seperti GAS) ---
         function formatDateToMY(dateInput) {
             if (!dateInput) return "";
             const d = new Date(dateInput);
@@ -203,7 +203,15 @@
             return `${day}/${month}/${year}`;
         }
 
-        // --- ADMIN AUTH ---
+        // --- UTILITY: FORMAT 24H TO 12H (Untuk paparan cantik) ---
+        function format12h(timeStr) {
+            if (!timeStr || !timeStr.includes(':')) return timeStr;
+            let [h, m] = timeStr.split(':');
+            let ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            return `${h}:${m} ${ampm}`;
+        }
+
         function showAdminLogin() { document.getElementById('modal-login').classList.remove('hidden'); }
         function hideAdminLogin() { document.getElementById('modal-login').classList.add('hidden'); }
         
@@ -240,11 +248,8 @@
             if(typeof lucide !== 'undefined') lucide.createIcons();
         }
 
-        // --- DASHBOARD LOGIC (BAIKPULIH TARIKH) ---
         function updateDashboard() {
-            // Gunakan utiliti format yang sama dengan rekod
             const todayStr = formatDateToMY(new Date());
-            
             const todayRecs = state.records.filter(r => r.Tarikh_Mula === todayStr);
             
             const countDalaman = todayRecs.filter(r => r.Urusan_Keberadaan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN').length;
@@ -294,13 +299,11 @@
             });
         }
 
-        // --- REKOD TABLE (BAIKPULIH TARIKH) ---
         function renderRecords() {
             const tbody = document.getElementById('table-rekod-body');
             const fDate = document.getElementById('filter-date').value;
             const fUrusan = document.getElementById('filter-urusan').value;
             
-            // Formatkan input date (yyyy-mm-dd) kepada dd/mm/yyyy
             let formattedFilterDate = fDate ? formatDateToMY(fDate) : "";
 
             const filtered = state.records.filter(r => {
@@ -330,12 +333,13 @@
                         <div class="flex items-center gap-1 text-slate-500"><i data-lucide="calendar" class="w-3 h-3"></i> ${r.Tarikh_Mula} ${r.Tarikh_Tamat && r.Tarikh_Tamat !== r.Tarikh_Mula ? '- ' + r.Tarikh_Tamat : ''}</div>
                         ${r.Masa_Keluar ? `
                         <div class="flex items-center gap-1 text-blue-600 font-medium mt-1">
-                            <i data-lucide="clock" class="w-3 h-3"></i> ${r.Masa_Keluar} - ${r.Masa_Masuk}
+                            <i data-lucide="clock" class="w-3 h-3"></i> ${format12h(r.Masa_Keluar)} - ${format12h(r.Masa_Masuk)}
                         </div>` : ''}
                     </td>
                     <td class="p-3 align-top">
                         ${r.Nama_Program ? `<div class="text-[11px] font-bold text-slate-600">${r.Nama_Program}</div>` : ''}
-                        <div class="text-[11px] text-slate-500 italic">${r.Catatan || '-'}</div>
+                        ${r.Tempat ? `<div class="text-[10px] text-emerald-600 font-medium">@ ${r.Tempat}</div>` : ''}
+                        <div class="text-[11px] text-slate-500 italic mt-1">${r.Catatan || '-'}</div>
                     </td>
                     <td class="p-3 text-right no-print align-top">
                         <button onclick="deleteRow('${r.ID_Rekod}')" class="p-2 text-red-300 hover:text-red-600 transition-colors">
@@ -368,7 +372,6 @@
             finally { showLoading(false); }
         }
 
-        // --- TEACHER MGMT ---
         function renderTeacherList() {
             const container = document.getElementById('teacher-list-container');
             container.innerHTML = state.teachers.map(t => `
@@ -398,7 +401,6 @@
             finally { showLoading(false); }
         });
 
-        // --- USER FORM FUNCTIONS ---
         function toggleFormFields() {
             const urusan = document.getElementById('select-urusan').value;
             const container = document.getElementById('dynamic-fields');
