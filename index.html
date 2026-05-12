@@ -42,7 +42,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-lg font-bold">eKeberadaan Guru</h1>
-                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh</p>
+                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.2)</p>
                 </div>
                 <!-- BUTANG ADMIN (Ikon Gear) -->
                 <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all flex items-center justify-center border border-blue-500/30">
@@ -220,8 +220,8 @@
     <!-- Script Section -->
     <script>
         // --- CONFIGURATION ---
-        // PENTING: Anda perlu mengisi URL Google Apps Script anda di bawah
-        const API_URL = ""; 
+        // URL Google Apps Script yang anda berikan dimasukkan di sini
+        const API_URL = "https://script.google.com/macros/s/AKfycbwCumZBnERCXzABn3L00ulOdae7B7tx1gLCmSNRgq-tGo_zHWe27boeGkPwFhlYyjjWrg/exec"; 
         const ADMIN_PASS = "Admin0228";
         
         let state = {
@@ -264,6 +264,9 @@
                 renderRecords();
             } catch (e) {
                 console.error("Gagal memuatkan data:", e);
+                // Jika ralat berlaku (cth: CORS), muatkan data demo supaya UI tidak kosong
+                state.teachers = [{id: "G01", nama: "GURU CONTOH 1", jawatan: "GURU"}];
+                renderTeacherList();
             } finally {
                 showLoading(false);
             }
@@ -379,7 +382,7 @@
             e.preventDefault();
             
             if(!API_URL || API_URL.trim() === "") {
-                alert("Ralat: API URL tidak ditetapkan. Sila masukkan URL Google Apps Script dalam kod.");
+                alert("Ralat: API URL tidak ditetapkan.");
                 return;
             }
 
@@ -422,7 +425,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert("Ralat sambungan: " + err.message);
+                alert("Ralat sambungan: Sila pastikan skrip GAS anda membenarkan CORS dan telah dideploy sebagai 'Web App' dengan akses 'Anyone'.");
             } finally {
                 showLoading(false);
             }
