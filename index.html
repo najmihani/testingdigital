@@ -475,18 +475,67 @@
             document.getElementById('stat-cuti').innerText = todayRecords.filter(r => r.UrusanKeberadaan === 'CUTI').length;
         }
 
-        function renderRecords() {
-            const tbody = document.getElementById('table-rekod-body');
-            if(!tbody) return;
+       // Gantikan fungsi renderRecords sedia ada dengan yang ini:
+function renderRecords() {
+    const tbody = document.getElementById('table-rekod-body');
+    if(!tbody) return;
 
-            const fDate = document.getElementById('filter-date').value;
-            const fUrusan = document.getElementById('filter-urusan').value;
-            
-            let formattedFilterDate = "";
-            if(fDate) {
-                const parts = fDate.split('-');
-                formattedFilterDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
-            }
+    const fDate = document.getElementById('filter-date').value;
+    const fUrusan = document.getElementById('filter-urusan').value;
+    
+    let formattedFilterDate = "";
+    if(fDate) {
+        const parts = fDate.split('-');
+        formattedFilterDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    const filtered = state.records.filter(r => {
+        // Perhatikan r.Tarikh_Mula (menggunakan underscore)
+        const matchDate = fDate ? r.Tarikh_Mula === formattedFilterDate : true;
+        const matchUrusan = fUrusan ? r.Urusan_Keberadaan === fUrusan : true;
+        return matchDate && matchUrusan;
+    });
+
+    if(filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-10 text-center text-slate-400">Tiada rekod dijumpai.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(r => `
+        <tr class="hover:bg-slate-50 transition-colors">
+            <td class="p-3 font-mono text-[10px] text-slate-400">${r.ID_Rekod}</td>
+            <td class="p-3 font-bold text-slate-700">${r.Nama}</td>
+            <td class="p-3"><span class="px-2 py-1 rounded-md text-[9px] font-bold ${getBadgeColor(r.Urusan_Keberadaan)}">${r.Urusan_Keberadaan}</span></td>
+            <td class="p-3 text-xs font-semibold">${r.Tarikh_Mula}</td>
+            <td class="p-3 text-[11px] text-slate-600">
+                <div class="font-bold uppercase text-slate-700">${r.Jenis_Urusan || r.Jenis_Cuti || r.Urusan_Keluar}</div>
+                ${r.Nama_Program ? `<div class="italic">${r.Nama_Program}</div>` : ''}
+                ${r.Masa_Keluar ? `<div class="mt-1 flex items-center gap-1 text-blue-600"><i data-lucide="clock" class="w-3 h-3"></i> ${r.Masa_Keluar} - ${r.Masa_Masuk}</div>` : ''}
+            </td>
+            <td class="p-3 text-right no-print">
+                <button onclick="deleteRow('${r.ID_Rekod}')" class="p-2 text-red-400 hover:text-red-600">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// Kemas kini juga fungsi updateStats() supaya menggunakan underscore
+function updateStats() {
+    const todayDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const todayRecords = state.records.filter(r => r.Tarikh_Mula === todayDate);
+    
+    const dalaman = todayRecords.filter(r => r.Urusan_Keberadaan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN').length;
+    const rasmi = todayRecords.filter(r => r.Urusan_Keberadaan === 'URUSAN RASMI').length;
+    const cuti = todayRecords.filter(r => r.Urusan_Keberadaan === 'CUTI').length;
+    
+    document.getElementById('stat-total').innerText = todayRecords.length;
+    document.getElementById('stat-dalaman').innerText = dalaman;
+    document.getElementById('stat-rasmi').innerText = rasmi;
+    document.getElementById('stat-cuti').innerText = cuti;
+}
 
             const filtered = state.records.filter(r => {
                 const matchDate = fDate ? r.TarikhMula === formattedFilterDate : true;
