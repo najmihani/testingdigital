@@ -33,7 +33,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-lg font-bold">eKeberadaan Guru</h1>
-                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.11)</p>
+                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.12)</p>
                 </div>
                 <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all border border-blue-500/30">
                     <i data-lucide="settings" class="w-6 h-6 text-white"></i>
@@ -165,21 +165,27 @@
             document.getElementById('admin-password').value = "";
         }
 
+        // --- FUNGSI DIUBAH UNTUK FORMAT 24 JAM ---
         function formatMasa(val) {
             if (!val || val === '-') return '-';
             let timeString = String(val);
+            
+            // Mengendalikan format tarikh pelik dari Google Sheets (1899...)
             if (timeString.includes('1899')) {
                 const parts = timeString.split(' ');
                 timeString = parts[parts.length - 1];
             }
+
             if (timeString.includes(':')) {
                 try {
+                    // Gunakan tarikh dummy untuk memparsing masa
                     const dummyDate = new Date('2000-01-01 ' + timeString);
                     if (!isNaN(dummyDate.getTime())) {
-                        return dummyDate.toLocaleTimeString('en-US', { 
-                            hour: 'numeric', 
+                        // Guna hour12: false untuk format 24 jam
+                        return dummyDate.toLocaleTimeString('en-GB', { 
+                            hour: '2-digit', 
                             minute: '2-digit', 
-                            hour12: true 
+                            hour12: false 
                         });
                     }
                 } catch (e) {
