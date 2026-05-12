@@ -25,7 +25,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-lg font-bold">eKeberadaan Guru</h1>
-                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh</p>
+                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.1.0.5)</p>
                 </div>
                 <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all border border-blue-500/30">
                     <i data-lucide="settings" class="w-6 h-6 text-white"></i>
@@ -176,7 +176,6 @@
 
         function showLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
 
-        // FUNGSI LOGOUT (Tanpa reload penuh)
         function logoutAdmin() {
             state.isAdmin = false;
             document.getElementById('admin-nav').classList.add('hidden');
@@ -251,7 +250,6 @@
             return 'bg-blue-100 text-blue-700';
         }
 
-        // --- FUNGSI LAIN ---
         function toggleFormFields() {
             const urusan = document.getElementById('select-urusan').value;
             const container = document.getElementById('dynamic-fields');
@@ -274,7 +272,16 @@
                         <option value="MESYUARAT">MESYUARAT</option><option value="BENGKEL">BENGKEL</option><option value="PROGRAM">PROGRAM</option>
                     </select>
                     <input type="text" id="namaProgram" placeholder="Nama Program" class="w-full p-3 border rounded-xl">
-                    <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 px-1">TARIKH MULA</label>
+                            <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 px-1">TARIKH TAMAT</label>
+                            <input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl">
+                        </div>
+                    </div>
                     <input type="text" id="tempat" placeholder="Tempat" class="w-full p-3 border rounded-xl">
                 </div>`;
             } else if(urusan === 'CUTI') {
@@ -282,7 +289,16 @@
                     <select id="jenisCuti" class="w-full p-3 border rounded-xl">
                         <option value="CUTI SAKIT">CUTI SAKIT</option><option value="CRK">CRK</option>
                     </select>
-                    <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 px-1">TARIKH MULA</label>
+                            <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 px-1">TARIKH TAMAT</label>
+                            <input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl">
+                        </div>
+                    </div>
                 </div>`;
             }
             container.innerHTML = html + `<textarea id="catatan" placeholder="Catatan" class="w-full p-3 border rounded-xl"></textarea>`;
@@ -310,6 +326,7 @@
                 urusan: document.getElementById('select-urusan').value,
                 urusanKeluar: document.getElementById('urusanKeluar')?.value || "",
                 tarikhMula: document.getElementById('tarikhMula')?.value || "",
+                tarikhTamat: document.getElementById('tarikhTamat')?.value || "",
                 masaKeluar: document.getElementById('masaKeluar')?.value || "",
                 masaMasuk: document.getElementById('masaMasuk')?.value || "",
                 jenisUrusan: document.getElementById('jenisUrusan')?.value || "",
