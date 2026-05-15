@@ -1,792 +1,620 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eKeberadaan Guru - SMK Perempuan Jalan Ipoh</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        .loading-overlay { 
-            background: rgba(255,255,255,0.8); 
-            display: none; 
-            position: fixed; 
-            inset: 0; 
-            z-index: 99; 
-            justify-content: center; 
-            align-items: center; 
-        }
-        #name-dropdown { z-index: 100; }
-        .active-tab { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
-        .admin-tab { cursor: pointer; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #475569; transition: all 0.15s; }
-        .admin-tab:hover { background-color: #f1f5f9; }
-        .admin-tab.active-tab { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>Kejohanan Olahraga | SMK (P) Jalan Ipoh</title>
 
-        /* ===== PRINT STYLES ===== */
-        @media print {
-            .no-print { display: none !important; }
-            .print-only { display: block !important; }
-            body { background: white !important; font-size: 11px; }
-            #app { max-width: 100% !important; }
-            header, nav, #view-user, #admin-dashboard, #view-guru-mgmt { display: none !important; }
-            #view-admin-rekod { display: block !important; }
-            #print-header { display: block !important; margin-bottom: 12px; }
-            .overflow-x-auto { overflow: visible !important; }
-            table { font-size: 9px !important; }
-            th, td { padding: 4px 6px !important; }
-            tr { page-break-inside: avoid; }
-            #filter-bar, #table-empty-msg-filtered { }
+    <!-- ========== TAILWIND CSS v4 (Play CDN) ========== -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    </script>
+
+    <!-- ========== FONT AWESOME 6.5.1 (Ikon Percuma) ========== -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- ========== GOOGLE FONT: POPPINS (SANTUN & CERIA) ========== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet" />
+
+    <!-- ========== STYLE TAMBAHAN (TEMA CERIA & ANIMASI) ========== -->
+    <style type="text/tailwindcss">
+        @theme {
+            --font-poppins: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+            --color-kenanga: #FF69B4;
+            --color-kenanga-light: #FFB6D9;
+            --color-melur: #FFA500;
+            --color-melur-light: #FFD280;
+            --color-cempaka: #FFD700;
+            --color-cempaka-light: #FFF0A0;
+            --color-anggerik: #8A2BE2;
+            --color-anggerik-light: #C9A0F0;
+            --animate-bounce-in: bounce-in 0.8s ease-out;
+            --animate-slide-up: slide-up 0.7s ease-out;
+            --animate-pulse-glow: pulse-glow 2s infinite;
+            --animate-float: float 3s ease-in-out infinite;
+            --animate-medal-pop: medal-pop 0.5s ease-out;
         }
-        .print-only { display: none; }
-        #print-header { display: none; }
+
+        /* Fon utama seluruh laman */
+        html, body {
+            font-family: var(--font-poppins);
+            scroll-behavior: smooth;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fff7ed 30%, #faf5ff 60%, #fefce8 100%);
+            background-attachment: fixed;
+        }
+
+        /* Animasi tersuai */
+        @keyframes bounce-in {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { transform: scale(1.08); }
+            70% { transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slide-up {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.6); }
+            50% { box-shadow: 0 0 0 18px rgba(255, 105, 180, 0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes medal-pop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Animasi untuk kemas kini data */
+        .data-updated {
+            animation: highlight-row 0.6s ease-out;
+        }
+        @keyframes highlight-row {
+            0% { background-color: rgba(255, 215, 0, 0.3); }
+            100% { background-color: transparent; }
+        }
+
+        /* Bar skrol tersuai */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fce4ec; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #f8bbd0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f48fb1; }
+
+        /* Jalur pelangi halus untuk header */
+        .rainbow-line {
+            background: linear-gradient(90deg, #FF69B4, #FFA500, #FFD700, #8A2BE2, #FF69B4);
+            background-size: 200% 100%;
+            animation: rainbow-shift 4s linear infinite;
+            height: 5px;
+        }
+        @keyframes rainbow-shift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        /* Konfeti */
+        .confetti-piece {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            top: -20px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: confetti-fall linear forwards;
+        }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800">
+<body class="min-h-screen antialiased">
 
-    <div id="loading" class="loading-overlay">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-    </div>
+    <!-- ==================== KONFETI LATAR (AKTIF AUTOMATIK) ==================== -->
+    <div id="confetti-container" aria-hidden="true"></div>
 
-    <div id="app" class="max-w-md mx-auto md:max-w-5xl min-h-screen flex flex-col">
+    <!-- ==================== HEADER UTAMA ==================== -->
+    <header class="relative overflow-hidden bg-white/70 backdrop-blur-md shadow-lg">
+        <!-- Jalur pelangi -->
+        <div class="rainbow-line"></div>
 
-        <!-- HEADER -->
-        <header class="bg-blue-800 text-white p-4 shadow-lg sticky top-0 z-40 no-print">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-lg font-bold">eKeberadaan Guru</h1>
-                    <p class="text-xs opacity-80">SMK Perempuan Jalan Ipoh (v.2.0.0)</p>
-                </div>
-                <button id="btn-admin-access" onclick="showAdminLogin()" class="p-2 bg-blue-700 hover:bg-blue-600 rounded-full transition-all border border-blue-500/30">
-                    <i data-lucide="settings" class="w-6 h-6 text-white"></i>
-                </button>
-            </div>
-        </header>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
 
-        <!-- ADMIN NAV BAR -->
-        <nav id="admin-nav" class="bg-white border-b hidden no-print">
-            <div class="flex flex-wrap p-2 gap-1 items-center">
-                <span class="px-3 py-2 text-sm font-bold text-blue-800 uppercase mr-2">MOD PENTADBIR</span>
-                <button class="admin-tab active-tab" id="tab-rekod" onclick="showAdminTab('rekod')">
-                    <i data-lucide="table-2" class="w-3 h-3 inline mr-1"></i>Rekod
-                </button>
-                <button class="admin-tab" id="tab-dashboard" onclick="showAdminTab('dashboard')">
-                    <i data-lucide="bar-chart-2" class="w-3 h-3 inline mr-1"></i>Dashboard
-                </button>
-                <button class="admin-tab" id="tab-guru" onclick="showAdminTab('guru')">
-                    <i data-lucide="users" class="w-3 h-3 inline mr-1"></i>Urus Guru
-                </button>
-                <button onclick="logoutAdmin()" class="px-4 py-2 text-sm font-medium rounded-lg text-red-600 hover:bg-red-50 ml-auto flex items-center gap-1">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> KELUAR
-                </button>
-            </div>
-        </nav>
-
-        <main class="flex-grow p-4 space-y-4">
-
-            <!-- ===== VIEW: BORANG PENGGUNA ===== -->
-            <section id="view-user" class="space-y-4">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <i data-lucide="user-check" class="text-blue-600"></i> Borang Keberadaan
-                    </h2>
-                    <form id="form-keberadaan" class="space-y-4">
-                        <div class="relative">
-                            <label class="block text-sm font-semibold mb-1 text-slate-600">NAMA GURU</label>
-                            <input type="text" id="user-nama-input" placeholder="Taip nama anda..." autocomplete="off" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
-                            <div id="name-dropdown" class="absolute w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-48 overflow-y-auto hidden"></div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-1 text-slate-600">URUSAN KEBERADAAN</label>
-                            <select id="select-urusan" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500" onchange="toggleFormFields()">
-                                <option value="">-- Sila Pilih --</option>
-                                <option value="KELUAR WAKTU BEKERJA / URUSAN DALAMAN">KELUAR WAKTU BEKERJA / URUSAN DALAMAN</option>
-                                <option value="URUSAN RASMI">URUSAN RASMI</option>
-                                <option value="CUTI">CUTI</option>
-                            </select>
-                        </div>
-                        <div id="dynamic-fields" class="space-y-4 border-t border-slate-100 pt-4 hidden"></div>
-                        <button type="submit" class="w-full bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-800 transition-all flex items-center justify-center gap-2">
-                            <i data-lucide="save" class="w-5 h-5"></i> SIMPAN MAKLUMAT
-                        </button>
-                    </form>
-                </div>
-            </section>
-
-            <!-- ===== VIEW: REKOD ADMIN ===== -->
-            <section id="view-admin-rekod" class="hidden space-y-3">
-
-                <!-- Print Header (cetak sahaja) -->
-                <div id="print-header" class="print-only">
-                    <h2 class="text-lg font-bold">SMK Perempuan Jalan Ipoh</h2>
-                    <p class="text-sm">Senarai Rekod Keberadaan Guru</p>
-                    <p class="text-xs text-slate-500" id="print-filter-info"></p>
-                    <hr class="my-2">
+                <!-- Logo & Nama Sekolah -->
+                <div class="flex items-center gap-4 animate-slide-up">
+                    <!-- Ikon piala -->
+                    <div class="hidden sm:flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-pink-300 to-purple-400 shadow-lg animate-float">
+                        <i class="fa-solid fa-trophy text-white text-2xl"></i>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <p class="text-sm sm:text-base font-medium text-purple-700 tracking-wide">
+                            🏫 SMK (P) JALAN IPOH
+                        </p>
+                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-pink-500 via-orange-500 to-purple-600 bg-clip-text text-transparent leading-tight">
+                            KARNIVAL OLAHRAGA TAHUNAN
+                        </h1>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-1 flex items-center justify-center sm:justify-start gap-2">
+                            <i class="fa-regular fa-calendar-days text-pink-400"></i>
+                            <span>Sesi 2026</span>
+                            <span class="hidden sm:inline">•</span>
+                            <span class="hidden sm:inline-flex items-center gap-1">
+                                <span class="relative flex h-3 w-3">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                </span>
+                                <span class="text-green-600 font-semibold">LIVE</span>
+                            </span>
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Toolbar: tajuk + cetak -->
-                <div class="flex flex-wrap justify-between items-center gap-2 no-print">
-                    <h2 class="font-bold text-slate-700 text-base">Senarai Keseluruhan Rekod</h2>
-                    <button onclick="printFilteredRecords()" class="px-3 py-1.5 bg-slate-700 text-white rounded-lg text-xs flex items-center gap-1 hover:bg-slate-800">
-                        <i data-lucide="printer" class="w-3 h-3"></i> Cetak
+                <!-- Info masa & refresh -->
+                <div class="flex items-center gap-4 animate-slide-up">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-xs text-gray-400">🕒 Kemas kini terakhir</p>
+                        <p id="last-updated" class="text-sm font-semibold text-gray-600">--:--:--</p>
+                    </div>
+                    <button id="refresh-btn"
+                            onclick="fetchData(true)"
+                            title="Segar semula data"
+                            class="flex items-center justify-center w-11 h-11 rounded-full bg-pink-50 hover:bg-pink-100 border-2 border-pink-200 hover:border-pink-400 transition-all duration-300 hover:scale-110 active:scale-95 shadow-md">
+                        <i id="refresh-icon" class="fa-solid fa-rotate text-pink-500 text-lg"></i>
                     </button>
                 </div>
+            </div>
+        </div>
+    </header>
 
-                <!-- TAPISAN / FILTER BAR -->
-                <div id="filter-bar" class="bg-white rounded-xl border border-slate-200 p-3 no-print">
-                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">Tapisan Rekod</p>
-                    <div class="flex flex-wrap gap-2">
-                        <!-- Tapisan Tarikh -->
-                        <div class="flex items-center gap-1">
-                            <label class="text-xs text-slate-500 font-semibold whitespace-nowrap">Dari:</label>
-                            <input type="date" id="filter-tarikh-mula" class="text-xs p-1.5 border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-blue-400">
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <label class="text-xs text-slate-500 font-semibold whitespace-nowrap">Hingga:</label>
-                            <input type="date" id="filter-tarikh-tamat" class="text-xs p-1.5 border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-blue-400">
-                        </div>
-                        <!-- Tapisan Jenis Urusan -->
-                        <div class="flex items-center gap-1">
-                            <label class="text-xs text-slate-500 font-semibold whitespace-nowrap">Urusan:</label>
-                            <select id="filter-urusan" class="text-xs p-1.5 border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-blue-400">
-                                <option value="">Semua</option>
-                                <option value="KELUAR WAKTU BEKERJA / URUSAN DALAMAN">Keluar Waktu Bekerja</option>
-                                <option value="URUSAN RASMI">Urusan Rasmi</option>
-                                <option value="CUTI">Cuti</option>
-                            </select>
-                        </div>
-                        <!-- Butang -->
-                        <button onclick="applyFilter()" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 flex items-center gap-1">
-                            <i data-lucide="filter" class="w-3 h-3"></i> Tapis
-                        </button>
-                        <button onclick="resetFilter()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-300 flex items-center gap-1">
-                            <i data-lucide="x" class="w-3 h-3"></i> Padam Tapisan
-                        </button>
-                    </div>
-                    <!-- Info kiraan rekod -->
-                    <p id="filter-count" class="text-xs text-slate-400 mt-2"></p>
+    <!-- ==================== KANDUNGAN UTAMA ==================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+
+        <!-- ========== BAHAGIAN 1: PAPAN MATA (LEADERBOARD) ========== -->
+        <section id="leaderboard-section" class="mb-10 animate-slide-up">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center shadow-lg animate-pulse-glow">
+                    <i class="fa-solid fa-ranking-star text-white"></i>
                 </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">
+                    🏆 Papan Mata Keseluruhan
+                </h2>
+            </div>
 
-                <!-- TABLE REKOD -->
-                <div class="overflow-x-auto bg-white rounded-lg border border-slate-200">
-                    <table class="w-full text-left border-collapse text-[10px]" id="rekod-table">
-                        <thead class="bg-slate-100 border-b font-bold uppercase text-slate-600">
-                            <tr>
-                                <th class="p-2 border-r">Nama Guru</th>
-                                <th class="p-2 border-r">Urusan Utama</th>
-                                <th class="p-2 border-r">Tarikh Mula</th>
-                                <th class="p-2 border-r">Tarikh Tamat</th>
-                                <th class="p-2 border-r text-rose-600">Masa Keluar</th>
-                                <th class="p-2 border-r text-emerald-600">Masa Masuk</th>
-                                <th class="p-2 border-r">Butiran/Program</th>
-                                <th class="p-2 border-r">Tempat/Anjuran</th>
-                                <th class="p-2 border-r">Catatan</th>
-                                <th class="p-2 no-print text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-rekod-body" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- ===== VIEW: DASHBOARD ===== -->
-            <section id="admin-dashboard" class="hidden space-y-4">
-                <!-- Tarikh Hari Ini -->
-                <div class="bg-blue-800 text-white rounded-2xl p-4 flex items-center gap-4">
-                    <div class="bg-white/20 rounded-xl p-3">
-                        <i data-lucide="calendar" class="w-8 h-8"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs opacity-70 uppercase font-semibold">Tarikh Hari Ini</p>
-                        <p id="dashboard-tarikh" class="text-2xl font-bold tracking-wide"></p>
-                        <p id="dashboard-hari" class="text-sm opacity-80"></p>
+            <!-- Grid kad rumah sukan -->
+            <div id="leaderboard-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Placeholder sementara (akan diganti oleh JavaScript) -->
+                <div class="col-span-full text-center py-10">
+                    <div class="inline-flex items-center gap-3 text-gray-400">
+                        <i class="fa-solid fa-spinner fa-spin-pulse text-2xl"></i>
+                        <span class="text-lg">Memuatkan papan mata...</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Ringkasan Hari Ini -->
-                <div>
-                    <h3 class="font-bold text-slate-600 text-sm uppercase mb-2">Ringkasan Keberadaan Hari Ini</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="dashboard-cards"></div>
+            <!-- Jadual terperinci (desktop sahaja) -->
+            <div id="leaderboard-table-wrapper" class="hidden sm:block mt-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                <table class="w-full text-left" id="leaderboard-table">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-pink-100 via-orange-50 to-purple-100">
+                            <th class="px-6 py-4 text-sm font-bold text-gray-700 uppercase tracking-wider">Ked.</th>
+                            <th class="px-6 py-4 text-sm font-bold text-gray-700 uppercase tracking-wider">Rumah</th>
+                            <th class="px-6 py-4 text-sm font-bold text-gray-700 uppercase tracking-wider text-center">🥇 Emas</th>
+                            <th class="px-6 py-4 text-sm font-bold text-gray-700 uppercase tracking-wider text-center">🥈 Perak</th>
+                            <th class="px-6 py-4 text-sm font-bold text-gray-700 uppercase tracking-wider text-center">🥉 Gangsa</th>
+                            <th class="px-6 py-4 text-sm font-bold text-gray-700 uppercase tracking-wider text-center">Ke-4</th>
+                            <th class="px-6 py-4 text-sm font-bold text-gray-700 uppercase tracking-wider text-center">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-tbody">
+                        <tr><td colspan="7" class="text-center py-8 text-gray-400">Tiada data</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========== BAHAGIAN 2: SENARAI ACARA ========== -->
+        <section id="events-section" class="mb-10 animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-300 to-cyan-400 flex items-center justify-center shadow-lg">
+                    <i class="fa-solid fa-list-ol text-white"></i>
                 </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">
+                    📋 Senarai Acara
+                </h2>
+                <span id="event-count" class="text-sm bg-pink-100 text-pink-700 px-3 py-1 rounded-full font-semibold">0 acara</span>
+            </div>
 
-                <!-- Jumlah Keseluruhan -->
-                <div>
-                    <h3 class="font-bold text-slate-600 text-sm uppercase mb-2">Jumlah Keseluruhan Rekod</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="dashboard-total-cards"></div>
-                </div>
-
-                <!-- Senarai guru hari ini -->
-                <div>
-                    <h3 class="font-bold text-slate-600 text-sm uppercase mb-2">Senarai Guru Tidak Hadir / Keluar Hari Ini</h3>
-                    <div id="dashboard-guru-list" class="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100"></div>
-                </div>
-            </section>
-
-            <!-- ===== VIEW: URUS GURU ===== -->
-            <section id="view-guru-mgmt" class="hidden space-y-4">
-                <!-- Form Tambah Guru -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                    <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                        <i data-lucide="user-plus" class="w-4 h-4 text-blue-600"></i> Tambah Guru Baru
-                    </h3>
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-semibold mb-1 text-slate-500 uppercase">Nama Guru</label>
-                            <input type="text" id="new-guru-nama" placeholder="Nama penuh guru..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 uppercase">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold mb-1 text-slate-500 uppercase">Jawatan</label>
-                            <input type="text" id="new-guru-jawatan" placeholder="Contoh: Guru Matematik" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 uppercase">
-                        </div>
-                        <button onclick="submitTambahGuru()" class="w-full bg-blue-700 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all flex items-center justify-center gap-2">
-                            <i data-lucide="save" class="w-4 h-4"></i> SIMPAN GURU
-                        </button>
+            <!-- Grid kad acara -->
+            <div id="events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                <div class="col-span-full text-center py-10">
+                    <div class="inline-flex items-center gap-3 text-gray-400">
+                        <i class="fa-solid fa-spinner fa-spin-pulse text-2xl"></i>
+                        <span class="text-lg">Memuatkan acara...</span>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Senarai Guru -->
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                    <div class="p-4 border-b bg-slate-50 flex items-center gap-2">
-                        <i data-lucide="users" class="w-4 h-4 text-slate-500"></i>
-                        <h3 class="font-bold text-slate-700 text-sm">Senarai Guru Berdaftar</h3>
-                        <span id="guru-count-badge" class="ml-auto bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full"></span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
-                            <thead class="bg-slate-100 font-bold uppercase text-slate-500">
-                                <tr>
-                                    <th class="p-2 border-r">ID</th>
-                                    <th class="p-2 border-r">Nama</th>
-                                    <th class="p-2">Jawatan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="guru-table-body" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
+    </main>
 
-        </main>
+    <!-- ==================== BUTANG LOGIN ADMIN ==================== -->
+    <div class="fixed bottom-6 right-6 z-50 animate-bounce-in" style="animation-delay: 1s;">
+        <a href="admin.html"
+           title="Login Admin"
+           class="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 active:scale-95 transition-all duration-300">
+            <i class="fa-solid fa-lock text-sm"></i>
+            <span class="hidden sm:inline">Login Admin</span>
+        </a>
     </div>
 
-    <!-- MODAL LOGIN ADMIN -->
-    <div id="modal-login" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white p-8 rounded-3xl w-full max-w-sm text-center shadow-2xl">
-            <h2 class="text-xl font-bold mb-4">Akses Pentadbir</h2>
-            <input type="password" id="admin-password" class="w-full p-4 border rounded-2xl mb-4 text-center tracking-widest outline-none" placeholder="••••••••" onkeydown="if(event.key==='Enter') verifyAdmin()">
-            <div class="flex gap-2">
-                <button onclick="hideAdminLogin()" class="flex-1 p-3 bg-slate-100 rounded-xl hover:bg-slate-200">Batal</button>
-                <button onclick="verifyAdmin()" class="flex-1 p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700">Masuk</button>
-            </div>
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-white/60 backdrop-blur-sm border-t border-pink-100 mt-10">
+        <div class="max-w-7xl mx-auto px-4 py-5 text-center">
+            <p class="text-sm text-gray-500">
+                © 2026 <span class="font-semibold text-pink-600">SMK (P) Jalan Ipoh</span> —
+                Kejohanan Olahraga Tahunan
+                <span class="mx-2">🌸</span>
+                <span class="text-xs text-gray-400">Dibina dengan penuh semangat kesukanan</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==================== TOAST MESEJ (MAKLUM BALAS) ==================== -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] hidden">
+        <div class="bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-3 min-w-[280px] animate-slide-up">
+            <i id="toast-icon" class="text-xl"></i>
+            <span id="toast-msg" class="text-sm font-medium text-gray-700"></span>
         </div>
     </div>
 
+
+    <!-- ==================== SKRIP JAVASCRIPT UTAMA ==================== -->
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbwCumZBnERCXzABn3L00ulOdae7B7tx1gLCmSNRgq-tGo_zHWe27boeGkPwFhlYyjjWrg/exec"; 
-        const ADMIN_PASS = "Admin0228";
+        (function () {
+            // ========== KONFIGURASI ==========
+            const API_URL =
+                'https://script.google.com/macros/s/AKfycbwpWop8CJaDMwLEeBGL5haqf7rFxQyIYnttKgabdioXhCVMcUFD09UkkDSxDEzzTo4T/exec';
+            const REFRESH_INTERVAL = 15_000; // 15 saat (sekolah: jangan terlalu kerap)
+            const ANIMATION_DURATION = 600;   // ms untuk animasi nombor
 
-        let state = { 
-            teachers: [], 
-            records: [],       // semua rekod asal
-            filtered: [],      // rekod selepas tapisan
-            isAdmin: false,
-            filterActive: false
-        };
+            // ========== WARNA RUMAH (fallback jika API tiada) ==========
+            const HOUSE_COLORS = {
+                'Kenanga': { bg: '#FFE4F0', border: '#FF69B4', text: '#C2185B', gradient: 'from-pink-100 to-pink-200' },
+                'Melur': { bg: '#FFF3E0', border: '#FFA500', text: '#E65100', gradient: 'from-orange-100 to-orange-200' },
+                'Cempaka': { bg: '#FFFDE7', border: '#FFD700', text: '#F9A825', gradient: 'from-yellow-100 to-yellow-200' },
+                'Anggerik': { bg: '#F3E5F5', border: '#8A2BE2', text: '#6A1B9A', gradient: 'from-purple-100 to-purple-200' }
+            };
 
-        // =============================================
-        // INIT
-        // =============================================
-        window.addEventListener('load', () => { 
-            if(typeof lucide !== 'undefined') lucide.createIcons(); 
-            loadInitialData(); 
-            setupAutocomplete(); 
-            setDashboardDate();
-        });
+            const DEFAULT_COLORS = { bg: '#F5F5F5', border: '#9E9E9E', text: '#616161', gradient: 'from-gray-100 to-gray-200' };
 
-        async function loadInitialData() {
-            showLoading(true);
-            try {
-                const response = await fetch(`${API_URL}?action=getInitialData`, { method: 'POST', body: JSON.stringify({}) });
-                const data = await response.json();
-                state.teachers = data.teachers || [];
-                state.records = data.records || [];
-                state.filtered = [...state.records];
-                if(state.isAdmin) { renderAllRecords(); renderDashboard(); renderGuruTable(); }
-            } catch (e) { console.error("Error:", e); } 
-            finally { showLoading(false); }
-        }
+            // ========== SIMPANAN DATA ==========
+            let cachedData = null;
+            let previousLeaderboard = null;
+            let isFirstLoad = true;
 
-        function showLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
+            // ========== FUNGSI UTAMA: TARIK DATA ==========
+            async function fetchData(isManual = false) {
+                const refreshIcon = document.getElementById('refresh-icon');
+                if (refreshIcon) {
+                    refreshIcon.classList.add('fa-spin');
+                }
 
-        // =============================================
-        // ADMIN LOGIN / LOGOUT
-        // =============================================
-        function showAdminLogin() { document.getElementById('modal-login').classList.remove('hidden'); document.getElementById('admin-password').focus(); }
-        function hideAdminLogin() { document.getElementById('modal-login').classList.add('hidden'); }
-        
-        function verifyAdmin() {
-            if(document.getElementById('admin-password').value === ADMIN_PASS) {
-                state.isAdmin = true;
-                hideAdminLogin();
-                document.getElementById('admin-nav').classList.remove('hidden');
-                document.getElementById('btn-admin-access').classList.add('hidden');
-                document.getElementById('view-user').classList.add('hidden');
-                showAdminTab('rekod');
-                renderAllRecords();
-                renderDashboard();
-                renderGuruTable();
-            } else { alert("Kata laluan salah!"); }
-        }
+                try {
+                    const response = await fetch(API_URL + '?action=all', {
+                        cache: 'no-store',
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const json = await response.json();
 
-        function logoutAdmin() {
-            state.isAdmin = false;
-            document.getElementById('admin-nav').classList.add('hidden');
-            document.getElementById('btn-admin-access').classList.remove('hidden');
-            document.getElementById('view-admin-rekod').classList.add('hidden');
-            document.getElementById('admin-dashboard').classList.add('hidden');
-            document.getElementById('view-guru-mgmt').classList.add('hidden');
-            document.getElementById('view-user').classList.remove('hidden');
-            document.getElementById('admin-password').value = "";
-        }
-
-        // =============================================
-        // ADMIN TABS
-        // =============================================
-        function showAdminTab(tab) {
-            ['rekod','dashboard','guru'].forEach(t => {
-                const tabEl = document.getElementById('tab-' + t);
-                if(tabEl) tabEl.classList.remove('active-tab');
-            });
-            document.getElementById('view-admin-rekod').classList.add('hidden');
-            document.getElementById('admin-dashboard').classList.add('hidden');
-            document.getElementById('view-guru-mgmt').classList.add('hidden');
-
-            const activeTab = document.getElementById('tab-' + tab);
-            if(activeTab) activeTab.classList.add('active-tab');
-
-            if(tab === 'rekod') {
-                document.getElementById('view-admin-rekod').classList.remove('hidden');
-            } else if(tab === 'dashboard') {
-                document.getElementById('admin-dashboard').classList.remove('hidden');
-                renderDashboard();
-            } else if(tab === 'guru') {
-                document.getElementById('view-guru-mgmt').classList.remove('hidden');
-            }
-            lucide.createIcons();
-        }
-
-        // =============================================
-        // FORMAT MASA — PENTING: terima string HH:mm dari GAS
-        // =============================================
-        function formatMasa(val) {
-            if (!val || val === '' || val === '-') return '-';
-            const s = String(val).trim();
-            // Format HH:mm atau HH:mm:ss — ambil 5 aksara pertama
-            if (/^\d{1,2}:\d{2}/.test(s)) {
-                return s.substring(0, 5);
-            }
-            return s || '-';
-        }
-
-        // =============================================
-        // FORMAT TARIKH — GAS sudah hantar dd/MM/yyyy
-        // =============================================
-        function formatTarikh(val) {
-            if (!val || val === '' || val === '-') return '-';
-            const s = String(val).trim();
-            // GAS sudah hantar dalam format dd/MM/yyyy — guna terus
-            if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) return s;
-            return s || '-';
-        }
-
-        // Parse tarikh dd/MM/yyyy → Date object (untuk tapisan)
-        function parseTarikhDMY(s) {
-            if (!s || s === '-') return null;
-            const p = String(s).trim().split('/');
-            if (p.length !== 3) return null;
-            // p[0]=dd, p[1]=MM, p[2]=yyyy
-            const d = new Date(parseInt(p[2]), parseInt(p[1]) - 1, parseInt(p[0]));
-            return isNaN(d.getTime()) ? null : d;
-        }
-
-        // =============================================
-        // RENDER REKOD
-        // =============================================
-        function renderAllRecords(records) {
-            const tbody = document.getElementById('table-rekod-body');
-            const data = records || state.filtered;
-            const countEl = document.getElementById('filter-count');
-
-            if(data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-slate-400 italic">Tiada rekod ditemui.</td></tr>`;
-                if(countEl) countEl.textContent = 'Tiada rekod ditemui.';
-                return;
-            }
-            if(countEl) countEl.textContent = `Menunjukkan ${data.length} rekod daripada ${state.records.length} rekod.`;
-            
-            tbody.innerHTML = data.map(r => `
-                <tr class="hover:bg-slate-50 border-b border-slate-100">
-                    <td class="p-2 font-bold text-slate-700">${r.Nama || '-'}</td>
-                    <td class="p-2">
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${getUrusanClass(r.Urusan_Keberadaan)}">
-                            ${r.Urusan_Keberadaan || '-'}
-                        </span>
-                    </td>
-                    <td class="p-2 whitespace-nowrap">${formatTarikh(r.Tarikh_Mula)}</td>
-                    <td class="p-2 whitespace-nowrap">${formatTarikh(r.Tarikh_Tamat)}</td>
-                    <td class="p-2 font-medium text-rose-600">${formatMasa(r.Masa_Keluar)}</td>
-                    <td class="p-2 font-medium text-emerald-600">${formatMasa(r.Masa_Masuk)}</td>
-                    <td class="p-2">
-                        <div class="font-bold text-slate-800">${r.Nama_Program || r.Jenis_Cuti || r.Urusan_Keluar || '-'}</div>
-                        <div class="text-[9px] text-slate-400">${r.Jenis_Urusan || ''}</div>
-                    </td>
-                    <td class="p-2">
-                        <div>${r.Tempat || '-'}</div>
-                        <div class="text-[9px] text-slate-400 italic">${r.Anjuran || ''}</div>
-                    </td>
-                    <td class="p-2 italic text-slate-500">${r.Catatan || '-'}</td>
-                    <td class="p-2 text-center no-print">
-                        <button onclick="deleteRow('${r.ID_Rekod}')" class="text-red-400 hover:text-red-600 p-1">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function getUrusanClass(u) {
-            if(u?.includes('KELUAR')) return 'bg-blue-100 text-blue-700';
-            if(u?.includes('RASMI')) return 'bg-emerald-100 text-emerald-700';
-            if(u?.includes('CUTI')) return 'bg-rose-100 text-rose-700';
-            return 'bg-slate-100 text-slate-600';
-        }
-
-        // =============================================
-        // TAPISAN / FILTER
-        // =============================================
-        function applyFilter() {
-            const mula = document.getElementById('filter-tarikh-mula').value;
-            const tamat = document.getElementById('filter-tarikh-tamat').value;
-            const urusan = document.getElementById('filter-urusan').value;
-
-            let hasil = [...state.records];
-
-            // Tapisan mengikut tarikh
-            if(mula || tamat) {
-                hasil = hasil.filter(r => {
-                    const tMula = parseTarikhDMY(r.Tarikh_Mula);
-                    if(!tMula) return false;
-                    if(mula) {
-                        const dMula = new Date(mula);
-                        if(tMula < dMula) return false;
+                    if (json && json.leaderboard) {
+                        // Bandingkan dengan data sebelumnya
+                        if (previousLeaderboard) {
+                            checkForChanges(json.leaderboard, previousLeaderboard);
+                        }
+                        previousLeaderboard = JSON.parse(JSON.stringify(json.leaderboard));
+                        cachedData = json;
+                        renderAll(json);
+                        updateTimestamp();
+                        if (isFirstLoad) {
+                            isFirstLoad = false;
+                            // Lancarkan konfeti pada muatan pertama
+                            spawnConfetti(30);
+                        }
+                        if (isManual) {
+                            showToast('success', '✅ Data telah disegarkan!');
+                        }
+                    } else {
+                        console.warn('Data API kosong atau tidak sah:', json);
+                        if (isManual) showToast('warning', '⚠️ Tiada data diterima.');
                     }
-                    if(tamat) {
-                        const dTamat = new Date(tamat);
-                        dTamat.setHours(23,59,59);
-                        if(tMula > dTamat) return false;
+                } catch (err) {
+                    console.error('Ralat fetch:', err);
+                    if (isManual) showToast('error', '❌ Gagal menyambung ke pelayan.');
+                } finally {
+                    if (refreshIcon) {
+                        refreshIcon.classList.remove('fa-spin');
                     }
-                    return true;
-                });
+                }
             }
 
-            // Tapisan mengikut jenis urusan
-            if(urusan) {
-                hasil = hasil.filter(r => r.Urusan_Keberadaan === urusan);
+            // ========== KESAN PERUBAHAN DATA ==========
+            function checkForChanges(newLB, oldLB) {
+                for (let i = 0; i < newLB.length; i++) {
+                    if (newLB[i].jumlah_mata !== oldLB[i].jumlah_mata ||
+                        newLB[i].emas !== oldLB[i].emas ||
+                        newLB[i].perak !== oldLB[i].perak ||
+                        newLB[i].gangsa !== oldLB[i].gangsa) {
+                        // Ada perubahan! Lancarkan konfeti dan animasi
+                        spawnConfetti(15);
+                        const changedHouse = newLB[i].rumah;
+                        highlightHouseCard(changedHouse);
+                        break; // cukup sekali
+                    }
+                }
             }
 
-            state.filtered = hasil;
-            state.filterActive = !!(mula || tamat || urusan);
-            renderAllRecords();
-        }
+            function highlightHouseCard(houseName) {
+                const card = document.getElementById(`house-card-${houseName}`);
+                if (card) {
+                    card.classList.add('data-updated');
+                    setTimeout(() => card.classList.remove('data-updated'), 1000);
+                }
+            }
 
-        function resetFilter() {
-            document.getElementById('filter-tarikh-mula').value = '';
-            document.getElementById('filter-tarikh-tamat').value = '';
-            document.getElementById('filter-urusan').value = '';
-            state.filtered = [...state.records];
-            state.filterActive = false;
-            document.getElementById('filter-count').textContent = '';
-            renderAllRecords();
-        }
+            // ========== RENDER SEMUA UI ==========
+            function renderAll(data) {
+                renderLeaderboard(data.leaderboard);
+                renderLeaderboardTable(data.leaderboard);
+                renderEvents(data.acara);
+            }
 
-        // =============================================
-        // CETAK — ikut paparan yang terpapar
-        // =============================================
-        function printFilteredRecords() {
-            // Kemas maklumat tapisan untuk header cetakan
-            const mula = document.getElementById('filter-tarikh-mula').value;
-            const tamat = document.getElementById('filter-tarikh-tamat').value;
-            const urusan = document.getElementById('filter-urusan').value;
-            
-            let filterInfo = 'Semua rekod';
-            const parts = [];
-            if(mula) parts.push(`Dari: ${mula.split('-').reverse().join('/')}`);
-            if(tamat) parts.push(`Hingga: ${tamat.split('-').reverse().join('/')}`);
-            if(urusan) parts.push(`Urusan: ${urusan}`);
-            if(parts.length) filterInfo = parts.join(' | ');
-            filterInfo += ` | Jumlah: ${state.filtered.length} rekod | Dicetak: ${new Date().toLocaleDateString('ms-MY')}`;
+            // ========== RENDER KAD PAPAN MATA (MOBILE + DESKTOP) ==========
+            function renderLeaderboard(leaderboard) {
+                const grid = document.getElementById('leaderboard-grid');
+                if (!grid) return;
 
-            document.getElementById('print-filter-info').textContent = filterInfo;
-            window.print();
-        }
+                // Isih mengikut jumlah mata (menurun)
+                const sorted = [...leaderboard].sort((a, b) => b.jumlah_mata - a.jumlah_mata);
 
-        // =============================================
-        // PADAM REKOD
-        // =============================================
-        async function deleteRow(id) {
-            if(!confirm("Padam rekod ini?")) return;
-            showLoading(true);
-            try {
-                const res = await fetch(`${API_URL}?action=deleteRecord`, { method: 'POST', body: JSON.stringify({id: id}) });
-                const data = await res.json();
-                if(data.success) { 
-                    state.records = state.records.filter(r => r.ID_Rekod !== id);
-                    state.filtered = state.filtered.filter(r => r.ID_Rekod !== id);
-                    renderAllRecords();
-                    renderDashboard();
-                } else { alert("Gagal memadam rekod."); }
-            } catch (e) { alert("Gagal memadam."); }
-            finally { showLoading(false); }
-        }
+                grid.innerHTML = sorted.map((house, index) => {
+                    const colors = HOUSE_COLORS[house.rumah] || DEFAULT_COLORS;
+                    const medalEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏅';
+                    const rankLabel = index === 0 ? 'Juara' : index === 1 ? 'Naib Juara' : index === 2 ? 'Ketiga' : `Ke-${index + 1}`;
 
-        // =============================================
-        // DASHBOARD
-        // =============================================
-        const HARI_MS = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'];
-        const BULAN_MS = ['Januari','Februari','Mac','April','Mei','Jun','Julai','Ogos','September','Oktober','November','Disember'];
+                    return `
+                    <div id="house-card-${house.rumah}"
+                         class="group relative bg-white/80 backdrop-blur-sm rounded-2xl border-2 p-5 sm:p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 animate-slide-up overflow-hidden"
+                         style="border-color: ${colors.border}; animation-delay: ${index * 0.1}s;">
+                        <!-- Hiasan latar belakang -->
+                        <div class="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20 blur-2xl" style="background-color: ${colors.border};"></div>
 
-        function setDashboardDate() {
-            const now = new Date();
-            const tarikhEl = document.getElementById('dashboard-tarikh');
-            const hariEl = document.getElementById('dashboard-hari');
-            if(tarikhEl) tarikhEl.textContent = `${now.getDate()} ${BULAN_MS[now.getMonth()]} ${now.getFullYear()}`;
-            if(hariEl) hariEl.textContent = HARI_MS[now.getDay()];
-        }
-
-        function getTodayStr() {
-            const now = new Date();
-            const d = String(now.getDate()).padStart(2,'0');
-            const m = String(now.getMonth()+1).padStart(2,'0');
-            const y = now.getFullYear();
-            return `${d}/${m}/${y}`;
-        }
-
-        function renderDashboard() {
-            setDashboardDate();
-            const todayStr = getTodayStr();
-
-            // Rekod hari ini sahaja
-            const todayRecords = state.records.filter(r => {
-                const tm = formatTarikh(r.Tarikh_Mula);
-                return tm === todayStr;
-            });
-
-            // Kiraan mengikut kategori (hari ini)
-            const cats = {
-                'KELUAR WAKTU BEKERJA / URUSAN DALAMAN': { label: 'Keluar Waktu Bekerja', color: 'bg-blue-50 border-blue-200 text-blue-700', icon: 'door-open', count: 0 },
-                'URUSAN RASMI': { label: 'Urusan Rasmi', color: 'bg-emerald-50 border-emerald-200 text-emerald-700', icon: 'briefcase', count: 0 },
-                'CUTI': { label: 'Cuti', color: 'bg-rose-50 border-rose-200 text-rose-700', icon: 'bed', count: 0 }
-            };
-
-            todayRecords.forEach(r => {
-                if(cats[r.Urusan_Keberadaan]) cats[r.Urusan_Keberadaan].count++;
-            });
-
-            const cardsEl = document.getElementById('dashboard-cards');
-            cardsEl.innerHTML = Object.values(cats).map(c => `
-                <div class="border rounded-xl p-4 ${c.color} flex items-center gap-3">
-                    <div class="text-3xl font-bold">${c.count}</div>
-                    <div>
-                        <p class="text-xs font-bold uppercase opacity-70">${c.label}</p>
-                        <p class="text-[10px] opacity-50">Hari ini</p>
-                    </div>
-                </div>
-            `).join('');
-
-            // Jumlah keseluruhan
-            const totalCats = {
-                'KELUAR WAKTU BEKERJA / URUSAN DALAMAN': { label: 'Keluar Waktu Bekerja', color: 'bg-blue-50 border-blue-200 text-blue-700', count: 0 },
-                'URUSAN RASMI': { label: 'Urusan Rasmi', color: 'bg-emerald-50 border-emerald-200 text-emerald-700', count: 0 },
-                'CUTI': { label: 'Cuti', color: 'bg-rose-50 border-rose-200 text-rose-700', count: 0 }
-            };
-            state.records.forEach(r => {
-                if(totalCats[r.Urusan_Keberadaan]) totalCats[r.Urusan_Keberadaan].count++;
-            });
-            totalCats['JUMLAH'] = { label: 'Jumlah Rekod', color: 'bg-slate-50 border-slate-200 text-slate-700', count: state.records.length };
-
-            const totalEl = document.getElementById('dashboard-total-cards');
-            totalEl.innerHTML = Object.values(totalCats).map(c => `
-                <div class="border rounded-xl p-4 ${c.color} flex items-center gap-3">
-                    <div class="text-3xl font-bold">${c.count}</div>
-                    <div>
-                        <p class="text-xs font-bold uppercase opacity-70">${c.label}</p>
-                        <p class="text-[10px] opacity-50">Keseluruhan</p>
-                    </div>
-                </div>
-            `).join('');
-
-            // Senarai guru hari ini
-            const guruListEl = document.getElementById('dashboard-guru-list');
-            if(todayRecords.length === 0) {
-                guruListEl.innerHTML = `<div class="p-4 text-slate-400 text-sm text-center italic">Tiada rekod untuk hari ini.</div>`;
-            } else {
-                guruListEl.innerHTML = todayRecords.map(r => `
-                    <div class="p-3 flex items-center gap-3">
-                        <span class="px-2 py-0.5 rounded text-[9px] font-bold ${getUrusanClass(r.Urusan_Keberadaan)} whitespace-nowrap">${r.Urusan_Keberadaan || '-'}</span>
-                        <div>
-                            <p class="text-sm font-bold text-slate-700">${r.Nama || '-'}</p>
-                            <p class="text-xs text-slate-400">${r.Nama_Program || r.Jenis_Cuti || r.Urusan_Keluar || ''} ${r.Masa_Keluar ? '· Keluar: '+formatMasa(r.Masa_Keluar) : ''} ${r.Masa_Masuk ? '· Masuk: '+formatMasa(r.Masa_Masuk) : ''}</p>
+                        <!-- Kedudukan -->
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-4xl sm:text-5xl" style="animation: medal-pop 0.6s ease-out ${index * 0.2}s both;">${medalEmoji}</span>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background-color: ${colors.bg}; color: ${colors.text};">${rankLabel}</span>
                         </div>
-                    </div>
-                `).join('');
-            }
 
-            lucide.createIcons();
-        }
+                        <!-- Nama rumah -->
+                        <h3 class="text-lg sm:text-xl font-extrabold mb-3" style="color: ${colors.text};">
+                            ${house.rumah}
+                        </h3>
 
-        // =============================================
-        // URUS GURU
-        // =============================================
-        function renderGuruTable() {
-            const tbody = document.getElementById('guru-table-body');
-            const badge = document.getElementById('guru-count-badge');
-            if(badge) badge.textContent = state.teachers.length + ' orang';
-            if(state.teachers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400 italic">Tiada data guru.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = state.teachers.map(t => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-2 border-r text-slate-500 font-mono">${t.id}</td>
-                    <td class="p-2 border-r font-bold text-slate-700">${t.nama}</td>
-                    <td class="p-2 text-slate-500">${t.jawatan}</td>
-                </tr>
-            `).join('');
-        }
-
-        async function submitTambahGuru() {
-            const nama = document.getElementById('new-guru-nama').value.trim();
-            const jawatan = document.getElementById('new-guru-jawatan').value.trim();
-            if(!nama || !jawatan) { alert("Sila isi nama dan jawatan guru."); return; }
-            showLoading(true);
-            try {
-                const res = await fetch(`${API_URL}?action=addTeacher`, { method: 'POST', body: JSON.stringify({ nama, jawatan }) });
-                const data = await res.json();
-                if(data.success) {
-                    alert("Guru berjaya ditambah!");
-                    document.getElementById('new-guru-nama').value = '';
-                    document.getElementById('new-guru-jawatan').value = '';
-                    // Refresh data
-                    await loadInitialData();
-                    renderGuruTable();
-                } else { alert("Gagal menambah guru."); }
-            } catch(e) { alert("Ralat: " + e); }
-            finally { showLoading(false); }
-        }
-
-        // =============================================
-        // BORANG KEBERADAAN
-        // =============================================
-        function toggleFormFields() {
-            const urusan = document.getElementById('select-urusan').value;
-            const container = document.getElementById('dynamic-fields');
-            if(!urusan) { container.classList.add('hidden'); return; }
-            container.classList.remove('hidden');
-            const today = new Date().toISOString().split('T')[0];
-            let html = '';
-            
-            if(urusan === 'KELUAR WAKTU BEKERJA / URUSAN DALAMAN') {
-                html = `<div class="bg-blue-50/50 p-4 rounded-xl space-y-4">
-                    <input type="text" id="urusanKeluar" placeholder="Urusan Keluar (Contoh: Klinik)" required class="w-full p-3 border rounded-xl">
-                    <input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Masa Keluar (24 Jam)</label>
-                            <input type="time" id="masaKeluar" required class="w-full p-3 border rounded-xl">
+                        <!-- Mata -->
+                        <div class="flex items-baseline gap-2 mb-4">
+                            <span class="text-4xl sm:text-5xl font-black" style="color: ${colors.border};"
+                                  data-house="${house.rumah}" data-target="${house.jumlah_mata}">
+                                ${animateNumber(house.rumah, house.jumlah_mata)}
+                            </span>
+                            <span class="text-sm font-medium text-gray-500">mata</span>
                         </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Masa Masuk (24 Jam)</label>
-                            <input type="time" id="masaMasuk" required class="w-full p-3 border rounded-xl">
+
+                        <!-- Butiran pingat -->
+                        <div class="grid grid-cols-4 gap-2 text-center">
+                            <div class="bg-yellow-50 rounded-xl py-2 px-1 border border-yellow-200">
+                                <span class="block text-lg">🥇</span>
+                                <span class="text-sm font-bold text-yellow-700">${house.emas}</span>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl py-2 px-1 border border-gray-200">
+                                <span class="block text-lg">🥈</span>
+                                <span class="text-sm font-bold text-gray-600">${house.perak}</span>
+                            </div>
+                            <div class="bg-orange-50 rounded-xl py-2 px-1 border border-orange-200">
+                                <span class="block text-lg">🥉</span>
+                                <span class="text-sm font-bold text-orange-700">${house.gangsa}</span>
+                            </div>
+                            <div class="bg-blue-50 rounded-xl py-2 px-1 border border-blue-200">
+                                <span class="block text-lg">4️⃣</span>
+                                <span class="text-sm font-bold text-blue-600">${house.tempat_ke4}</span>
+                            </div>
                         </div>
-                    </div>
-                </div>`;
-            } else if(urusan === 'URUSAN RASMI') {
-                html = `<div class="bg-emerald-50/50 p-4 rounded-xl space-y-4">
-                    <select id="jenisUrusan" class="w-full p-3 border rounded-xl"><option value="MESYUARAT">MESYUARAT</option><option value="BENGKEL">BENGKEL</option><option value="PROGRAM">PROGRAM</option></select>
-                    <input type="text" id="namaProgram" placeholder="Nama Program / Bengkel" class="w-full p-3 border rounded-xl">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Tarikh Mula</label><input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Tarikh Tamat</label><input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl"></div>
-                    </div>
-                    <input type="text" id="tempat" placeholder="Tempat" class="w-full p-3 border rounded-xl">
-                    <input type="text" id="anjuran" placeholder="Anjuran (Contoh: PPD/JPN)" class="w-full p-3 border rounded-xl">
-                </div>`;
-            } else if(urusan === 'CUTI') {
-                html = `<div class="bg-rose-50/50 p-4 rounded-xl space-y-4">
-                    <select id="jenisCuti" class="w-full p-3 border rounded-xl"><option value="CUTI SAKIT">CUTI SAKIT</option><option value="CRK">CRK</option><option value="CUTI KUARANTIN">CUTI KUARANTIN</option><option value="LAIN-LAIN">LAIN-LAIN</option></select>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Tarikh Mula</label><input type="date" id="tarikhMula" value="${today}" class="w-full p-3 border rounded-xl"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 px-1 uppercase">Tarikh Tamat</label><input type="date" id="tarikhTamat" value="${today}" class="w-full p-3 border rounded-xl"></div>
-                    </div>
-                </div>`;
+
+                        <!-- Progress bar mata -->
+                        <div class="mt-4 w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-700 ease-out"
+                                 style="width: ${getProgressPercentage(house.jumlah_mata, sorted)}%; background-color: ${colors.border};">
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
             }
-            container.innerHTML = html + `<textarea id="catatan" placeholder="Catatan Tambahan (Jika ada)" class="w-full p-3 border rounded-xl"></textarea>`;
-            lucide.createIcons();
-        }
 
-        // =============================================
-        // AUTOCOMPLETE NAMA
-        // =============================================
-        function setupAutocomplete() {
-            const input = document.getElementById('user-nama-input');
-            const dropdown = document.getElementById('name-dropdown');
-            input.addEventListener('input', () => {
-                const q = input.value.toUpperCase();
-                if (q.length < 1) { dropdown.classList.add('hidden'); return; }
-                const matches = state.teachers.filter(t => t.nama.toUpperCase().includes(q));
-                if (matches.length > 0) {
-                    dropdown.innerHTML = matches.map(t => `<div class="p-3 hover:bg-blue-50 cursor-pointer text-sm font-medium border-b border-slate-50" onclick="selectTeacher('${t.nama}')">${t.nama}</div>`).join('');
-                    dropdown.classList.remove('hidden');
-                } else dropdown.classList.add('hidden');
-            });
-            document.addEventListener('click', (e) => { if(!input.contains(e.target)) dropdown.classList.add('hidden'); });
-        }
+            // ========== RENDER JADUAL PAPAN MATA (DESKTOP) ==========
+            function renderLeaderboardTable(leaderboard) {
+                const tbody = document.getElementById('leaderboard-tbody');
+                if (!tbody) return;
 
-        function selectTeacher(n) { 
-            document.getElementById('user-nama-input').value = n; 
-            document.getElementById('name-dropdown').classList.add('hidden'); 
-        }
+                const sorted = [...leaderboard].sort((a, b) => b.jumlah_mata - a.jumlah_mata);
 
-        // =============================================
-        // SUBMIT BORANG
-        // =============================================
-        document.getElementById('form-keberadaan').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = {
-                nama: document.getElementById('user-nama-input').value,
-                urusan: document.getElementById('select-urusan').value,
-                urusanKeluar: document.getElementById('urusanKeluar')?.value || "",
-                tarikhMula: document.getElementById('tarikhMula')?.value || "",
-                tarikhTamat: document.getElementById('tarikhTamat')?.value || "",
-                masaKeluar: document.getElementById('masaKeluar')?.value || "",
-                masaMasuk: document.getElementById('masaMasuk')?.value || "",
-                jenisUrusan: document.getElementById('jenisUrusan')?.value || "",
-                namaProgram: document.getElementById('namaProgram')?.value || "",
-                jenisCuti: document.getElementById('jenisCuti')?.value || "",
-                catatan: document.getElementById('catatan')?.value || "",
-                tempat: document.getElementById('tempat')?.value || "",
-                anjuran: document.getElementById('anjuran')?.value || ""
-            };
-            if(!formData.nama || !formData.urusan) { alert("Sila lengkapkan Nama dan Urusan."); return; }
-            showLoading(true);
-            try {
-                const res = await fetch(`${API_URL}?action=submitRecord`, { method: 'POST', body: JSON.stringify(formData) });
-                const result = await res.json();
-                if(result.success) { alert("Berjaya disimpan!"); location.reload(); }
-                else { alert("Gagal menyimpan. Sila cuba lagi."); }
-            } catch (e) { alert("Ralat semasa menyimpan."); }
-            finally { showLoading(false); }
-        });
+                tbody.innerHTML = sorted.map((house, index) => {
+                    const colors = HOUSE_COLORS[house.rumah] || DEFAULT_COLORS;
+                    const rankEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}`;
+
+                    return `
+                    <tr class="border-b border-gray-50 hover:bg-pink-50/50 transition-colors duration-200 data-updated" id="table-row-${house.rumah}">
+                        <td class="px-6 py-4">
+                            <span class="text-xl font-bold">${rankEmoji}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-4 h-4 rounded-full" style="background-color: ${colors.border};"></div>
+                                <span class="font-bold text-gray-800">${house.rumah}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center font-bold text-yellow-600">${house.emas}</td>
+                        <td class="px-6 py-4 text-center font-bold text-gray-500">${house.perak}</td>
+                        <td class="px-6 py-4 text-center font-bold text-orange-600">${house.gangsa}</td>
+                        <td class="px-6 py-4 text-center text-gray-500">${house.tempat_ke4}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="inline-block px-4 py-1 rounded-full text-lg font-black" style="background-color: ${colors.bg}; color: ${colors.text};">
+                                ${house.jumlah_mata}
+                            </span>
+                        </td>
+                    </tr>`;
+                }).join('');
+            }
+
+            // ========== RENDER SENARAI ACARA ==========
+            function renderEvents(acaraList) {
+                const grid = document.getElementById('events-grid');
+                const countEl = document.getElementById('event-count');
+                if (!grid) return;
+
+                if (!acaraList || acaraList.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-400">📭 Tiada acara didaftarkan.</div>`;
+                    if (countEl) countEl.textContent = '0 acara';
+                    return;
+                }
+
+                if (countEl) countEl.textContent = `${acaraList.length} acara`;
+
+                const jenisIkon = { 'Balapan': '🏃‍♀️', 'Padang': '🎯' };
+                const jenisBg = { 'Balapan': 'from-sky-50 to-blue-50 border-sky-200', 'Padang': 'from-emerald-50 to-teal-50 border-emerald-200' };
+
+                grid.innerHTML = acaraList.map((acara, i) => {
+                    const ikon = jenisIkon[acara.jenis] || '🏅';
+                    const bgGradient = jenisBg[acara.jenis] || 'from-gray-50 to-gray-100 border-gray-200';
+
+                    return `
+                    <div class="group bg-white/70 backdrop-blur-sm rounded-2xl border-2 bg-gradient-to-r ${bgGradient} p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-slide-up"
+                         style="animation-delay: ${i * 0.08}s;">
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="text-3xl">${ikon}</span>
+                            <span class="text-xs font-bold px-2 py-1 rounded-full bg-white/80 text-gray-600 border border-gray-200">
+                                ${acara.kategori}
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-base sm:text-lg leading-tight mb-2">${acara.nama_acara}</h4>
+                        <div class="flex items-center gap-3 text-xs text-gray-500">
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-tag text-gray-400"></i> ${acara.jenis}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-ruler text-gray-400"></i> ${acara.unit}
+                            </span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-200/60">
+                            <p class="text-xs text-gray-400 flex items-center gap-1">
+                                <i class="fa-solid fa-trophy text-yellow-400 text-xs"></i>
+                                Rekod: <span class="font-semibold text-gray-600">${acara.rekod_kejohanan} ${acara.unit}</span>
+                            </p>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            // ========== PEMBANTU: PERATUS PROGRESS BAR ==========
+            function getProgressPercentage(mata, sortedList) {
+                const maxMata = sortedList.length > 0 ? sortedList[0].jumlah_mata : 1;
+                if (maxMata === 0) return 0;
+                return Math.min(100, Math.round((mata / maxMata) * 100));
+            }
+
+            // ========== PEMBANTU: NOMBOR ANIMASI RINGKAS ==========
+            function animateNumber(houseName, target) {
+                // Untuk kesederhanaan, kita terus papar nombor.
+                // Animasi nombor sebenar boleh ditambah dengan requestAnimationFrame.
+                return target;
+            }
+
+            // ========== KEMAS KINI CAP MASA ==========
+            function updateTimestamp() {
+                const el = document.getElementById('last-updated');
+                if (el) {
+                    const now = new Date();
+                    el.textContent = now.toLocaleTimeString('ms-MY', { hour12: false });
+                }
+            }
+
+            // ========== TOAST MESEJ ==========
+            function showToast(type, message) {
+                const toast = document.getElementById('toast');
+                const icon = document.getElementById('toast-icon');
+                const msg = document.getElementById('toast-msg');
+                if (!toast || !icon || !msg) return;
+
+                icon.className = {
+                    'success': 'fa-solid fa-circle-check text-green-500',
+                    'error': 'fa-solid fa-circle-xmark text-red-500',
+                    'warning': 'fa-solid fa-triangle-exclamation text-amber-500'
+                }[type] || 'fa-solid fa-info-circle text-blue-500';
+
+                msg.textContent = message;
+                toast.classList.remove('hidden');
+                clearTimeout(toast._timeout);
+                toast._timeout = setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 3000);
+            }
+
+            // ========== KONFETI RINGKAS ==========
+            function spawnConfetti(count = 25) {
+                const container = document.getElementById('confetti-container');
+                if (!container) return;
+
+                const colors = ['#FF69B4', '#FFA500', '#FFD700', '#8A2BE2', '#FF4081', '#00E5FF', '#76FF03', '#FF6D00', '#E040FB'];
+                const fragments = document.createDocumentFragment();
+
+                for (let i = 0; i < count; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'confetti-piece';
+                    piece.style.left = Math.random() * 100 + '%';
+                    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    piece.style.animationDelay = Math.random() * 0.5 + 's';
+                    piece.style.width = (Math.random() * 8 + 6) + 'px';
+                    piece.style.height = (Math.random() * 8 + 6) + 'px';
+                    fragments.appendChild(piece);
+                }
+
+                container.appendChild(fragments);
+
+                // Bersihkan selepas animasi tamat
+                setTimeout(() => {
+                    while (container.firstChild) {
+                        container.removeChild(container.firstChild);
+                    }
+                }, 4000);
+            }
+
+            // ========== MULA APLIKASI ==========
+            fetchData();
+
+            // Segar semula secara berkala
+            setInterval(() => fetchData(false), REFRESH_INTERVAL);
+
+            // ========== EKSPOS GLOBAL (untuk butang) ==========
+            window.fetchData = fetchData;
+        })();
     </script>
 </body>
 </html>
