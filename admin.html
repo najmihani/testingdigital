@@ -4,26 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Panel Admin | Kejohanan Olahraga SMK (P) Jalan Ipoh</title>
-
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Google Font Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
     <style type="text/tailwindcss">
         @theme {
             --font-poppins: 'Poppins', sans-serif;
-            --color-kenanga: #FF69B4;
-            --color-melur: #FFA500;
-            --color-cempaka: #FFD700;
-            --color-anggerik: #8A2BE2;
+            --color-kenanga: #FF69B4; --color-melur: #FFA500;
+            --color-cempaka: #FFD700; --color-anggerik: #8A2BE2;
             --animate-slide-down: slide-down 0.4s ease-out;
             --animate-fade-in: fade-in 0.5s ease-out;
         }
@@ -32,172 +25,61 @@
             background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 100%);
             background-attachment: fixed;
         }
-        @keyframes slide-down {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fade-in {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-        .rainbow-line {
-            background: linear-gradient(90deg, #FF69B4, #FFA500, #FFD700, #8A2BE2, #FF69B4);
-            background-size: 200% 100%;
-            animation: rainbow-shift 4s linear infinite;
-            height: 5px;
-        }
-        @keyframes rainbow-shift {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-        .pulse-glow {
-            box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.4);
-            animation: pulse-glow 2s infinite;
-        }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.4); }
-            50% { box-shadow: 0 0 0 15px rgba(138, 43, 226, 0); }
-        }
+        @keyframes slide-down { 0%{opacity:0;transform:translateY(-20px);} 100%{opacity:1;transform:translateY(0);} }
+        @keyframes fade-in { 0%{opacity:0;} 100%{opacity:1;} }
+        .rainbow-line { background: linear-gradient(90deg, #FF69B4, #FFA500, #FFD700, #8A2BE2, #FF69B4); background-size: 200% 100%; animation: rainbow-shift 4s linear infinite; height: 5px; }
+        @keyframes rainbow-shift { 0%{background-position:0% 50%;} 100%{background-position:200% 50%;} }
+        .pulse-glow { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.4); animation: pulse-glow 2s infinite; }
+        @keyframes pulse-glow { 0%,100%{box-shadow:0 0 0 0 rgba(138,43,226,0.4);} 50%{box-shadow:0 0 0 15px rgba(138,43,226,0);} }
     </style>
 </head>
 <body class="min-h-screen antialiased">
-
-    <!-- Header -->
     <header class="relative bg-white/80 backdrop-blur-md shadow-lg">
         <div class="rainbow-line"></div>
         <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-lock text-2xl text-purple-600"></i>
-                <div>
-                    <h1 class="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Panel Admin</h1>
-                    <p class="text-xs text-gray-500">SMK (P) Jalan Ipoh</p>
-                </div>
+                <div><h1 class="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Panel Admin</h1><p class="text-xs text-gray-500">SMK (P) Jalan Ipoh</p></div>
             </div>
-            <a href="index.html" class="text-sm text-pink-600 hover:underline flex items-center gap-1">
-                <i class="fa-solid fa-arrow-left"></i> Paparan Awam
-            </a>
+            <a href="index.html" class="text-sm text-pink-600 hover:underline flex items-center gap-1"><i class="fa-solid fa-arrow-left"></i> Paparan Awam</a>
         </div>
     </header>
-
     <main class="max-w-3xl mx-auto px-4 py-8 space-y-8">
-
-        <!-- ====== KAD LOGIN ====== -->
         <div id="login-card" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-pink-100 p-6 sm:p-8 animate-fade-in">
-            <div class="text-center mb-6">
-                <i class="fa-solid fa-shield-haltered text-5xl text-purple-400 mb-3"></i>
-                <h2 class="text-2xl font-bold text-gray-800">Log Masuk Admin</h2>
-                <p class="text-sm text-gray-500">Sila masukkan kata laluan untuk akses panel</p>
-            </div>
+            <div class="text-center mb-6"><i class="fa-solid fa-shield-haltered text-5xl text-purple-400 mb-3"></i><h2 class="text-2xl font-bold text-gray-800">Log Masuk Admin</h2><p class="text-sm text-gray-500">Sila masukkan kata laluan untuk akses panel</p></div>
             <div class="flex gap-3 max-w-sm mx-auto">
-                <input type="password" id="password-input" placeholder="Kata laluan"
-                       class="flex-1 px-4 py-3 border-2 border-pink-200 rounded-xl focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
-                       onkeydown="if(event.key==='Enter') verifyPassword()" />
-                <button onclick="verifyPassword()"
-                        class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition flex items-center gap-2 shadow-md">
-                    <i class="fa-solid fa-right-to-bracket"></i> Log Masuk
-                </button>
+                <input type="password" id="password-input" placeholder="Kata laluan" class="flex-1 px-4 py-3 border-2 border-pink-200 rounded-xl focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition" onkeydown="if(event.key==='Enter') verifyPassword()" />
+                <button onclick="verifyPassword()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition flex items-center gap-2 shadow-md"><i class="fa-solid fa-right-to-bracket"></i> Log Masuk</button>
             </div>
             <p id="login-error" class="text-red-500 text-sm text-center mt-3 hidden"></p>
         </div>
-
-        <!-- ====== PANEL UTAMA (tersembunyi sebelum login) ====== -->
         <div id="admin-panel" class="hidden space-y-8 animate-slide-down">
-
-            <!-- Form Tambah Keputusan -->
             <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-purple-100 p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
-                    <i class="fa-solid fa-plus-circle text-purple-500"></i> Catat Keputusan Baharu
-                </h2>
-
+                <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6"><i class="fa-solid fa-plus-circle text-purple-500"></i> Catat Keputusan Baharu</h2>
                 <form id="result-form" class="space-y-5">
-                    <!-- Pilih Acara -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Acara</label>
-                        <select id="select-acara" required
-                                class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-white focus:border-purple-400 outline-none transition">
-                            <option value="">-- Pilih Acara --</option>
-                        </select>
-                    </div>
-
-                    <!-- Pilih Peserta (bergantung pada acara) -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Peserta</label>
-                        <select id="select-peserta" required disabled
-                                class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-white focus:border-purple-400 outline-none transition disabled:bg-gray-100">
-                            <option value="">-- Pilih Acara dahulu --</option>
-                        </select>
-                    </div>
-
-                    <!-- Baris untuk Prestasi & Kedudukan -->
+                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Acara</label><select id="select-acara" required class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-white focus:border-purple-400 outline-none transition"><option value="">-- Pilih Acara --</option></select></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Peserta</label><select id="select-peserta" required disabled class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-white focus:border-purple-400 outline-none transition disabled:bg-gray-100"><option value="">-- Pilih Acara dahulu --</option></select></div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Prestasi -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Prestasi (contoh: 12.35)</label>
-                            <input type="text" id="input-prestasi" required placeholder="cth: 13.10"
-                                   class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:border-purple-400 outline-none transition" />
-                        </div>
-                        <!-- Kedudukan -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Kedudukan</label>
-                            <select id="select-kedudukan" required
-                                    class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-white focus:border-purple-400 outline-none transition">
-                                <option value="">-- Pilih --</option>
-                                <option value="1">🥇 Tempat Pertama</option>
-                                <option value="2">🥈 Tempat Kedua</option>
-                                <option value="3">🥉 Tempat Ketiga</option>
-                                <option value="4">🏅 Tempat Keempat</option>
-                            </select>
-                        </div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Prestasi (contoh: 12.35)</label><input type="text" id="input-prestasi" required placeholder="cth: 13.10" class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:border-purple-400 outline-none transition" /></div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Kedudukan</label><select id="select-kedudukan" required class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-white focus:border-purple-400 outline-none transition"><option value="">-- Pilih --</option><option value="1">🥇 Tempat Pertama</option><option value="2">🥈 Tempat Kedua</option><option value="3">🥉 Tempat Ketiga</option><option value="4">🏅 Tempat Keempat</option></select></div>
                     </div>
-
-                    <!-- Mata (auto dikira, dipaparkan sahaja) -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Mata Diberikan</label>
-                        <input type="number" id="input-mata" readonly
-                               class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-purple-50 font-bold text-purple-700 outline-none" value="0" />
-                        <input type="hidden" id="input-rumah" />
-                    </div>
-
-                    <!-- Butang Hantar -->
-                    <button type="submit"
-                            class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-2 pulse-glow">
-                        <i class="fa-solid fa-paper-plane"></i> Simpan Keputusan
-                    </button>
+                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Mata Diberikan</label><input type="number" id="input-mata" readonly class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-purple-50 font-bold text-purple-700 outline-none" value="0" /><input type="hidden" id="input-rumah" /></div>
+                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-2 pulse-glow"><i class="fa-solid fa-paper-plane"></i> Simpan Keputusan</button>
                 </form>
-                <!-- Mesej maklum balas -->
                 <div id="form-message" class="mt-4 text-center text-sm font-medium hidden"></div>
             </div>
-
-            <!-- Senarai Keputusan Terkini (opsyenal - tarik dari API?) -->
-            <!-- Kita boleh paparkan ringkasan 5 keputusan terakhir dari sheet? 
-                 Buat masa ini, kita cuma refresh papan mata secara manual. -->
-            <div class="text-center">
-                <button onclick="window.open('index.html','_blank')"
-                        class="text-purple-600 underline text-sm hover:text-pink-500 flex items-center justify-center gap-1 mx-auto">
-                    <i class="fa-solid fa-external-link"></i> Lihat Papan Mata Awam
-                </button>
-            </div>
+            <div class="text-center"><button onclick="window.open('index.html','_blank')" class="text-purple-600 underline text-sm hover:text-pink-500 flex items-center justify-center gap-1 mx-auto"><i class="fa-solid fa-external-link"></i> Lihat Papan Mata Awam</button></div>
         </div>
     </main>
-
-    <!-- Toast maklum balas -->
-    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden">
-        <div class="bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-3 min-w-[280px] animate-slide-down">
-            <i id="toast-icon" class="text-xl"></i>
-            <span id="toast-msg" class="text-sm font-medium text-gray-700"></span>
-        </div>
-    </div>
-
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden"><div class="bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-3 min-w-[280px] animate-slide-down"><i id="toast-icon" class="text-xl"></i><span id="toast-msg" class="text-sm font-medium text-gray-700"></span></div></div>
     <script>
         (function() {
-            // ===== KONFIGURASI =====
             const API_URL = 'https://script.google.com/macros/s/AKfycbwpWop8CJaDMwLEeBGL5haqf7rFxQyIYnttKgabdioXhCVMcUFD09UkkDSxDEzzTo4T/exec';
             let adminPassword = '';
-            let pointsMapping = { "1": 5, "2": 3, "3": 2, "4": 1 }; // default
+            let pointsMapping = { "1":5, "2":3, "3":2, "4":1 };
             let allEvents = [];
-            let allParticipantsCache = {}; // key: acaraId, value: array peserta
+            let allParticipantsCache = {};
 
-            // ===== ELEMEN UI =====
             const loginCard = document.getElementById('login-card');
             const adminPanel = document.getElementById('admin-panel');
             const passwordInput = document.getElementById('password-input');
@@ -210,30 +92,17 @@
             const inputRumah = document.getElementById('input-rumah');
             const formMessage = document.getElementById('form-message');
 
-            // ===== FUNGSI TOAST =====
             function showToast(type, message) {
-                const toast = document.getElementById('toast');
-                const icon = document.getElementById('toast-icon');
-                const msg = document.getElementById('toast-msg');
-                icon.className = {
-                    'success': 'fa-solid fa-circle-check text-green-500',
-                    'error': 'fa-solid fa-circle-xmark text-red-500',
-                    'info': 'fa-solid fa-circle-info text-blue-500'
-                }[type] || 'fa-solid fa-info-circle';
-                msg.textContent = message;
-                toast.classList.remove('hidden');
-                clearTimeout(toast._timeout);
-                toast._timeout = setTimeout(() => toast.classList.add('hidden'), 3000);
+                const toast = document.getElementById('toast'), icon = document.getElementById('toast-icon'), msg = document.getElementById('toast-msg');
+                icon.className = { 'success':'fa-solid fa-circle-check text-green-500', 'error':'fa-solid fa-circle-xmark text-red-500', 'info':'fa-solid fa-circle-info text-blue-500' }[type] || 'fa-solid fa-info-circle';
+                msg.textContent = message; toast.classList.remove('hidden');
+                clearTimeout(toast._timeout); toast._timeout = setTimeout(() => toast.classList.add('hidden'), 3000);
             }
 
-            // ===== LOGIN: VERIFIKASI KATA LALUAN =====
             window.verifyPassword = async function() {
                 const pass = passwordInput.value.trim();
-                if (!pass) {
-                    loginError.textContent = 'Sila masukkan kata laluan.';
-                    loginError.classList.remove('hidden');
-                    return;
-                }
+                if (!pass) { loginError.textContent='Sila masukkan kata laluan.'; loginError.classList.remove('hidden'); return; }
+                loginError.classList.add('hidden');
                 try {
                     const formData = new URLSearchParams();
                     formData.append('action', 'verifyPassword');
@@ -241,14 +110,15 @@
 
                     const res = await fetch(API_URL, {
                         method: 'POST',
-                        body: formData
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData.toString()
                     });
                     const data = await res.json();
                     if (data.status === 'success') {
-                        adminPassword = pass; // simpan untuk kegunaan kemudian
+                        adminPassword = pass;
                         loginCard.classList.add('hidden');
                         adminPanel.classList.remove('hidden');
-                        await loadInitialData(); // muatkan acara & tetapan
+                        await loadInitialData();
                         showToast('success', '✅ Log masuk berjaya!');
                     } else {
                         loginError.textContent = data.message || 'Kata laluan salah!';
@@ -260,124 +130,59 @@
                 }
             };
 
-            // ===== MUAT DATA AWAL SELEPAS LOGIN =====
             async function loadInitialData() {
                 try {
                     const res = await fetch(API_URL + '?action=all');
                     const data = await res.json();
-                    if (data.settings) {
-                        pointsMapping = data.settings.mata_kedudukan || pointsMapping;
-                    }
-                    if (data.acara) {
-                        allEvents = data.acara;
-                        populateAcaraDropdown();
-                    }
-                } catch (err) {
-                    showToast('error', 'Gagal memuatkan data acara.');
-                }
+                    if (data.settings) pointsMapping = data.settings.mata_kedudukan || pointsMapping;
+                    if (data.acara) { allEvents = data.acara; populateAcaraDropdown(); }
+                } catch (err) { showToast('error', 'Gagal memuatkan data acara.'); }
             }
 
-            // Isi dropdown acara
             function populateAcaraDropdown() {
                 selectAcara.innerHTML = '<option value="">-- Pilih Acara --</option>';
-                allEvents.forEach(acara => {
-                    const opt = document.createElement('option');
-                    opt.value = acara.acara_id;
-                    opt.textContent = `${acara.nama_acara} (${acara.kategori})`;
-                    selectAcara.appendChild(opt);
-                });
+                allEvents.forEach(acara => { const opt = document.createElement('option'); opt.value = acara.acara_id; opt.textContent = `${acara.nama_acara} (${acara.kategori})`; selectAcara.appendChild(opt); });
             }
 
-            // Apabila acara dipilih, muatkan senarai peserta
             selectAcara.addEventListener('change', async function() {
                 const acaraId = this.value;
                 selectPeserta.innerHTML = '<option value="">-- Memuatkan peserta --</option>';
                 selectPeserta.disabled = true;
-                if (!acaraId) {
-                    selectPeserta.innerHTML = '<option value="">-- Pilih Acara dahulu --</option>';
-                    return;
-                }
-
-                // Cek cache
-                if (allParticipantsCache[acaraId]) {
-                    populatePesertaDropdown(allParticipantsCache[acaraId]);
-                    return;
-                }
-
+                if (!acaraId) { selectPeserta.innerHTML = '<option value="">-- Pilih Acara dahulu --</option>'; return; }
+                if (allParticipantsCache[acaraId]) { populatePesertaDropdown(allParticipantsCache[acaraId]); return; }
                 try {
                     const res = await fetch(API_URL + `?action=peserta&acara_id=${acaraId}`);
                     const peserta = await res.json();
                     allParticipantsCache[acaraId] = peserta;
                     populatePesertaDropdown(peserta);
-                } catch (err) {
-                    selectPeserta.innerHTML = '<option value="">❌ Gagal muat</option>';
-                    selectPeserta.disabled = true;
-                }
+                } catch (err) { selectPeserta.innerHTML = '<option value="">❌ Gagal muat</option>'; selectPeserta.disabled = true; }
             });
 
             function populatePesertaDropdown(pesertaList) {
                 selectPeserta.innerHTML = '<option value="">-- Pilih Peserta --</option>';
-                if (!pesertaList || pesertaList.length === 0) {
-                    selectPeserta.innerHTML = '<option value="">Tiada peserta untuk acara ini</option>';
-                    selectPeserta.disabled = true;
-                    return;
-                }
-                pesertaList.forEach(p => {
-                    const opt = document.createElement('option');
-                    opt.value = p.peserta_id;
-                    opt.dataset.rumah = p.rumah;
-                    opt.textContent = `${p.nama_peserta} (${p.rumah}) - Bib ${p.no_bib}`;
-                    selectPeserta.appendChild(opt);
-                });
+                if (!pesertaList || pesertaList.length===0) { selectPeserta.innerHTML = '<option value="">Tiada peserta untuk acara ini</option>'; selectPeserta.disabled = true; return; }
+                pesertaList.forEach(p => { const opt = document.createElement('option'); opt.value = p.peserta_id; opt.dataset.rumah = p.rumah; opt.textContent = `${p.nama_peserta} (${p.rumah}) - Bib ${p.no_bib}`; selectPeserta.appendChild(opt); });
                 selectPeserta.disabled = false;
             }
 
-            // Apabila peserta dipilih, kemas kini rumah tersembunyi
             selectPeserta.addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
-                const rumah = selectedOption.dataset.rumah || '';
-                inputRumah.value = rumah;
-                updateMata(); // kalau kedudukan sudah dipilih
+                inputRumah.value = selectedOption.dataset.rumah || '';
+                updateMata();
             });
 
-            // Apabila kedudukan berubah, kira mata
             selectKedudukan.addEventListener('change', updateMata);
+            function updateMata() { const kedudukan = selectKedudukan.value; if (kedudukan && pointsMapping[kedudukan] !== undefined) inputMata.value = pointsMapping[kedudukan]; else inputMata.value = 0; }
 
-            function updateMata() {
-                const kedudukan = selectKedudukan.value;
-                if (kedudukan && pointsMapping[kedudukan] !== undefined) {
-                    inputMata.value = pointsMapping[kedudukan];
-                } else {
-                    inputMata.value = 0;
-                }
-            }
-
-            // ===== HANTAR BORANG =====
             document.getElementById('result-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
-
-                const acaraId = selectAcara.value;
-                const pesertaId = selectPeserta.value;
-                const rumah = inputRumah.value;
-                const kedudukan = selectKedudukan.value;
-                const prestasi = inputPrestasi.value.trim();
-                const mata = inputMata.value;
-
+                const acaraId = selectAcara.value, pesertaId = selectPeserta.value, rumah = inputRumah.value, kedudukan = selectKedudukan.value, prestasi = inputPrestasi.value.trim(), mata = inputMata.value;
                 if (!acaraId || !pesertaId || !rumah || !kedudukan || !prestasi || !mata) {
-                    formMessage.textContent = '⚠️ Sila lengkapkan semua ruangan.';
-                    formMessage.className = 'mt-4 text-center text-sm font-medium text-amber-600';
-                    formMessage.classList.remove('hidden');
-                    return;
+                    formMessage.textContent = '⚠️ Sila lengkapkan semua ruangan.'; formMessage.className = 'mt-4 text-center text-sm font-medium text-amber-600'; formMessage.classList.remove('hidden'); return;
                 }
-
                 if (!adminPassword) {
-                    formMessage.textContent = '⚠️ Sesi tamat. Sila refresh & log masuk semula.';
-                    formMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
-                    formMessage.classList.remove('hidden');
-                    return;
+                    formMessage.textContent = '⚠️ Sesi tamat. Sila refresh & log masuk semula.'; formMessage.className = 'mt-4 text-center text-sm font-medium text-red-600'; formMessage.classList.remove('hidden'); return;
                 }
-
-                // Bina data POST
                 const formData = new URLSearchParams();
                 formData.append('action', 'submitKeputusan');
                 formData.append('password', adminPassword);
@@ -396,29 +201,21 @@
                 try {
                     const res = await fetch(API_URL, {
                         method: 'POST',
-                        body: formData
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData.toString()
                     });
                     const data = await res.json();
                     if (data.status === 'success') {
-                        formMessage.textContent = '✅ ' + data.message;
-                        formMessage.className = 'mt-4 text-center text-sm font-medium text-green-600';
+                        formMessage.textContent = '✅ ' + data.message; formMessage.className = 'mt-4 text-center text-sm font-medium text-green-600';
                         showToast('success', 'Keputusan disimpan! Papan mata dikemas kini.');
-                        // Reset borang (kecuali acara? Boleh kosongkan semua)
-                        selectPeserta.innerHTML = '<option value="">-- Pilih Acara dahulu --</option>';
-                        selectPeserta.disabled = true;
-                        inputPrestasi.value = '';
-                        selectKedudukan.value = '';
-                        inputMata.value = 0;
-                        // Biarkan acara terpilih untuk cepat input seterusnya? Kita kosongkan.
-                        // selectAcara.value = ''; // optional
+                        selectPeserta.innerHTML = '<option value="">-- Pilih Acara dahulu --</option>'; selectPeserta.disabled = true;
+                        inputPrestasi.value = ''; selectKedudukan.value = ''; inputMata.value = 0;
                     } else {
-                        formMessage.textContent = '❌ ' + (data.message || 'Ralat tidak diketahui');
-                        formMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
+                        formMessage.textContent = '❌ ' + (data.message || 'Ralat tidak diketahui'); formMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
                     }
                     formMessage.classList.remove('hidden');
                 } catch (err) {
-                    formMessage.textContent = '❌ Ralat rangkaian. Sila cuba lagi.';
-                    formMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
+                    formMessage.textContent = '❌ Ralat rangkaian. Sila cuba lagi.'; formMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
                     formMessage.classList.remove('hidden');
                 } finally {
                     submitBtn.disabled = false;
@@ -426,7 +223,6 @@
                 }
             });
 
-            // Auto-fokus pada input password semasa mula
             passwordInput.focus();
         })();
     </script>
