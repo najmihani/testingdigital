@@ -11,8 +11,7 @@
           crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <style type="text/tailwindcss">
         @theme {
             --font-poppins: 'Poppins', sans-serif;
@@ -49,10 +48,7 @@
         <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-lock text-2xl text-purple-600"></i>
-                <div>
-                    <h1 class="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Panel Admin</h1>
-                    <p class="text-xs text-gray-500">SMK (P) Jalan Ipoh</p>
-                </div>
+                <div><h1 class="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Panel Admin</h1><p class="text-xs text-gray-500">SMK (P) Jalan Ipoh</p></div>
             </div>
             <a href="index.html" class="text-sm text-pink-600 hover:underline"><i class="fa-solid fa-arrow-left"></i> Paparan Awam</a>
         </div>
@@ -61,19 +57,10 @@
     <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
         <!-- Login Card -->
         <div id="login-card" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-pink-100 p-6 sm:p-8 animate-fade-in">
-            <div class="text-center mb-6">
-                <i class="fa-solid fa-shield-haltered text-5xl text-purple-400 mb-3"></i>
-                <h2 class="text-2xl font-bold text-gray-800">Log Masuk Admin</h2>
-                <p class="text-sm text-gray-500">Sila masukkan kata laluan</p>
-            </div>
+            <div class="text-center mb-6"><i class="fa-solid fa-shield-haltered text-5xl text-purple-400 mb-3"></i><h2 class="text-2xl font-bold text-gray-800">Log Masuk Admin</h2><p class="text-sm text-gray-500">Sila masukkan kata laluan</p></div>
             <div class="flex gap-3 max-w-sm mx-auto">
-                <input type="password" id="password-input" placeholder="Kata laluan"
-                       class="flex-1 px-4 py-3 border-2 border-pink-200 rounded-xl focus:border-purple-400 outline-none"
-                       onkeydown="if(event.key==='Enter') verifyPassword()" />
-                <button onclick="verifyPassword()"
-                        class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition shadow-md">
-                    <i class="fa-solid fa-right-to-bracket"></i> Log Masuk
-                </button>
+                <input type="password" id="password-input" placeholder="Kata laluan" class="flex-1 px-4 py-3 border-2 border-pink-200 rounded-xl focus:border-purple-400 outline-none" onkeydown="if(event.key==='Enter') verifyPassword()" />
+                <button onclick="verifyPassword()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition shadow-md"><i class="fa-solid fa-right-to-bracket"></i> Log Masuk</button>
             </div>
             <p id="login-error" class="text-red-500 text-sm text-center mt-3 hidden"></p>
         </div>
@@ -81,18 +68,9 @@
         <div id="admin-panel" class="hidden space-y-6 animate-fade-in">
             <!-- Tabs -->
             <div class="flex flex-wrap gap-2 bg-white/60 backdrop-blur-sm rounded-2xl p-2 shadow-inner">
-                <button onclick="switchTab('acara')" id="tab-acara"
-                        class="tab-active px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-medal"></i> Keputusan Acara
-                </button>
-                <button onclick="switchTab('sukantara')" id="tab-sukantara"
-                        class="px-5 py-2.5 rounded-xl font-semibold text-gray-700 hover:bg-purple-100 transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-person-running"></i> Sukantara
-                </button>
-                <button onclick="switchTab('merentas')" id="tab-merentas"
-                        class="px-5 py-2.5 rounded-xl font-semibold text-gray-700 hover:bg-purple-100 transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-mountain"></i> Merentas Desa
-                </button>
+                <button onclick="switchTab('acara')" id="tab-acara" class="tab-active px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"><i class="fa-solid fa-medal"></i> Keputusan Acara</button>
+                <button onclick="switchTab('sukantara')" id="tab-sukantara" class="px-5 py-2.5 rounded-xl font-semibold text-gray-700 hover:bg-purple-100 transition-all duration-300 flex items-center gap-2"><i class="fa-solid fa-person-running"></i> Sukantara</button>
+                <button onclick="switchTab('merentas')" id="tab-merentas" class="px-5 py-2.5 rounded-xl font-semibold text-gray-700 hover:bg-purple-100 transition-all duration-300 flex items-center gap-2"><i class="fa-solid fa-mountain"></i> Merentas Desa</button>
             </div>
 
             <!-- Tab: Keputusan Acara -->
@@ -100,33 +78,22 @@
                 <h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-list-check text-purple-500 mr-2"></i>Masukkan / Edit Keputusan Acara</h2>
                 <div class="mb-4">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Acara</label>
-                    <select id="select-acara"
-                            class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-white focus:border-purple-400 outline-none transition">
+                    <select id="select-acara" class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-white focus:border-purple-400 outline-none transition">
                         <option value="">-- Pilih Acara --</option>
                     </select>
                 </div>
 
+                <div id="acara-loading" class="hidden text-center py-4 text-gray-400"><i class="fa-solid fa-spinner fa-spin"></i> Memuatkan peserta...</div>
                 <div id="acara-table-container" class="overflow-x-auto mt-4 hidden">
                     <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-purple-50 text-purple-900 text-sm">
-                                <th class="px-3 py-2">Nama</th>
-                                <th class="px-3 py-2">Rumah</th>
-                                <th class="px-3 py-2">Bib</th>
-                                <th class="px-3 py-2">Ked.</th>
-                                <th class="px-3 py-2">Prestasi</th>
-                                <th class="px-3 py-2">Mata</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="bg-purple-50 text-purple-900 text-sm"><th class="px-3 py-2">Nama</th><th class="px-3 py-2">Rumah</th><th class="px-3 py-2">Bib</th><th class="px-3 py-2">Ked.</th><th class="px-3 py-2">Prestasi</th><th class="px-3 py-2">Mata</th></tr></thead>
                         <tbody id="acara-tbody"></tbody>
                     </table>
                     <div class="flex flex-col sm:flex-row gap-3 mt-6">
-                        <button onclick="saveResults()"
-                                class="flex-1 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-xl shadow-lg pulse-glow flex items-center justify-center gap-2">
+                        <button id="btn-save-results" onclick="saveResults()" class="flex-1 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-xl shadow-lg pulse-glow flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                             <i class="fa-solid fa-save"></i> Simpan Semua Keputusan
                         </button>
-                        <button onclick="deleteResults()" id="btn-delete-results"
-                                class="hidden py-3 px-6 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
+                        <button id="btn-delete-results" onclick="deleteResults()" class="hidden py-3 px-6 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 transition disabled:opacity-50">
                             <i class="fa-solid fa-trash"></i> Padam Semua Keputusan
                         </button>
                     </div>
@@ -135,37 +102,24 @@
             </div>
 
             <!-- Tab: Sukantara -->
-            <div id="content-sukantara"
-                 class="hidden bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-pink-100 p-6">
+            <div id="content-sukantara" class="hidden bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-pink-100 p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-stopwatch text-pink-500 mr-2"></i>Markah Sukantara (Setiap Rumah)</h2>
                 <div id="sukantara-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-                <button onclick="saveRumahMarkah('sukantara')"
-                        class="mt-6 w-full py-3 bg-gradient-to-r from-pink-400 to-pink-600 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-save"></i> Simpan Markah Sukantara
-                </button>
+                <button onclick="saveRumahMarkah('sukantara')" class="mt-6 w-full py-3 bg-gradient-to-r from-pink-400 to-pink-600 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2"><i class="fa-solid fa-save"></i> Simpan Markah Sukantara</button>
                 <div id="sukantara-message" class="mt-4 text-center text-sm font-medium hidden"></div>
             </div>
 
             <!-- Tab: Merentas Desa -->
-            <div id="content-merentas"
-                 class="hidden bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-orange-100 p-6">
+            <div id="content-merentas" class="hidden bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-orange-100 p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-flag-checkered text-orange-500 mr-2"></i>Markah Merentas Desa (Setiap Rumah)</h2>
                 <div id="merentas-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-                <button onclick="saveRumahMarkah('merentas')"
-                        class="mt-6 w-full py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-save"></i> Simpan Markah Merentas Desa
-                </button>
+                <button onclick="saveRumahMarkah('merentas')" class="mt-6 w-full py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2"><i class="fa-solid fa-save"></i> Simpan Markah Merentas Desa</button>
                 <div id="merentas-message" class="mt-4 text-center text-sm font-medium hidden"></div>
             </div>
         </div>
     </main>
 
-    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden">
-        <div class="bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-3 min-w-[280px] animate-fade-in">
-            <i id="toast-icon" class="text-xl"></i>
-            <span id="toast-msg" class="text-sm font-medium text-gray-700"></span>
-        </div>
-    </div>
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden"><div class="bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-3 min-w-[280px] animate-fade-in"><i id="toast-icon" class="text-xl"></i><span id="toast-msg" class="text-sm font-medium text-gray-700"></span></div></div>
 
     <script>
         (function() {
@@ -175,64 +129,45 @@
             let allEvents = [];
             let rumahList = [];
             let currentAcaraId = null;
+            let currentResults = [];
 
-            // Elemen UI
+            // UI elements
             const loginCard = document.getElementById('login-card');
             const adminPanel = document.getElementById('admin-panel');
             const loginError = document.getElementById('login-error');
             const selectAcara = document.getElementById('select-acara');
+            const acaraLoading = document.getElementById('acara-loading');
             const acaraTableContainer = document.getElementById('acara-table-container');
             const acaraTbody = document.getElementById('acara-tbody');
             const acaraMessage = document.getElementById('acara-message');
+            const btnSave = document.getElementById('btn-save-results');
             const btnDelete = document.getElementById('btn-delete-results');
 
-            // Toast
             function showToast(type, msg) {
-                const t = document.getElementById('toast'),
-                    ic = document.getElementById('toast-icon'),
-                    m = document.getElementById('toast-msg');
-                ic.className = {
-                    success: 'fa-solid fa-circle-check text-green-500',
-                    error: 'fa-solid fa-circle-xmark text-red-500',
-                    info: 'fa-solid fa-circle-info text-blue-500'
-                }[type] || 'fa-solid fa-info-circle';
-                m.textContent = msg;
-                t.classList.remove('hidden');
-                clearTimeout(t._timeout);
-                t._timeout = setTimeout(() => t.classList.add('hidden'), 4000);
+                const t = document.getElementById('toast'), ic = document.getElementById('toast-icon'), m = document.getElementById('toast-msg');
+                ic.className = { success:'fa-solid fa-circle-check text-green-500', error:'fa-solid fa-circle-xmark text-red-500', info:'fa-solid fa-info-circle text-blue-500' }[type]||'fa-solid fa-info-circle';
+                m.textContent = msg; t.classList.remove('hidden');
+                clearTimeout(t._timeout); t._timeout = setTimeout(() => t.classList.add('hidden'), 3000);
             }
 
-            // Fungsi fetch generic dengan timeout
-            async function fetchJSON(url, options = {}) {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 15000); // 15 saat
-                try {
-                    const res = await fetch(url, { ...options, signal: controller.signal });
-                    if (!res.ok) throw new Error(`Status ${res.status}`);
-                    return await res.json();
-                } finally {
-                    clearTimeout(timeout);
+            function setButtonsDisabled(disabled) {
+                btnSave.disabled = disabled;
+                btnDelete.disabled = disabled;
+                if (disabled) {
+                    btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+                } else {
+                    btnSave.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Semua Keputusan';
                 }
             }
 
-            // Login
             window.verifyPassword = async function() {
                 const pass = document.getElementById('password-input').value.trim();
-                if (!pass) {
-                    loginError.textContent = 'Sila masukkan kata laluan.';
-                    loginError.classList.remove('hidden');
-                    return;
-                }
+                if (!pass) { loginError.textContent='Sila masukkan kata laluan.'; loginError.classList.remove('hidden'); return; }
                 loginError.classList.add('hidden');
                 try {
-                    const fd = new URLSearchParams();
-                    fd.append('action', 'verifyPassword');
-                    fd.append('password', pass);
-                    const data = await fetchJSON(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: fd.toString()
-                    });
+                    const fd = new URLSearchParams(); fd.append('action','verifyPassword'); fd.append('password', pass);
+                    const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd.toString() });
+                    const data = await res.json();
                     if (data.status === 'success') {
                         adminPassword = pass;
                         loginCard.classList.add('hidden');
@@ -240,53 +175,40 @@
                         await loadInitialData();
                         showToast('success', '✅ Log masuk berjaya!');
                     } else {
-                        loginError.textContent = data.message || 'Kata laluan salah!';
-                        loginError.classList.remove('hidden');
+                        loginError.textContent = data.message || 'Kata laluan salah!'; loginError.classList.remove('hidden');
                     }
-                } catch (err) {
-                    loginError.textContent = 'Ralat sambungan. Periksa internet.';
-                    loginError.classList.remove('hidden');
-                }
+                } catch (err) { loginError.textContent='Ralat sambungan.'; loginError.classList.remove('hidden'); }
             };
 
             async function loadInitialData() {
                 try {
-                    const data = await fetchJSON(API_URL + '?action=all');
+                    const res = await fetch(API_URL + '?action=all');
+                    const data = await res.json();
                     if (data.settings && data.settings.mata_kedudukan) {
                         pointsMapping = data.settings.mata_kedudukan;
                     } else {
-                        pointsMapping = { "1": 5, "2": 3, "3": 2, "4": 1 }; // fallback
+                        pointsMapping = {"1":5,"2":3,"3":2,"4":1};
                     }
-                    if (data.rumah) rumahList = data.rumah;
-                    if (data.acara) {
-                        allEvents = data.acara;
-                        populateAcaraDropdown();
-                    }
-                } catch (e) {
-                    showToast('error', 'Gagal memuatkan data asas. Sila cuba lagi.');
-                }
+                    if (data.rumah && Array.isArray(data.rumah)) rumahList = data.rumah;
+                    if (data.acara) { allEvents = data.acara; populateAcaraDropdown(); }
+                } catch (e) { showToast('error','Gagal muat data asas. Sila cuba lagi.'); }
             }
 
             function populateAcaraDropdown() {
                 selectAcara.innerHTML = '<option value="">-- Pilih Acara --</option>';
                 allEvents.forEach(a => {
-                    const opt = document.createElement('option');
-                    opt.value = a.acara_id;
-                    opt.textContent = `${a.nama_acara} (${a.kategori})`;
-                    selectAcara.appendChild(opt);
+                    const opt = document.createElement('option'); opt.value = a.acara_id; opt.textContent = `${a.nama_acara} (${a.kategori})`; selectAcara.appendChild(opt);
                 });
             }
 
-            // Tab switching
             window.switchTab = async function(tab) {
                 document.querySelectorAll('[id^="tab-"]').forEach(b => b.classList.remove('tab-active'));
-                document.getElementById('tab-' + tab).classList.add('tab-active');
+                document.getElementById('tab-'+tab).classList.add('tab-active');
                 document.getElementById('content-acara').classList.add('hidden');
                 document.getElementById('content-sukantara').classList.add('hidden');
                 document.getElementById('content-merentas').classList.add('hidden');
-                if (tab === 'acara') {
-                    document.getElementById('content-acara').classList.remove('hidden');
-                } else if (tab === 'sukantara') {
+                if (tab === 'acara') document.getElementById('content-acara').classList.remove('hidden');
+                else if (tab === 'sukantara') {
                     document.getElementById('content-sukantara').classList.remove('hidden');
                     await loadRumahMarkahForm('sukantara');
                 } else if (tab === 'merentas') {
@@ -295,7 +217,6 @@
                 }
             };
 
-            // Acara dipilih - muatkan peserta & keputusan (berasingan, agar ralat tidak jejaskan semua)
             selectAcara.addEventListener('change', async function() {
                 const acaraId = this.value;
                 currentAcaraId = acaraId;
@@ -304,75 +225,40 @@
                     btnDelete.classList.add('hidden');
                     return;
                 }
-
-                // Paparkan loading
-                acaraTbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-gray-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Memuatkan peserta & keputusan...</td></tr>';
-                acaraTableContainer.classList.remove('hidden');
+                acaraLoading.classList.remove('hidden');
+                acaraTableContainer.classList.add('hidden');
                 btnDelete.classList.add('hidden');
-                acaraMessage.classList.add('hidden');
-
-                let pesertaList = [];
-                let resultsList = [];
-                let pesertaError = null;
-                let resultsError = null;
-
-                // Tarik peserta dahulu
                 try {
-                    const data = await fetchJSON(API_URL + `?action=peserta&acara_id=${acaraId}`);
-                    pesertaList = Array.isArray(data) ? data : [];
-                } catch (e) {
-                    pesertaError = 'Gagal muat peserta.';
-                }
-
-                // Tarik keputusan (delay kecil untuk elak throttle)
-                await new Promise(resolve => setTimeout(resolve, 300));
-                try {
-                    const data = await fetchJSON(API_URL + `?action=results&acara_id=${acaraId}`);
-                    resultsList = Array.isArray(data) ? data : [];
-                } catch (e) {
-                    resultsError = 'Gagal muat keputusan sedia ada.';
-                }
-
-                // Jika kedua-duanya gagal, tunjuk error
-                if (!pesertaList.length && pesertaError) {
-                    acaraTbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">❌ ${pesertaError}</td></tr>`;
-                    return;
-                }
-
-                // Render jadual
-                renderAcaraTable(pesertaList, resultsList);
-
-                // Tunjuk amaran jika keputusan gagal dimuatkan
-                if (resultsError && pesertaList.length) {
-                    acaraMessage.textContent = '⚠️ ' + resultsError + ' Hanya paparan peserta sahaja tersedia.';
-                    acaraMessage.className = 'mt-4 text-center text-sm font-medium text-amber-600';
+                    const [pesertaRes, resultsRes] = await Promise.all([
+                        fetch(API_URL + `?action=peserta&acara_id=${acaraId}`),
+                        fetch(API_URL + `?action=results&acara_id=${acaraId}`)
+                    ]);
+                    if (!pesertaRes.ok) throw new Error('Gagal muat peserta');
+                    if (!resultsRes.ok) throw new Error('Gagal muat keputusan');
+                    const pesertaList = await pesertaRes.json();
+                    const resultsList = await resultsRes.json();
+                    currentResults = Array.isArray(resultsList) ? resultsList : [];
+                    renderAcaraTable(pesertaList, currentResults);
+                } catch (err) {
+                    acaraMessage.textContent = '❌ Gagal muat data. Sila cuba lagi.';
+                    acaraMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
                     acaraMessage.classList.remove('hidden');
-                }
-
-                // Butang padam jika ada keputusan
-                if (resultsList.length > 0) {
-                    btnDelete.classList.remove('hidden');
-                } else {
-                    btnDelete.classList.add('hidden');
+                } finally {
+                    acaraLoading.classList.add('hidden');
                 }
             });
 
             function renderAcaraTable(pesertaList, resultsList) {
                 acaraTbody.innerHTML = '';
-                if (!pesertaList || pesertaList.length === 0) {
-                    acaraTbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-gray-500">Tiada peserta untuk acara ini.</td></tr>';
+                if (!pesertaList.length) {
+                    acaraTbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-gray-500">Tiada peserta</td></tr>';
+                    acaraTableContainer.classList.remove('hidden');
+                    btnDelete.classList.add('hidden');
                     return;
                 }
-
-                // Bina lookup results
                 const resultMap = {};
-                if (resultsList) {
-                    resultsList.forEach(r => { resultMap[r.peserta_id] = r; });
-                }
-
-                // Susun dropdown kedudukan
-                const kedOptions = Object.keys(pointsMapping).sort((a, b) => parseInt(a) - parseInt(b));
-
+                if (resultsList) resultsList.forEach(r => { resultMap[r.peserta_id] = r; });
+                const kedOptions = Object.keys(pointsMapping).sort((a,b) => parseInt(a)-parseInt(b));
                 pesertaList.forEach(p => {
                     const result = resultMap[p.peserta_id] || null;
                     const tr = document.createElement('tr');
@@ -387,15 +273,10 @@
                                 ${kedOptions.map(k => `<option value="${k}" ${result && result.kedudukan == k ? 'selected' : ''}>${k}</option>`).join('')}
                             </select>
                         </td>
-                        <td class="px-3 py-2">
-                            <input type="text" class="prestasi-input border border-gray-300 rounded px-2 py-1 text-sm w-24" data-peserta="${p.peserta_id}" value="${result ? result.prestasi : ''}" placeholder="cth: 13.10" />
-                        </td>
-                        <td class="px-3 py-2">
-                            <input type="number" class="mata-input border border-gray-200 rounded px-2 py-1 text-sm w-16 bg-gray-100" data-peserta="${p.peserta_id}" readonly value="${result ? result.mata : '0'}" />
-                        </td>
+                        <td class="px-3 py-2"><input type="text" class="prestasi-input border border-gray-300 rounded px-2 py-1 text-sm w-24" data-peserta="${p.peserta_id}" value="${result ? result.prestasi : ''}" placeholder="cth: 13.10" /></td>
+                        <td class="px-3 py-2"><input type="number" class="mata-input border border-gray-200 rounded px-2 py-1 text-sm w-16 bg-gray-100" data-peserta="${p.peserta_id}" readonly value="${result ? result.mata : '0'}" /></td>
                     `;
                     acaraTbody.appendChild(tr);
-
                     const kedSelect = tr.querySelector('.kedudukan-select');
                     const mataInput = tr.querySelector('.mata-input');
                     kedSelect.addEventListener('change', function() {
@@ -403,9 +284,14 @@
                         mataInput.value = (ked && pointsMapping[ked]) ? pointsMapping[ked] : 0;
                     });
                 });
+                acaraTableContainer.classList.remove('hidden');
+                if (resultsList && resultsList.length > 0) {
+                    btnDelete.classList.remove('hidden');
+                } else {
+                    btnDelete.classList.add('hidden');
+                }
             }
 
-            // Simpan keputusan (overwrite)
             window.saveResults = async function() {
                 if (!currentAcaraId) return;
                 const rows = acaraTbody.querySelectorAll('tr');
@@ -418,114 +304,77 @@
                     const ked = kedSelect.value;
                     if (!ked) return;
                     const pesertaId = kedSelect.dataset.peserta;
-                    const rumah = row.cells[1].textContent;
+                    const rumah = row.cells[1].textContent.trim();
                     const prestasi = prestasiInput.value.trim();
                     const mata = mataInput.value;
-                    if (!prestasi) {
-                        showToast('error', 'Isi prestasi untuk semua yang ada kedudukan.');
-                        return;
-                    }
-                    results.push({
-                        acara_id: currentAcaraId,
-                        peserta_id: pesertaId,
-                        rumah: rumah,
-                        kedudukan: ked,
-                        prestasi: prestasi,
-                        mata: parseInt(mata)
-                    });
+                    if (!prestasi) { showToast('error','Isi prestasi untuk semua yang ada kedudukan.'); return; }
+                    results.push({ acara_id: currentAcaraId, peserta_id: pesertaId, rumah, kedudukan: ked, prestasi, mata: parseInt(mata) });
                 });
-                if (results.length === 0) {
-                    showToast('info', 'Tiada keputusan untuk disimpan.');
-                    return;
-                }
+                if (results.length === 0) { showToast('info','Tiada keputusan untuk disimpan.'); return; }
 
-                const fd = new URLSearchParams();
-                fd.append('action', 'overwriteResults');
-                fd.append('password', adminPassword);
-                fd.append('results', JSON.stringify(results));
-
-                const submitBtn = document.querySelector('#content-acara button');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+                setButtonsDisabled(true);
+                acaraMessage.classList.add('hidden');
                 try {
-                    const data = await fetchJSON(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: fd.toString()
-                    });
+                    const fd = new URLSearchParams();
+                    fd.append('action', 'overwriteResults');
+                    fd.append('password', adminPassword);
+                    fd.append('results', JSON.stringify(results));
+                    const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd.toString() });
+                    const data = await res.json();
                     if (data.status === 'success') {
                         showToast('success', data.message);
-                        // Refresh jadual dengan data baru
-                        selectAcara.dispatchEvent(new Event('change'));
+                        selectAcara.dispatchEvent(new Event('change')); // muat semula
                     } else {
-                        showToast('error', data.message || 'Ralat menyimpan.');
+                        acaraMessage.textContent = '❌ ' + (data.message || 'Ralat');
+                        acaraMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
+                        acaraMessage.classList.remove('hidden');
                     }
                 } catch (err) {
-                    showToast('error', 'Ralat rangkaian semasa menyimpan.');
+                    acaraMessage.textContent = '❌ Ralat rangkaian.';
+                    acaraMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
+                    acaraMessage.classList.remove('hidden');
                 } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
+                    setButtonsDisabled(false);
                 }
             };
 
-            // Padam keputusan
             window.deleteResults = async function() {
                 if (!currentAcaraId) return;
                 if (!confirm('Padam SEMUA keputusan untuk acara ini?')) return;
-                const fd = new URLSearchParams();
-                fd.append('action', 'deleteResults');
-                fd.append('password', adminPassword);
-                fd.append('acara_id', currentAcaraId);
+                btnDelete.disabled = true;
                 try {
-                    const data = await fetchJSON(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: fd.toString()
-                    });
+                    const fd = new URLSearchParams(); fd.append('action','deleteResults'); fd.append('password',adminPassword); fd.append('acara_id',currentAcaraId);
+                    const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd.toString() });
+                    const data = await res.json();
                     if (data.status === 'success') {
                         showToast('success', data.message);
-                        acaraTbody.querySelectorAll('.kedudukan-select').forEach(s => s.value = '');
-                        acaraTbody.querySelectorAll('.prestasi-input').forEach(i => i.value = '');
-                        acaraTbody.querySelectorAll('.mata-input').forEach(i => i.value = '0');
-                        btnDelete.classList.add('hidden');
+                        selectAcara.dispatchEvent(new Event('change'));
                     } else {
-                        showToast('error', data.message || 'Gagal padam.');
+                        showToast('error', data.message || 'Gagal padam');
                     }
-                } catch (err) {
-                    showToast('error', 'Ralat rangkaian.');
-                }
+                } catch (err) { showToast('error','Ralat rangkaian'); }
+                finally { btnDelete.disabled = false; }
             };
 
-            // Markah rumah (sama seperti sebelum, dengan fetchJSON)
             async function loadRumahMarkahForm(type) {
-                const formDiv = document.getElementById(type + '-form');
+                const formDiv = document.getElementById(type+'-form');
                 if (!formDiv) return;
                 await ensureRumahList();
                 let currentMarks = {};
                 try {
                     const action = type === 'sukantara' ? 'sukantara_marks' : 'merentas_marks';
-                    const data = await fetchJSON(API_URL + `?action=${action}`);
+                    const res = await fetch(API_URL + `?action=${action}`);
+                    const data = await res.json();
                     if (Array.isArray(data)) data.forEach(d => { currentMarks[d.rumah] = d.markah; });
-                } catch (e) {
-                    // biarkan kosong
-                }
+                } catch(e) {}
                 formDiv.innerHTML = '';
-                if (!rumahList.length) {
-                    formDiv.innerHTML = '<p class="text-red-500">Tiada data rumah sukan.</p>';
-                    return;
-                }
+                if (!rumahList.length) { formDiv.innerHTML = '<p class="text-red-500">Tiada data rumah sukan.</p>'; return; }
                 rumahList.forEach(rumah => {
                     const warna = rumah.warna || '#8A2BE2';
                     const nilai = currentMarks[rumah.nama] !== undefined ? currentMarks[rumah.nama] : '';
-                    const div = document.createElement('div');
-                    div.className = 'flex flex-col gap-1';
-                    div.innerHTML = `
-                        <label class="text-sm font-semibold flex items-center gap-2">
-                            <span class="w-4 h-4 rounded-full" style="background-color:${warna};"></span>${rumah.nama}
-                        </label>
-                        <input type="number" step="any" class="markah-rumah-input border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-purple-400 outline-none" data-rumah="${rumah.nama}" value="${nilai}" placeholder="0.00" />
-                    `;
+                    const div = document.createElement('div'); div.className = 'flex flex-col gap-1';
+                    div.innerHTML = `<label class="text-sm font-semibold flex items-center gap-2"><span class="w-4 h-4 rounded-full" style="background-color:${warna};"></span>${rumah.nama}</label>
+                        <input type="number" step="any" class="markah-rumah-input border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-purple-400 outline-none" data-rumah="${rumah.nama}" value="${nilai}" placeholder="0.00" />`;
                     formDiv.appendChild(div);
                 });
             }
@@ -533,40 +382,27 @@
             async function ensureRumahList() {
                 if (rumahList.length > 0) return;
                 try {
-                    const data = await fetchJSON(API_URL + '?action=rumah');
+                    const res = await fetch(API_URL + '?action=rumah');
+                    const data = await res.json();
                     if (Array.isArray(data)) rumahList = data;
-                } catch (e) {}
+                } catch(e) {}
             }
 
             window.saveRumahMarkah = async function(type) {
-                const formDiv = document.getElementById(type + '-form');
+                const formDiv = document.getElementById(type+'-form');
                 const inputs = formDiv.querySelectorAll('.markah-rumah-input');
                 const data = [];
-                inputs.forEach(inp => {
-                    const val = inp.value.trim();
-                    if (val !== '') data.push({ rumah: inp.dataset.rumah, markah: parseFloat(val) });
-                });
-                if (!data.length) { showToast('info', 'Tiada markah diisi.'); return; }
-                const fd = new URLSearchParams();
-                fd.append('action', type === 'sukantara' ? 'submitSukantara' : 'submitMerentas');
-                fd.append('password', adminPassword);
-                fd.append('data', JSON.stringify(data));
-                const msgDiv = document.getElementById(type + '-message');
+                inputs.forEach(inp => { const val = inp.value.trim(); if (val !== '') data.push({ rumah: inp.dataset.rumah, markah: parseFloat(val) }); });
+                if (!data.length) { showToast('info','Tiada markah.'); return; }
+                const fd = new URLSearchParams(); fd.append('action', type==='sukantara'?'submitSukantara':'submitMerentas'); fd.append('password', adminPassword); fd.append('data', JSON.stringify(data));
+                const msgDiv = document.getElementById(type+'-message');
                 try {
-                    const resp = await fetchJSON(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: fd.toString()
-                    });
-                    msgDiv.textContent = resp.status === 'success' ? '✅ ' + resp.message : '❌ ' + (resp.message || 'Ralat');
-                    msgDiv.className = 'mt-4 text-center text-sm font-medium ' + (resp.status === 'success' ? 'text-green-600' : 'text-red-600');
+                    const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd.toString() });
+                    const resp = await res.json();
+                    msgDiv.textContent = resp.status==='success' ? '✅ '+resp.message : '❌ '+(resp.message||'Ralat');
+                    msgDiv.className = 'mt-4 text-center text-sm font-medium ' + (resp.status==='success'?'text-green-600':'text-red-600');
                     msgDiv.classList.remove('hidden');
-                    if (resp.status === 'success') showToast('success', resp.message);
-                } catch (err) {
-                    msgDiv.textContent = '❌ Ralat rangkaian.';
-                    msgDiv.className = 'mt-4 text-center text-sm font-medium text-red-600';
-                    msgDiv.classList.remove('hidden');
-                }
+                } catch (err) { msgDiv.textContent='❌ Ralat rangkaian.'; msgDiv.classList.remove('hidden'); }
             };
 
             document.getElementById('password-input').focus();
